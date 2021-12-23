@@ -1,0 +1,67 @@
+.TransactionModal {
+	position: absolute;
+	top: 90px;
+	right: 570px;
+	bottom: 90px;
+	left: 570px;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	text-align: center;
+	border: 2px solid #313137;
+}
+
+.TransactionModal h4 {
+	font-size: 35px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 600;
+	letter-spacing: 2px;
+	height: 15%;
+	padding: 30px 10px 10px 10px;
+	margin: 0px;
+	background-color: #313137;
+	color: #ffff;
+}
+
+.TransactionModal .transaction-add-form {
+	height: 60%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	padding: 20px;
+}
+
+.TransactionModal .transaction-add-form select {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.TransactionModal .transaction-modal-btn {
+	height: 25%;
+	display: flex;
+	justify-content: space-around;
+	padding: 40px 20px 40px 20px;
+}
+
+.TransactionModal .transaction-modal-btn button {
+	height: 60%;
+	min-width: 150px;
+	padding: 0px 30px;
+	background-color: #0715d0;
+	color: #ffff;
+}
+
+.TransactionModal .transaction-modal-btn button:hover {
+	color: #ffff;
+	background-color: #3845f3;
+}
+
+.Overlay {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}

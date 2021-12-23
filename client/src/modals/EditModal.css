@@ -1,0 +1,66 @@
+.EditModal {
+	position: absolute;
+	top: 180px;
+	right: 600px;
+	bottom: 180px;
+	left: 600px;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	text-align: center;
+	border: 2px solid #313137;
+}
+
+.EditModal h4 {
+	font-size: 35px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 600;
+	letter-spacing: 2px;
+	height: 15%;
+	padding: 30px 10px 10px 10px;
+	margin: 0px;
+	background-color: #313137;
+	color: #ffff;
+}
+
+.EditModal .airport-edit-select {
+	width: 70%;
+	margin: 40px auto;
+	height: 15%;
+}
+
+.EditModal .airport-edit-form {
+	height: 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.EditModal .edit-modal-btn {
+	height: 30%;
+	display: flex;
+	justify-content: space-around;
+	padding: 40px 20px 0px 20px;
+}
+
+.EditModal .edit-modal-btn button {
+	height: 60%;
+	min-width: 150px;
+	padding: 0px 30px;
+	background-color: #0715d0;
+	color: #ffff;
+}
+
+.EditModal .edit-modal-btn button:hover {
+	color: #ffff;
+	background-color: #3845f3;
+}
+
+.Overlay {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
