@@ -225,14 +225,24 @@ body {
 }
 
 .airport-container {
-	padding: 80px;
+	height: 920px;
+}
+
+.inner-airport-container {
+	display: flex;
+	height: 100%;
+}
+
+.airport-list {
+	width: 80%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 }
 
 .airport-top {
-	margin: 20px 100px 50px 0px;
+	height: 10%;
+	margin: 20px;
 	text-align: right;
 }
 
@@ -248,6 +258,8 @@ body {
 }
 
 .airport-table {
+	height: 70%;
+	padding: 20px;
 	margin: 0px 50px 40px 50px;
 	border: 1px solid black;
 }
@@ -276,13 +288,18 @@ body {
 }
 
 .airport-down {
+	height: 20%;
 	display: flex;
 	justify-content: space-around;
+	margin-bottom: 20px;
 }
 
 .airport-down button {
+	height: 40%;
 	background-color: #0715d0;
 	color: #ffff;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .airport-down button:hover {
@@ -293,7 +310,12 @@ body {
 /* fuel consumption report */
 
 .fuel-consumption-container {
-	padding: 80px;
+	height: 920px;
+}
+
+.inner-fuel-consumption-container {
+	display: flex;
+	height: 100%;
 }
 
 .fuel-consumption-container .download-btn {
@@ -312,12 +334,16 @@ body {
 
 .fuel-consumption-container .fuel-consumption-report {
 	margin: 50px;
+	height: 75%;
+	overflow-y: scroll;
+	box-shadow: 5px 5px 10px #313137;
 }
 
 .fuel-consumption-container .fuel-consumption-report .each-report-item {
 	display: flex;
 	flex-direction: column;
 	border-bottom: 2px dotted black;
+	margin: 20px;
 }
 
 .fuel-consumption-report .each-report-item p,
@@ -351,5 +377,5 @@ table {
 	text-decoration: underline;
 	font-size: 20px;
 	padding: 0px;
-	margin-top: 30px;
+	margin: 30px;
 }

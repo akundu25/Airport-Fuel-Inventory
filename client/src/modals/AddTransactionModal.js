@@ -25,13 +25,6 @@ const AddTransactionModal = ({
 		>
 			<h4>ENTER DETAILS OF TRANSACTION</h4>
 			<form className='transaction-add-form'>
-				<Input
-					name='transaction_date_time'
-					label='Date and Time: '
-					type='datetime-local'
-					value={transaction.transaction_date_time}
-					onChange={handleInputChange}
-				/>
 				<select name='transaction_type' onChange={handleInputChange}>
 					<option>Select transaction type</option>
 					<option value='IN'>IN</option>

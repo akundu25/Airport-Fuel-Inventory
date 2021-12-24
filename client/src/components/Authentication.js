@@ -28,7 +28,7 @@ const Authentication = () => {
 	const [error, setError] = useState(authError);
 	const [signupForm, setSignupForm] = useState(initialSignupForm);
 	const [loginForm, setLoginForm] = useState(initialLoginForm);
-	const [isLogin, setIsLogin] = useState(false);
+	const [isLogin, setIsLogin] = useState(true);
 
 	useEffect(() => {
 		authError && setError(authError);

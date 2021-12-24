@@ -4,6 +4,8 @@ import { getAirports, updateAirport, addNewAirport } from '../actions/airport';
 import * as images from '../images';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
+import Nav from '../utility/Nav';
+import Sidebar from '../utility/Sidebar';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
 
@@ -30,6 +32,39 @@ const sampleAirport = {
 	fuel_available: '',
 	fuel_capacity: '',
 };
+
+const listItems = [
+	{
+		id: 1,
+		path: '/dashboard',
+		pathName: 'Dashboard',
+	},
+	{
+		id: 2,
+		path: '/airports',
+		pathName: 'Airports',
+	},
+	{
+		id: 3,
+		path: '/aircrafts',
+		pathName: 'Aircrafts',
+	},
+	{
+		id: 4,
+		path: '/transactions',
+		pathName: 'Transactions',
+	},
+	{
+		id: 5,
+		path: '/airport-summary',
+		pathName: 'Airport Summary Report',
+	},
+	{
+		id: 6,
+		path: '/fuel-consumption',
+		pathName: 'Fuel Consumption Report',
+	},
+];
 
 const Airports = () => {
 	const dispatch = useDispatch();
@@ -109,50 +144,60 @@ const Airports = () => {
 				(isEditModalOpen || isAddModalOpen) && 'modal-open'
 			}`}
 		>
-			<div className='airport-top'>
-				<select className='page-limit' onChange={handleChange}>
-					<option>2</option>
-					<option>4</option>
-				</select>
-				<span>Page limit</span>
-				<Button
-					type='button'
-					btnText={
-						<img
-							src={images.leftArrow}
-							alt='left-arrow'
-							className='left-arrow'
+			<Nav />
+			<div className='inner-airport-container'>
+				<Sidebar listItems={listItems} />
+				<div className='airport-list'>
+					<div className='airport-top'>
+						<select className='page-limit' onChange={handleChange}>
+							<option>2</option>
+							<option>4</option>
+						</select>
+						<span>Page limit</span>
+						<Button
+							type='button'
+							btnText={
+								<img
+									src={images.leftArrow}
+									alt='left-arrow'
+									className='left-arrow'
+								/>
+							}
+							onClick={handlePrevPage}
+							disabled={prevDisabled}
 						/>
-					}
-					onClick={handlePrevPage}
-					disabled={prevDisabled}
-				/>
-				<span className='page-number'>Page: {page}</span>
-				<Button
-					type='button'
-					btnText={
-						<img
-							src={images.rightArrow}
-							alt='right-arrow'
-							className='right-arrow'
+						<span className='page-number'>Page: {page}</span>
+						<Button
+							type='button'
+							btnText={
+								<img
+									src={images.rightArrow}
+									alt='right-arrow'
+									className='right-arrow'
+								/>
+							}
+							onClick={handleNextPage}
+							disabled={nextDisabled}
 						/>
-					}
-					onClick={handleNextPage}
-					disabled={nextDisabled}
-				/>
-			</div>
-			<Table columns={columns} className='airport-table' data={airportsData} />
-			<div className='airport-down'>
-				<Button
-					type='button'
-					btnText='Add Airport'
-					onClick={handleOpenAddModal}
-				/>
-				<Button
-					type='button'
-					btnText='Edit Airport'
-					onClick={handleOpenEditModal}
-				/>
+					</div>
+					<Table
+						columns={columns}
+						className='airport-table'
+						data={airportsData}
+					/>
+					<div className='airport-down'>
+						<Button
+							type='button'
+							btnText='Add Airport'
+							onClick={handleOpenAddModal}
+						/>
+						<Button
+							type='button'
+							btnText='Edit Airport'
+							onClick={handleOpenEditModal}
+						/>
+					</div>
+				</div>
 			</div>
 			<EditModal
 				isModalOpen={isEditModalOpen}
