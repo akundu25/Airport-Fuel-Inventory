@@ -3,7 +3,7 @@ import * as types from '../types';
 const initialState = {
 	name: '',
 	email: '',
-	error: '',
+	error: null,
 };
 
 const user = (state = initialState, action) => {
@@ -22,7 +22,7 @@ const user = (state = initialState, action) => {
 		case types.USER_AUTH_ERROR_REMOVE:
 			return {
 				...state,
-				error: '',
+				error: null,
 			};
 		case types.LOGOUT:
 			localStorage.removeItem('userProfile');
@@ -30,7 +30,7 @@ const user = (state = initialState, action) => {
 				...state,
 				name: '',
 				email: '',
-				error: '',
+				error: null,
 			};
 		default:
 			return state;
