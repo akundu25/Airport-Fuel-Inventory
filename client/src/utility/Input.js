@@ -9,6 +9,7 @@ const Input = ({ name, label, type, placeholder, value, onChange }) => {
 				placeholder={placeholder}
 				value={value}
 				onChange={onChange}
+				required
 			/>
 		</label>
 	);

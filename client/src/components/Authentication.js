@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Input from '../utility/Input';
 import Button from '../utility/Button';
 import * as images from '../images';
+import * as types from '../types';
 import { loginUser, signupUser } from '../actions/user';
 
 import '../App.css';
@@ -23,9 +24,19 @@ const initialLoginForm = {
 const Authentication = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const authError = useSelector((state) => state.user.error);
+	const [error, setError] = useState(authError);
 	const [signupForm, setSignupForm] = useState(initialSignupForm);
 	const [loginForm, setLoginForm] = useState(initialLoginForm);
 	const [isLogin, setIsLogin] = useState(false);
+
+	useEffect(() => {
+		authError && setError(authError);
+		setTimeout(() => {
+			dispatch({ type: types.USER_AUTH_ERROR_REMOVE });
+			setError(null);
+		}, 2000);
+	}, [dispatch, authError]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -59,6 +70,13 @@ const Authentication = () => {
 					alt='airport-logo'
 					className='airport-logo'
 				/>
+				{error &&
+					error.length &&
+					error.map((err, ind) => (
+						<span key={ind} className='auth-error'>
+							{err.msg}
+						</span>
+					))}
 				{!isLogin ? (
 					<>
 						<Input

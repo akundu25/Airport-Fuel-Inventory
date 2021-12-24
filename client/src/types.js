@@ -1,4 +1,6 @@
 export const USER_AUTH = 'USER_AUTH';
+export const USER_AUTH_ERROR = 'USER_AUTH_ERROR';
+export const USER_AUTH_ERROR_REMOVE = 'USER_AUTH_ERROR_REMOVE';
 export const LOGOUT = 'LOGOUT';
 export const FETCH_AIRPORTS = 'FETCH_AIRPORTS';
 export const FETCH_ALL_AIRPORTS = 'FETCH_ALL_AIRPORTS';

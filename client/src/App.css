@@ -29,6 +29,12 @@ body {
 	margin-right: auto;
 }
 
+.auth-form .auth-error {
+	font-size: 12px;
+	color: #f13753;
+	text-align: center;
+}
+
 .auth-form .switch-login,
 .switch-signup {
 	text-align: center;

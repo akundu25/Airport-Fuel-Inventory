@@ -1,18 +1,25 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import user from '../models/user.js';
+import { validationResult } from 'express-validator';
 
 export const signupUser = async (req, res) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty())
+		return res.status(400).json({ errors: errors.array() });
 	try {
 		const { name, email, password, confirmPassword } = req.body;
 
 		const existingUser = await user.findOne({ email });
 
 		if (existingUser)
-			return res.status(400).json({ message: 'User already exists' });
+			return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
 
 		if (password !== confirmPassword)
-			return res.status(400).json({ message: 'passwords do not match' });
+			return res
+				.status(400)
+				.json({ errors: [{ msg: 'The password do not match' }] });
 
 		const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -31,7 +38,7 @@ export const signupUser = async (req, res) => {
 		res.status(200).json({ clientUser, token });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -42,7 +49,7 @@ export const loginUser = async (req, res) => {
 		const existingUser = await user.findOne({ email });
 
 		if (!existingUser)
-			return res.status(404).json({ message: 'User not found' });
+			return res.status(404).json({ errors: [{ msg: 'User not found' }] });
 
 		const isPasswordCorrect = await bcrypt.compare(
 			password,
@@ -50,7 +57,7 @@ export const loginUser = async (req, res) => {
 		);
 
 		if (!isPasswordCorrect)
-			return res.status(400).json({ message: 'Incorrect password' });
+			return res.status(400).json({ errors: [{ msg: 'Incorrect password' }] });
 
 		const token = jwt.sign(
 			{ email, id: existingUser._id },
@@ -62,7 +69,7 @@ export const loginUser = async (req, res) => {
 
 		res.status(200).json({ clientUser, token });
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 		console.log(error);
 	}
 };
