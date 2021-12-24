@@ -159,7 +159,7 @@ export const reverseTransaction = async (req, res) => {
 		});
 
 		await transaction.findByIdAndUpdate(_id, {
-			$set: { transaction_type: 'Reversed' },
+			$set: { transaction_type: transaction_type + '(Reversed)' },
 		});
 		return fetchingTransactions(page, limit, res);
 	} catch (error) {
