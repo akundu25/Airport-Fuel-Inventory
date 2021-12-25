@@ -23,6 +23,13 @@ const aircraft = (state = initialState, action) => {
 				...state,
 				allAircrafts: action?.payload,
 			};
+		case types.CLEAN_AIRCRAFTS:
+			return {
+				...state,
+				aircrafts: null,
+				next: null,
+				prev: null,
+			};
 		default:
 			return state;
 	}

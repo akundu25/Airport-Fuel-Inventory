@@ -9,6 +9,7 @@ import {
 import { getAllAircrafts } from '../actions/aircraft';
 import { getAllAirports } from '../actions/airport';
 import * as images from '../images';
+import * as types from '../types';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
@@ -50,7 +51,7 @@ const sampleTransaction = {
 	airport_id: '',
 	airport_name: '',
 	aircraft_id: '',
-	aircraft_name: '',
+	aircraft_name: 'N/A',
 	quantity: '',
 	transaction_id_parent: '',
 };
@@ -103,7 +104,7 @@ const Transactions = () => {
 		useState(allTransactions);
 	const [allAirportsData, setAllAirports] = useState(airports);
 	const [allAircraftsData, setAllAircrafts] = useState(aircrafts);
-	const [limit, setLimit] = useState(2);
+	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
 	const [nextDisabled, setNextDisabled] = useState(false);
@@ -114,8 +115,14 @@ const Transactions = () => {
 	const [transaction, setTransaction] = useState(sampleTransaction);
 	const [reverseTransaction, setReverseTransaction] =
 		useState(sampleTransaction);
+	// const [isAscendingByDate, setIsAscendingByDate] = useState(false);
+	const [isAscendingByAirport, setIsAscendingByAirport] = useState(false);
+	const [isAscendingByAircraft, setIsAscendingByAircraft] = useState(false);
+	const [isAscendingByQuantity, setIsAscendingByQuantity] = useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS });
+		dispatch({ type: types.CLEAN_AIRCRAFTS });
 		!transactions && dispatch(getTransactions(limit, page));
 		setTransactionsData(transactions);
 
@@ -179,10 +186,6 @@ const Transactions = () => {
 		});
 
 	const handleAddTransaction = () => {
-		setTransaction({
-			...transaction,
-			transaction_date_time: new Date(),
-		});
 		dispatch(addNewTransaction(page, limit, transaction));
 		setIsAddTransactionModalOpen(false);
 	};
@@ -190,6 +193,81 @@ const Transactions = () => {
 	const handleReverseTransaction = () => {
 		dispatch(undoTransaction(limit, page, reverseTransaction));
 		setIsReverseTransactionModalOpen(false);
+	};
+
+	const compareByAirportASC = (a, b) => {
+		if (a.airport_name < b.airport_name) return -1;
+		return 1;
+	};
+
+	const compareByAirportDESC = (a, b) => {
+		if (b.airport_name < a.airport_name) return -1;
+		return 1;
+	};
+
+	const sortTransactionByAirport = () => {
+		if (transactionsData && isAscendingByAirport) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByAirportASC)
+			);
+		} else if (transactionsData) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByAirportDESC)
+			);
+		}
+		setIsAscendingByAirport(!isAscendingByAirport);
+	};
+
+	const compareByAircraftASC = (a, b) => {
+		if (a.aircraft_name < b.aircraft_name) return -1;
+		return 1;
+	};
+
+	const compareByAircraftDESC = (a, b) => {
+		if (b.aircraft_name < a.aircraft_name) return -1;
+		return 1;
+	};
+
+	const sortTransactionByAircraft = () => {
+		if (transactionsData && isAscendingByAircraft) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByAircraftASC)
+			);
+		} else if (transactionsData) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByAircraftDESC)
+			);
+		}
+		setIsAscendingByAircraft(!isAscendingByAircraft);
+	};
+
+	const compareByQuantityASC = (a, b) => {
+		if (a.quantity < b.quantity) return -1;
+		return 1;
+	};
+
+	const compareByQuantityDESC = (a, b) => {
+		if (b.quantity < a.quantity) return -1;
+		return 1;
+	};
+
+	const sortTransactionByQuantity = () => {
+		if (transactionsData && isAscendingByQuantity) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByQuantityASC)
+			);
+		} else if (transactionsData) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByQuantityDESC)
+			);
+		}
+		setIsAscendingByQuantity(!isAscendingByQuantity);
+	};
+
+	const sorting = {
+		AIRPORT: sortTransactionByAirport,
+		AIRCRAFT: sortTransactionByAircraft,
+		QUANTITY: sortTransactionByQuantity,
 	};
 
 	return (
@@ -205,8 +283,8 @@ const Transactions = () => {
 				<div className='airport-list'>
 					<div className='airport-top'>
 						<select className='page-limit' onChange={handleChange}>
-							<option>2</option>
 							<option>4</option>
+							<option>8</option>
 						</select>
 						<span>Page limit</span>
 						<Button
@@ -239,6 +317,7 @@ const Transactions = () => {
 						columns={columns}
 						className='airport-table'
 						data={transactionsData}
+						sorting={sorting}
 					/>
 					<div className='airport-down'>
 						<Button

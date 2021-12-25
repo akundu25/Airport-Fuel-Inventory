@@ -6,6 +6,7 @@ import {
 	addNewAircraft,
 } from '../actions/aircraft';
 import * as images from '../images';
+import * as types from '../types';
 import Button from '../utility/Button';
 import Table from '../utility/Table';
 import Nav from '../utility/Nav';
@@ -70,7 +71,7 @@ const Aircrafts = () => {
 	const next = useSelector((state) => state.aircraft.next);
 	const prev = useSelector((state) => state.aircraft.prev);
 	const [aircraftsData, setAircraftsData] = useState(aircrafts);
-	const [limit, setLimit] = useState(2);
+	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
 	const [nextDisabled, setNextDisabled] = useState(false);
@@ -78,8 +79,12 @@ const Aircrafts = () => {
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [newAircraft, setNewAircraft] = useState(sampleAircraft);
 	const [selectedAircraft, setSelectedAircraft] = useState(sampleAircraft);
+	const [isAscendingByName, setIsAscendingByName] = useState(false);
+	const [isAscendingByAirline, setIsAscendingByAirline] = useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS });
+		dispatch({ type: types.CLEAN_TRANSACTIONS });
 		!aircrafts && dispatch(getAircrafts(limit, page));
 		setAircraftsData(aircrafts);
 
@@ -136,6 +141,55 @@ const Aircrafts = () => {
 		setPage((prevPage) => prevPage + 1);
 	};
 
+	const compareByNameASC = (a, b) => {
+		if (a.aircraft_no < b.aircraft_no) return -1;
+		return 1;
+	};
+
+	const compareByNameDESC = (a, b) => {
+		if (b.aircraft_no < a.aircraft_no) return -1;
+		return 1;
+	};
+
+	const sortAircraftByName = () => {
+		if (aircraftsData && isAscendingByName) {
+			setAircraftsData((prevAircrafts) => prevAircrafts.sort(compareByNameASC));
+		} else if (aircraftsData) {
+			setAircraftsData((prevAircrafts) =>
+				prevAircrafts.sort(compareByNameDESC)
+			);
+		}
+		setIsAscendingByName(!isAscendingByName);
+	};
+
+	const compareByAirlineASC = (a, b) => {
+		if (a.airline < b.airline) return -1;
+		return 1;
+	};
+
+	const compareByAirlineDESC = (a, b) => {
+		if (b.airline < a.airline) return -1;
+		return 1;
+	};
+
+	const sortAircraftByAirline = () => {
+		if (aircraftsData && isAscendingByAirline) {
+			setAircraftsData((prevAircrafts) =>
+				prevAircrafts.sort(compareByAirlineASC)
+			);
+		} else if (aircraftsData) {
+			setAircraftsData((prevAircrafts) =>
+				prevAircrafts.sort(compareByAirlineDESC)
+			);
+		}
+		setIsAscendingByAirline(!isAscendingByAirline);
+	};
+
+	const sorting = {
+		'AIRCRAFT NO': sortAircraftByName,
+		AIRLINE: sortAircraftByAirline,
+	};
+
 	return (
 		<div
 			className={`airport-container ${
@@ -148,8 +202,8 @@ const Aircrafts = () => {
 				<div className='airport-list'>
 					<div className='airport-top'>
 						<select className='page-limit' onChange={handleChange}>
-							<option>2</option>
 							<option>4</option>
+							<option>8</option>
 						</select>
 						<span>Page limit</span>
 						<Button
@@ -182,6 +236,7 @@ const Aircrafts = () => {
 						columns={columns}
 						className='airport-table'
 						data={aircraftsData}
+						sorting={sorting}
 					/>
 					<div className='airport-down'>
 						<Button

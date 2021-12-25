@@ -69,7 +69,7 @@ const AirportSummaryReport = () => {
 	const allAirports = useSelector((state) => state.airport.allAirports);
 	const [allAirportsData, setAllAirportsData] = useState(allAirports);
 	const [airportsData, setAirportsData] = useState(airports);
-	const [limit, setLimit] = useState(2);
+	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
 	const [nextDisabled, setNextDisabled] = useState(false);
@@ -124,8 +124,8 @@ const AirportSummaryReport = () => {
 				<div className='airport-list'>
 					<div className='airport-top'>
 						<select className='page-limit' onChange={handleChange}>
-							<option>2</option>
 							<option>4</option>
+							<option>8</option>
 						</select>
 						<span>Page limit</span>
 						<Button

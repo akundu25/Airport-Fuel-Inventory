@@ -23,6 +23,13 @@ const airport = (state = initialState, action) => {
 				...state,
 				allAirports: action?.payload,
 			};
+		case types.CLEAN_AIRPORTS:
+			return {
+				...state,
+				airports: null,
+				next: null,
+				prev: null,
+			};
 		default:
 			return state;
 	}

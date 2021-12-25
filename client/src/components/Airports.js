@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAirports, updateAirport, addNewAirport } from '../actions/airport';
 import * as images from '../images';
+import * as types from '../types';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
@@ -72,7 +73,7 @@ const Airports = () => {
 	const next = useSelector((state) => state.airport.next);
 	const prev = useSelector((state) => state.airport.prev);
 	const [airportsData, setAirportsData] = useState(airports);
-	const [limit, setLimit] = useState(2);
+	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
 	const [nextDisabled, setNextDisabled] = useState(false);
@@ -80,8 +81,15 @@ const Airports = () => {
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [newAirport, setNewAirport] = useState(sampleAirport);
 	const [selectedAirport, setSelectedAirport] = useState(sampleAirport);
+	const [isAscendingByName, setIsAscendingByName] = useState(false);
+	const [isAscendingByFuelAvailable, setIsAscendingByFuelAvailable] =
+		useState(false);
+	const [isAscendingByFuelCapacity, setIsAscendingByFuelCapacity] =
+		useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRCRAFTS });
+		dispatch({ type: types.CLEAN_TRANSACTIONS });
 		!airports && dispatch(getAirports(limit, page));
 		setAirportsData(airports);
 
@@ -138,6 +146,75 @@ const Airports = () => {
 		setPage((prevPage) => prevPage + 1);
 	};
 
+	const compareByNameASC = (a, b) => {
+		if (a.airport_name < b.airport_name) return -1;
+		return 1;
+	};
+
+	const compareByNameDESC = (a, b) => {
+		if (b.airport_name < a.airport_name) return -1;
+		return 1;
+	};
+
+	const sortAirportByName = () => {
+		if (airportsData && isAscendingByName) {
+			setAirportsData((prevAirports) => prevAirports.sort(compareByNameASC));
+		} else if (airportsData) {
+			setAirportsData((prevAirports) => prevAirports.sort(compareByNameDESC));
+		}
+		setIsAscendingByName(!isAscendingByName);
+	};
+
+	const compareByFuelAvailableASC = (a, b) => {
+		if (a.fuel_available < b.fuel_available) return -1;
+		return 1;
+	};
+	const compareByFuelAvailableDESC = (a, b) => {
+		if (b.fuel_available < a.fuel_available) return -1;
+		return 1;
+	};
+
+	const sortAirportByFuelAvailable = () => {
+		if (airportsData && isAscendingByFuelAvailable) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelAvailableASC)
+			);
+		} else if (airportsData) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelAvailableDESC)
+			);
+		}
+		setIsAscendingByFuelAvailable(!isAscendingByFuelAvailable);
+	};
+
+	const compareByFuelCapacityASC = (a, b) => {
+		if (a.fuel_capacity < b.fuel_capacity) return -1;
+		return 1;
+	};
+	const compareByFuelCapacityDESC = (a, b) => {
+		if (b.fuel_capacity < a.fuel_capacity) return -1;
+		return 1;
+	};
+
+	const sortAirportByFuelCapacity = () => {
+		if (airportsData && isAscendingByFuelCapacity) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelCapacityASC)
+			);
+		} else if (airportsData) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelCapacityDESC)
+			);
+		}
+		setIsAscendingByFuelCapacity(!isAscendingByFuelCapacity);
+	};
+
+	const sorting = {
+		'AIRPORT NAME': sortAirportByName,
+		'FUEL AVAILABLE': sortAirportByFuelAvailable,
+		'FUEL CAPACITY': sortAirportByFuelCapacity,
+	};
+
 	return (
 		<div
 			className={`airport-container ${
@@ -150,8 +227,8 @@ const Airports = () => {
 				<div className='airport-list'>
 					<div className='airport-top'>
 						<select className='page-limit' onChange={handleChange}>
-							<option>2</option>
 							<option>4</option>
+							<option>8</option>
 						</select>
 						<span>Page limit</span>
 						<Button
@@ -184,6 +261,7 @@ const Airports = () => {
 						columns={columns}
 						className='airport-table'
 						data={airportsData}
+						sorting={sorting}
 					/>
 					<div className='airport-down'>
 						<Button

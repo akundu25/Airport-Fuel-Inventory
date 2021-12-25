@@ -1,13 +1,20 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = ({ listItems }) => {
 	return (
 		<div className='sidebar-container'>
 			<ul className='sidebar-items'>
 				{listItems.map(({ id, path, pathName }) => (
-					<Link key={id} to={path}>
+					<NavLink
+						key={id}
+						exact
+						to={path}
+						className={({ isActive }) =>
+							isActive ? 'active-sidebar-item' : undefined
+						}
+					>
 						{pathName}
-					</Link>
+					</NavLink>
 				))}
 			</ul>
 		</div>

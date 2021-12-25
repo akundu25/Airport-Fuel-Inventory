@@ -85,8 +85,13 @@ body {
 	position: sticky;
 }
 
-.nav-bar button {
-	margin-right: 50px;
+.nav-bar .logout-btn {
+	width: 15%;
+}
+
+.nav-bar .logout-btn button {
+	width: 60%;
+	margin-left: 40px;
 	background-color: #0715d0;
 	color: #ffff;
 	padding: 10px 20px;
@@ -99,9 +104,16 @@ body {
 }
 
 .nav-heading {
+	width: 60%;
 	margin-left: 40px;
 	font-family: 'Oswald', sans-serif;
 	letter-spacing: 2px;
+}
+
+.nav-bar .user-name {
+	width: 25%;
+	margin: 0px 30px 0px 0px;
+	text-align: right;
 }
 
 .nav-heading .airport-logo {
@@ -137,16 +149,19 @@ body {
 	padding: 20px 20px 20px 40px;
 	font-family: 'Roboto Condensed', sans-serif;
 	letter-spacing: 2px;
-	text-decoration: none;
 	display: block;
-	color: black;
 	box-shadow: 0px 5px 20px #bdb5b6;
+	text-decoration: none;
+	color: black;
 }
 
 .sidebar-items a:hover {
-	background-color: #0715d0;
-	color: #ffff;
-	cursor: pointer;
+	background-color: #d2d2da;
+}
+
+.active-sidebar-item {
+	background-color: #0715d0 !important;
+	color: #ffff !important;
 }
 
 .dashboard-items {
@@ -259,9 +274,18 @@ body {
 
 .airport-table {
 	height: 70%;
-	padding: 20px;
 	margin: 0px 50px 40px 50px;
 	border: 1px solid black;
+	overflow-y: scroll;
+}
+.airport-table table {
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+}
+
+.airport-table table th img {
+	cursor: pointer;
 }
 
 .airport-table th {

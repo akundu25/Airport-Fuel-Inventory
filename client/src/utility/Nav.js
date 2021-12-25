@@ -38,7 +38,10 @@ const Nav = () => {
 				/>
 				Airport Management System
 			</h2>
-			<Button type='button' btnText='Logout' onClick={logout} />
+			<h6 className='user-name'>{user?.clientUser?.name}</h6>
+			<div className='logout-btn'>
+				<Button type='button' btnText='Logout' onClick={logout} />
+			</div>
 		</div>
 	);
 };
