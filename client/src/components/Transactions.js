@@ -115,7 +115,7 @@ const Transactions = () => {
 	const [transaction, setTransaction] = useState(sampleTransaction);
 	const [reverseTransaction, setReverseTransaction] =
 		useState(sampleTransaction);
-	// const [isAscendingByDate, setIsAscendingByDate] = useState(false);
+	const [isAscendingByDate, setIsAscendingByDate] = useState(false);
 	const [isAscendingByAirport, setIsAscendingByAirport] = useState(false);
 	const [isAscendingByAircraft, setIsAscendingByAircraft] = useState(false);
 	const [isAscendingByQuantity, setIsAscendingByQuantity] = useState(false);
@@ -195,6 +195,31 @@ const Transactions = () => {
 		setIsReverseTransactionModalOpen(false);
 	};
 
+	const compareByDateASC = (a, b) => {
+		const d1 = new Date(a.transaction_date_time).valueOf();
+		const d2 = new Date(b.transaction_date_time).valueOf();
+		return d1 - d2;
+	};
+
+	const compareByDateDESC = (a, b) => {
+		const d1 = new Date(a.transaction_date_time).valueOf();
+		const d2 = new Date(b.transaction_date_time).valueOf();
+		return d2 - d1;
+	};
+
+	const sortTransactionByDate = () => {
+		if (transactionsData && isAscendingByDate) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByDateASC)
+			);
+		} else if (transactionsData) {
+			setTransactionsData((prevTransactions) =>
+				prevTransactions.sort(compareByDateDESC)
+			);
+		}
+		setIsAscendingByDate(!isAscendingByDate);
+	};
+
 	const compareByAirportASC = (a, b) => {
 		if (a.airport_name < b.airport_name) return -1;
 		return 1;
@@ -265,6 +290,7 @@ const Transactions = () => {
 	};
 
 	const sorting = {
+		'DATE & TIME': sortTransactionByDate,
 		AIRPORT: sortTransactionByAirport,
 		AIRCRAFT: sortTransactionByAircraft,
 		QUANTITY: sortTransactionByQuantity,

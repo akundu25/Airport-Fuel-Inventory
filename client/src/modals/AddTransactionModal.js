@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import Modal from 'react-modal';
 import Button from '../utility/Button';
 import Input from '../utility/Input';
+import moment from 'moment';
 
 import './AddTransactionModal.css';
 
@@ -16,6 +18,14 @@ const AddTransactionModal = ({
 	handleAddTransaction,
 	setTransaction,
 }) => {
+	useEffect(() => {
+		transaction.transaction_date_time === '' &&
+			setTransaction({
+				...transaction,
+				transaction_date_time: moment().format('LLL'),
+			});
+	}, [transaction, setTransaction]);
+
 	return (
 		<Modal
 			isOpen={isModalOpen}
@@ -25,13 +35,6 @@ const AddTransactionModal = ({
 		>
 			<h4>ENTER DETAILS OF TRANSACTION</h4>
 			<form className='transaction-add-form'>
-				<Input
-					name='transaction_date_time'
-					label='Date and Time: '
-					type='datetime-local'
-					value={transaction.transaction_date_time}
-					onChange={handleInputChange}
-				/>
 				<select name='transaction_type' onChange={handleInputChange}>
 					<option>Select transaction type</option>
 					<option value='IN'>IN</option>
