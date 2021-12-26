@@ -24,12 +24,8 @@ const fuelConsumption = (state = initialState, action) => {
 		case types.FETCH_ALL_FUEL_CONSUMPTION:
 			return {
 				...state,
-				allAirports: state.allAirports
-					? [...state.allAirports, ...action?.payload?.airports]
-					: [...action?.payload?.airports],
-				allTransactions: state.allTransactions
-					? [...state.allTransactions, ...action?.payload?.transactions]
-					: [...action?.payload?.transactions],
+				allAirports: [...action?.payload?.airports],
+				allTransactions: [...action?.payload?.transactions],
 			};
 		default:
 			return state;

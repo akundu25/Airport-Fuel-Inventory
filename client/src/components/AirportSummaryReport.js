@@ -74,6 +74,11 @@ const AirportSummaryReport = () => {
 	const [prevDisabled, setPrevDisabled] = useState(true);
 	const [nextDisabled, setNextDisabled] = useState(false);
 	const date = new Date().toDateString();
+	const [isAscendingByName, setIsAscendingByName] = useState(false);
+	const [isAscendingByFuelAvailable, setIsAscendingByFuelAvailable] =
+		useState(false);
+	const [isAscendingByFuelCapacity, setIsAscendingByFuelCapacity] =
+		useState(false);
 
 	const handlePrint = useReactToPrint({
 		content: () => airportSummaryRef.current,
@@ -105,6 +110,75 @@ const AirportSummaryReport = () => {
 	const handleNextPage = () => {
 		dispatch(getAirports(limit, page + 1));
 		setPage((prevPage) => prevPage + 1);
+	};
+
+	const compareByNameASC = (a, b) => {
+		if (a.airport_name < b.airport_name) return -1;
+		return 1;
+	};
+
+	const compareByNameDESC = (a, b) => {
+		if (b.airport_name < a.airport_name) return -1;
+		return 1;
+	};
+
+	const sortAirportByName = () => {
+		if (airportsData && isAscendingByName) {
+			setAirportsData((prevAirports) => prevAirports.sort(compareByNameASC));
+		} else if (airportsData) {
+			setAirportsData((prevAirports) => prevAirports.sort(compareByNameDESC));
+		}
+		setIsAscendingByName(!isAscendingByName);
+	};
+
+	const compareByFuelAvailableASC = (a, b) => {
+		if (a.fuel_available < b.fuel_available) return -1;
+		return 1;
+	};
+	const compareByFuelAvailableDESC = (a, b) => {
+		if (b.fuel_available < a.fuel_available) return -1;
+		return 1;
+	};
+
+	const sortAirportByFuelAvailable = () => {
+		if (airportsData && isAscendingByFuelAvailable) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelAvailableASC)
+			);
+		} else if (airportsData) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelAvailableDESC)
+			);
+		}
+		setIsAscendingByFuelAvailable(!isAscendingByFuelAvailable);
+	};
+
+	const compareByFuelCapacityASC = (a, b) => {
+		if (a.fuel_capacity < b.fuel_capacity) return -1;
+		return 1;
+	};
+	const compareByFuelCapacityDESC = (a, b) => {
+		if (b.fuel_capacity < a.fuel_capacity) return -1;
+		return 1;
+	};
+
+	const sortAirportByFuelCapacity = () => {
+		if (airportsData && isAscendingByFuelCapacity) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelCapacityASC)
+			);
+		} else if (airportsData) {
+			setAirportsData((prevAirports) =>
+				prevAirports.sort(compareByFuelCapacityDESC)
+			);
+		}
+		setIsAscendingByFuelCapacity(!isAscendingByFuelCapacity);
+	};
+
+	const sorting = {
+		'AIRPORT NAME': sortAirportByName,
+		'FUEL AVAILABLE': sortAirportByFuelAvailable,
+		'FUEL CAPACITY': sortAirportByFuelCapacity,
 	};
 
 	return (
@@ -158,6 +232,7 @@ const AirportSummaryReport = () => {
 						columns={columns}
 						className='airport-table'
 						data={airportsData}
+						sorting={sorting}
 					/>
 					<div className='airport-down'>
 						<Button

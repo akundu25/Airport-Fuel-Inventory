@@ -125,7 +125,7 @@ body {
 /* dashboard */
 
 .dashboard-container {
-	height: 920px;
+	height: 1200px;
 }
 
 .main-dashboard {
@@ -168,13 +168,15 @@ body {
 	width: 80%;
 	height: 100%;
 	padding: 100px;
+	display: flex;
+	flex-direction: column;
 }
 
 .dashboard-items .row-1 {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	margin-bottom: 190px;
+	height: 20%;
 }
 
 .round-card {
@@ -198,6 +200,8 @@ body {
 .dashboard-items .row-2 {
 	display: flex;
 	justify-content: space-around;
+	height: 40%;
+	padding: 50px 0px;
 }
 
 .large-card {
@@ -231,6 +235,33 @@ body {
 	font-size: 20px;
 	padding: 0px;
 	color: #f13753;
+}
+
+.dashboard-items .charts {
+	margin: 100px 0px 50px 0px;
+	display: flex;
+	width: 1200px;
+	height: 40%;
+	justify-content: space-between;
+}
+
+.dashboard-items .charts .bar,
+.line {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	font-size: 15px;
+}
+
+.dashboard-items .charts .bar h7 {
+	color: #0715d0;
+	margin-bottom: 25px;
+}
+
+.dashboard-items .charts .line h7 {
+	color: #f13753;
+	margin-bottom: 25px;
 }
 
 /* airport */
@@ -301,12 +332,23 @@ body {
 	padding: 20px;
 }
 
+.airport-table .text-middle {
+	text-align: center;
+}
+
+.airport-table .edit-icon,
+.reverse-transaction-icon {
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+}
+
 .airport-table tr:hover {
 	background-color: #dcdce2;
 }
 
 .airport-table .loading {
-	font-size: 50px;
+	font-size: 30px;
 	font-weight: 600;
 	letter-spacing: 2px;
 }
@@ -340,6 +382,10 @@ body {
 .inner-fuel-consumption-container {
 	display: flex;
 	height: 100%;
+}
+
+.fuel-consumption-container .fuel-consumption-list {
+	width: 80%;
 }
 
 .fuel-consumption-container .download-btn {

@@ -97,7 +97,10 @@ const Aircrafts = () => {
 	const handleOpenAddModal = () => setIsAddModalOpen(true);
 	const handleCloseAddModal = () => setIsAddModalOpen(false);
 
-	const handleOpenEditModal = () => setIsEditModalOpen(true);
+	const handleOpenEditModal = (aircraft) => {
+		setSelectedAircraft(JSON.parse(aircraft));
+		setIsEditModalOpen(true);
+	};
 	const handleCloseEditModal = () => setIsEditModalOpen(false);
 
 	const handleNewAircraft = (e) =>
@@ -105,9 +108,6 @@ const Aircrafts = () => {
 			...newAircraft,
 			[e.target.name]: e.target.value,
 		});
-
-	const handleSelectedAircraft = (e) =>
-		setSelectedAircraft(JSON.parse(e.target.value));
 
 	const handleEditSelectedAircraft = (e) =>
 		setSelectedAircraft({
@@ -237,6 +237,8 @@ const Aircrafts = () => {
 						className='airport-table'
 						data={aircraftsData}
 						sorting={sorting}
+						edit={true}
+						handleOpenModal={handleOpenEditModal}
 					/>
 					<div className='airport-down'>
 						<Button
@@ -255,10 +257,8 @@ const Aircrafts = () => {
 			<EditModal
 				isModalOpen={isEditModalOpen}
 				handleCloseEditModal={handleCloseEditModal}
-				data={aircraftsData}
 				handleEditEntity={handleEditAircraft}
 				selectedEntity={selectedAircraft}
-				handleSelectedEntity={handleSelectedAircraft}
 				handleEditSelectedEntity={handleEditSelectedAircraft}
 				heading='SELECT AN AIRCRAFT TO EDIT'
 				inputLabels={['AIRCRAFT NO: ', 'AIRLINE: ']}

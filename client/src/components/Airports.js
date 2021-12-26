@@ -102,7 +102,10 @@ const Airports = () => {
 	const handleOpenAddModal = () => setIsAddModalOpen(true);
 	const handleCloseAddModal = () => setIsAddModalOpen(false);
 
-	const handleOpenEditModal = () => setIsEditModalOpen(true);
+	const handleOpenEditModal = (airport) => {
+		setSelectedAirport(JSON.parse(airport));
+		setIsEditModalOpen(true);
+	};
 	const handleCloseEditModal = () => setIsEditModalOpen(false);
 
 	const handleNewAirport = (e) =>
@@ -110,9 +113,6 @@ const Airports = () => {
 			...newAirport,
 			[e.target.name]: e.target.value,
 		});
-
-	const handleSelectedAirport = (e) =>
-		setSelectedAirport(JSON.parse(e.target.value));
 
 	const handleEditSelectedAirport = (e) =>
 		setSelectedAirport({
@@ -262,6 +262,8 @@ const Airports = () => {
 						className='airport-table'
 						data={airportsData}
 						sorting={sorting}
+						edit={true}
+						handleOpenModal={handleOpenEditModal}
 					/>
 					<div className='airport-down'>
 						<Button
@@ -269,21 +271,14 @@ const Airports = () => {
 							btnText='Add Airport'
 							onClick={handleOpenAddModal}
 						/>
-						<Button
-							type='button'
-							btnText='Edit Airport'
-							onClick={handleOpenEditModal}
-						/>
 					</div>
 				</div>
 			</div>
 			<EditModal
 				isModalOpen={isEditModalOpen}
 				handleCloseEditModal={handleCloseEditModal}
-				data={airportsData}
 				handleEditEntity={handleEditAirport}
 				selectedEntity={selectedAirport}
-				handleSelectedEntity={handleSelectedAirport}
 				handleEditSelectedEntity={handleEditSelectedAirport}
 				heading='SELECT AN AIRPORT TO EDIT'
 				inputLabels={['AIRPORT NAME: ', 'FUEL AVAILABLE: ', 'FUEL CAPACITY: ']}

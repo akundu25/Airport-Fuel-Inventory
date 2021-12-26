@@ -13,6 +13,10 @@ const airportSchema = mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	no_of_transactions: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const airport = mongoose.model('airport', airportSchema);

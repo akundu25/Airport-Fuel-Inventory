@@ -28,6 +28,11 @@ export const addAirport = (newAirport, page, limit) =>
 
 export const fetchAllAirports = () => API.get('/airport/all');
 
+export const fetchTopFiveAirports = () => API.get('/airport/top-5-airports');
+
+export const fetchTopFiveFuelAvailable = () =>
+	API.get('/airport/top-5-fuel-available');
+
 // aircrafts
 
 export const fetchAircrafts = (limit, page) =>

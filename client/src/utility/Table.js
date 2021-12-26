@@ -1,6 +1,14 @@
 import * as images from '../images';
 
-const Table = ({ className, data, columns, sorting }) => {
+const Table = ({
+	className,
+	data,
+	columns,
+	sorting,
+	edit,
+	reverse,
+	handleOpenModal,
+}) => {
 	return (
 		<div className={className}>
 			<table>
@@ -19,6 +27,8 @@ const Table = ({ className, data, columns, sorting }) => {
 								)}
 							</th>
 						))}
+						{edit && <th style={{ textAlign: 'center' }}>EDIT AIRPORT</th>}
+						{reverse && <th>REVERSE TRANSACTION</th>}
 					</tr>
 				</thead>
 				{data && data.length ? (
@@ -28,11 +38,37 @@ const Table = ({ className, data, columns, sorting }) => {
 								{columns.map(({ id, col_key }) => (
 									<td key={id}>{row[col_key]}</td>
 								))}
+								{edit && (
+									<td className='text-middle'>
+										<img
+											className='edit-icon'
+											src={images.editIcon}
+											alt='edit airport'
+											onClick={() => handleOpenModal(JSON.stringify(row))}
+										/>
+									</td>
+								)}
+								{reverse && (
+									<td className='text-middle'>
+										{row?.transaction_type.includes('Reversed') ? (
+											'Reversed'
+										) : row?.transaction_type === 'Reverse' ? (
+											'N/A'
+										) : (
+											<img
+												src={images.reverseTransactionIcon}
+												alt='reverse transaction'
+												className='reverse-transaction-icon'
+												onClick={() => handleOpenModal(JSON.stringify(row))}
+											/>
+										)}
+									</td>
+								)}
 							</tr>
 						))}
 					</tbody>
 				) : (
-					<span className='loading'>Loading...</span>
+					<span className='loading'>No Records available...</span>
 				)}
 			</table>
 		</div>

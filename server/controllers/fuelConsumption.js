@@ -45,17 +45,11 @@ export const fetchFuelConsumption = async (req, res) => {
 export const fetchAllFuelConsumption = async (req, res) => {
 	try {
 		const allAirports = await airport.find();
-		const transactions = [];
-		let transactionsData;
-		let airport_id;
+		const allTransactions = await transaction.find();
 
-		for (let { _id } of allAirports) {
-			airport_id = _id.toString();
-			transactionsData = await transaction.find({ airport_id });
-			transactions.splice(0, 0, ...transactionsData);
-		}
-
-		res.status(200).json({ airports: allAirports, transactions });
+		res
+			.status(200)
+			.json({ airports: allAirports, transactions: allTransactions });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: error.message });

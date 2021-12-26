@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
 	getTransactions,
 	addNewTransaction,
-	getAllTransactions,
 	undoTransaction,
 } from '../actions/transaction';
 import { getAllAircrafts } from '../actions/aircraft';
@@ -92,16 +91,11 @@ const listItems = [
 const Transactions = () => {
 	const dispatch = useDispatch();
 	const transactions = useSelector((state) => state.transaction.transactions);
-	const allTransactions = useSelector(
-		(state) => state.transaction.allTransactions
-	);
 	const airports = useSelector((state) => state.airport.allAirports);
 	const aircrafts = useSelector((state) => state.aircraft.allAircrafts);
 	const next = useSelector((state) => state.transaction.next);
 	const prev = useSelector((state) => state.transaction.prev);
 	const [transactionsData, setTransactionsData] = useState(transactions);
-	const [allTransactionsData, setAllTransactionsData] =
-		useState(allTransactions);
 	const [allAirportsData, setAllAirports] = useState(airports);
 	const [allAircraftsData, setAllAircrafts] = useState(aircrafts);
 	const [limit, setLimit] = useState(4);
@@ -126,9 +120,6 @@ const Transactions = () => {
 		!transactions && dispatch(getTransactions(limit, page));
 		setTransactionsData(transactions);
 
-		!allTransactions && dispatch(getAllTransactions());
-		setAllTransactionsData(allTransactions);
-
 		!airports && dispatch(getAllAirports());
 		setAllAirports(airports);
 
@@ -139,17 +130,7 @@ const Transactions = () => {
 		else setNextDisabled(true);
 		if (prev) setPrevDisabled(false);
 		else setPrevDisabled(true);
-	}, [
-		dispatch,
-		transactions,
-		allTransactions,
-		airports,
-		aircrafts,
-		next,
-		prev,
-		limit,
-		page,
-	]);
+	}, [dispatch, transactions, airports, aircrafts, next, prev, limit, page]);
 
 	const handleCloseAddTransactionModal = () =>
 		setIsAddTransactionModalOpen(false);
@@ -158,8 +139,8 @@ const Transactions = () => {
 
 	const handleCloseReverseTransactionModal = () =>
 		setIsReverseTransactionModalOpen(false);
-	const handleOpenReverseTransactionModal = () => {
-		dispatch(getAllTransactions());
+	const handleOpenReverseTransactionModal = (transaction) => {
+		setReverseTransaction(JSON.parse(transaction));
 		setIsReverseTransactionModalOpen(true);
 	};
 
@@ -188,6 +169,7 @@ const Transactions = () => {
 	const handleAddTransaction = () => {
 		dispatch(addNewTransaction(page, limit, transaction));
 		setIsAddTransactionModalOpen(false);
+		setTransaction(sampleTransaction);
 	};
 
 	const handleReverseTransaction = () => {
@@ -344,17 +326,14 @@ const Transactions = () => {
 						className='airport-table'
 						data={transactionsData}
 						sorting={sorting}
+						reverse={true}
+						handleOpenModal={handleOpenReverseTransactionModal}
 					/>
 					<div className='airport-down'>
 						<Button
 							type='button'
 							btnText='Add New Transaction'
 							onClick={handleOpenAddTransactionModal}
-						/>
-						<Button
-							type='button'
-							btnText='Reverse Transaction'
-							onClick={handleOpenReverseTransactionModal}
 						/>
 					</div>
 				</div>
@@ -372,8 +351,6 @@ const Transactions = () => {
 			<ReverseTransactionModal
 				isModalOpen={isReverseTransactionModalOpen}
 				handleCloseModal={handleCloseReverseTransactionModal}
-				transactions={allTransactionsData}
-				setReverseTransaction={setReverseTransaction}
 				handleReverseTransaction={handleReverseTransaction}
 			/>
 		</div>

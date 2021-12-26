@@ -82,7 +82,12 @@ export const addAirport = async (req, res) => {
 				.status(400)
 				.json({ message: 'More fuel available than capacity of the airport' });
 
-		await airport.create({ airport_name, fuel_available, fuel_capacity });
+		await airport.create({
+			airport_name,
+			fuel_available,
+			fuel_capacity,
+			no_of_transactions: 0,
+		});
 
 		return fetchingAirports(page, limit, res);
 	} catch (error) {
@@ -95,6 +100,32 @@ export const fetchAllAirports = async (req, res) => {
 	try {
 		const allAirports = await airport.find();
 		res.status(200).json(allAirports);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ message: error.message });
+	}
+};
+
+export const fetchTopFiveAirports = async (req, res) => {
+	try {
+		const top5Airports = await airport
+			.find()
+			.limit(5)
+			.sort({ no_of_transactions: -1 });
+		res.status(200).json(top5Airports);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ message: error.message });
+	}
+};
+
+export const fetchTopFiveFuelAvailable = async (req, res) => {
+	try {
+		const top5FuelAvailable = await airport
+			.find()
+			.limit(5)
+			.sort({ fuel_available: -1 });
+		res.status(200).json(top5FuelAvailable);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: error.message });

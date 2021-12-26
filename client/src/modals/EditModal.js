@@ -9,10 +9,8 @@ Modal.setAppElement('#root');
 const AirportEditModal = ({
 	isModalOpen,
 	handleCloseEditModal,
-	data,
 	handleEditEntity,
 	selectedEntity,
-	handleSelectedEntity,
 	handleEditSelectedEntity,
 	heading,
 	inputLabels,
@@ -26,16 +24,6 @@ const AirportEditModal = ({
 			overlayClassName='Overlay'
 		>
 			<h4>{heading}</h4>
-			<select className='airport-edit-select' onChange={handleSelectedEntity}>
-				<option>Select airport</option>
-				{data &&
-					data.length &&
-					data.map((entity) => (
-						<option key={entity._id} value={JSON.stringify(entity)}>
-							{entity[inputNames[0]]}
-						</option>
-					))}
-			</select>
 			<form className='airport-edit-form'>
 				{inputNames.map((name, index) => (
 					<Input

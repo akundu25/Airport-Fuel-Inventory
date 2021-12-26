@@ -8,8 +8,6 @@ Modal.setAppElement('#root');
 const ReverseTransactionModal = ({
 	isModalOpen,
 	handleCloseModal,
-	transactions,
-	setReverseTransaction,
 	handleReverseTransaction,
 }) => {
 	return (
@@ -19,22 +17,7 @@ const ReverseTransactionModal = ({
 			className='ReverseTransactionModal'
 			overlayClassName='Overlay'
 		>
-			<h4>SELECT A TRANSACTION TO REVERSE</h4>
-			<form className='transaction-add-form'>
-				<select
-					onChange={(e) => setReverseTransaction(JSON.parse(e.target.value))}
-				>
-					<option>Select transaction</option>
-					{transactions &&
-						transactions.length &&
-						transactions.map((transaction) => (
-							<option key={transaction._id} value={JSON.stringify(transaction)}>
-								{transaction.airport_name} - {transaction.transaction_type} -{' '}
-								{transaction.quantity}
-							</option>
-						))}
-				</select>
-			</form>
+			<h5>Are you sure you want to reverse the transaction</h5>
 			<div className='transaction-modal-btn'>
 				<Button type='button' btnText='Cancel' onClick={handleCloseModal} />
 				<Button

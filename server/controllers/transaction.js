@@ -1,5 +1,6 @@
 import airport from '../models/airport.js';
 import transaction from '../models/transaction.js';
+import moment from 'moment';
 
 const fetchingTransactions = async (page, limit, res) => {
 	try {
@@ -45,14 +46,14 @@ export const addTransaction = async (req, res) => {
 
 		const { transaction_type, airport_id, quantity } = newTransaction;
 
-		const { fuel_available, fuel_capacity } = await airport.findById(
-			airport_id,
-			{
+		const { fuel_available, fuel_capacity, no_of_transactions } =
+			await airport.findById(airport_id, {
 				fuel_available: 1,
 				fuel_capacity: 1,
-			}
-		);
+				no_of_transactions: 1,
+			});
 
+		const int_no_of_transactions = parseInt(no_of_transactions);
 		const int_fuel_available = parseInt(fuel_available);
 		const int_fuel_capacity = parseInt(fuel_capacity);
 		const int_quantity = parseInt(quantity);
@@ -73,7 +74,10 @@ export const addTransaction = async (req, res) => {
 		}
 
 		await airport.findByIdAndUpdate(airport_id, {
-			$set: { fuel_available: newFuelAvailable },
+			$set: {
+				fuel_available: newFuelAvailable,
+				no_of_transactions: int_no_of_transactions + 1,
+			},
 		});
 
 		await transaction.create(newTransaction);
@@ -117,13 +121,12 @@ export const reverseTransaction = async (req, res) => {
 		} = req.body;
 		let newFuelAvailable;
 
-		const { fuel_available, fuel_capacity } = await airport.findById(
-			airport_id,
-			{
+		const { fuel_available, fuel_capacity, no_of_transactions } =
+			await airport.findById(airport_id, {
 				fuel_available: 1,
 				fuel_capacity: 1,
-			}
-		);
+				no_of_transactions: 1,
+			});
 
 		if (transaction_type === 'IN') {
 			if (parseInt(quantity) > parseInt(fuel_available))
@@ -145,10 +148,13 @@ export const reverseTransaction = async (req, res) => {
 		}
 
 		await airport.findByIdAndUpdate(airport_id, {
-			$set: { fuel_available: newFuelAvailable },
+			$set: {
+				fuel_available: newFuelAvailable,
+				no_of_transactions: parseInt(no_of_transactions) - 1,
+			},
 		});
 		await transaction.create({
-			transaction_date_time: new Date(),
+			transaction_date_time: moment().format('LLL'),
 			transaction_type: 'Reverse',
 			airport_id,
 			airport_name,
