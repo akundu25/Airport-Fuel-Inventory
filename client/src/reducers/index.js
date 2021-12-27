@@ -4,6 +4,7 @@ import airport from './airport';
 import aircraft from './aircraft';
 import transaction from './transaction';
 import fuelConsumption from './fuelConsumption';
+import airportSummary from './airportSummary';
 
 const rootReducer = combineReducers({
 	user,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
 	aircraft,
 	transaction,
 	fuelConsumption,
+	airportSummary,
 });
 
 export default rootReducer;

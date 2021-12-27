@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAirports, getAllAirports } from '../actions/airport';
+import {
+	getAirportsSummary,
+	getAllAirportsSummary,
+} from '../actions/airportSummary';
 import { useReactToPrint } from 'react-to-print';
 import * as images from '../images';
+import * as types from '../types';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
@@ -63,10 +67,10 @@ const listItems = [
 const AirportSummaryReport = () => {
 	const airportSummaryRef = useRef();
 	const dispatch = useDispatch();
-	const airports = useSelector((state) => state.airport.airports);
-	const next = useSelector((state) => state.airport.next);
-	const prev = useSelector((state) => state.airport.prev);
-	const allAirports = useSelector((state) => state.airport.allAirports);
+	const airports = useSelector((state) => state.airportSummary.airports);
+	const next = useSelector((state) => state.airportSummary.next);
+	const prev = useSelector((state) => state.airportSummary.prev);
+	const allAirports = useSelector((state) => state.airportSummary.allAirports);
 	const [allAirportsData, setAllAirportsData] = useState(allAirports);
 	const [airportsData, setAirportsData] = useState(airports);
 	const [limit, setLimit] = useState(4);
@@ -85,9 +89,14 @@ const AirportSummaryReport = () => {
 	});
 
 	useEffect(() => {
-		!allAirports && dispatch(getAllAirports());
+		dispatch({ type: types.CLEAN_AIRPORTS });
+		dispatch({ type: types.CLEAN_AIRCRAFTS });
+		dispatch({ type: types.CLEAN_TRANSACTIONS });
+		dispatch({ type: types.CLEAN_CHARTS_DATA });
+		!allAirports && dispatch(getAllAirportsSummary());
 		setAllAirportsData(allAirports);
-		!airports && dispatch(getAirports(limit, page));
+
+		!airports && dispatch(getAirportsSummary(limit, page));
 		setAirportsData(airports);
 
 		if (next) setNextDisabled(false);
@@ -97,18 +106,18 @@ const AirportSummaryReport = () => {
 	}, [dispatch, airports, next, prev, limit, page, allAirports]);
 
 	const handleChange = (e) => {
-		dispatch(getAirports(e.target.value, 1));
+		dispatch(getAirportsSummary(e.target.value, 1));
 		setLimit(e.target.value);
 		setPage(1);
 	};
 
 	const handlePrevPage = () => {
-		dispatch(getAirports(limit, page - 1));
+		dispatch(getAirportsSummary(limit, page - 1));
 		setPage((prevPage) => prevPage - 1);
 	};
 
 	const handleNextPage = () => {
-		dispatch(getAirports(limit, page + 1));
+		dispatch(getAirportsSummary(limit, page + 1));
 		setPage((prevPage) => prevPage + 1);
 	};
 

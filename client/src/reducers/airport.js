@@ -42,6 +42,12 @@ const airport = (state = initialState, action) => {
 				next: null,
 				prev: null,
 			};
+		case types.CLEAN_CHARTS_DATA:
+			return {
+				...state,
+				top5Airports: null,
+				top5FuelAvailable: null,
+			};
 		default:
 			return state;
 	}

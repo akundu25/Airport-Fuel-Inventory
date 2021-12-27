@@ -83,8 +83,10 @@ const Aircrafts = () => {
 	const [isAscendingByAirline, setIsAscendingByAirline] = useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
 		dispatch({ type: types.CLEAN_AIRPORTS });
 		dispatch({ type: types.CLEAN_TRANSACTIONS });
+		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!aircrafts && dispatch(getAircrafts(limit, page));
 		setAircraftsData(aircrafts);
 

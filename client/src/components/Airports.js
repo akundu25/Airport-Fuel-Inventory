@@ -88,8 +88,10 @@ const Airports = () => {
 		useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
 		dispatch({ type: types.CLEAN_AIRCRAFTS });
 		dispatch({ type: types.CLEAN_TRANSACTIONS });
+		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!airports && dispatch(getAirports(limit, page));
 		setAirportsData(airports);
 

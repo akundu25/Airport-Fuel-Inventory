@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
+import * as types from '../types';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import RoundCard from '../utility/RoundCard';
@@ -123,9 +124,13 @@ const Dashboard = () => {
 
 	const label_top5FuelAvailable = 'Fuel Available (L)';
 	const borderColor_top5FuelAvailable = ['rgba(184, 74, 3, 0.2)'];
-	const backgroundColor_top5FuelAvailable = ['rgba(205, 25, 5, 0.7)'];
+	const backgroundColor_top5FuelAvailable = ['rgba(217, 114, 48, 0.7)'];
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
+		dispatch({ type: types.CLEAN_AIRPORTS });
+		dispatch({ type: types.CLEAN_AIRCRAFTS });
+		dispatch({ type: types.CLEAN_TRANSACTIONS });
 		!allAirports && dispatch(getAllAirports());
 		setAllAirportsData(allAirports);
 

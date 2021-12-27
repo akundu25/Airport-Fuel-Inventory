@@ -115,8 +115,10 @@ const Transactions = () => {
 	const [isAscendingByQuantity, setIsAscendingByQuantity] = useState(false);
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
 		dispatch({ type: types.CLEAN_AIRPORTS });
 		dispatch({ type: types.CLEAN_AIRCRAFTS });
+		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!transactions && dispatch(getTransactions(limit, page));
 		setTransactionsData(transactions);
 

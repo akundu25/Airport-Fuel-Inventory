@@ -6,6 +6,7 @@ import {
 	getAllFuelConsumption,
 } from '../actions/fuelConsumption';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
+import * as types from '../types';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
@@ -70,6 +71,10 @@ const FuelConsumptionReport = () => {
 	});
 
 	useEffect(() => {
+		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
+		dispatch({ type: types.CLEAN_AIRCRAFTS });
+		dispatch({ type: types.CLEAN_TRANSACTIONS });
+		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!airports && !transactions && dispatch(getFuelConsumption(limit, page));
 		setTransactionsData(transactions);
 		setAirportsData(airports);
