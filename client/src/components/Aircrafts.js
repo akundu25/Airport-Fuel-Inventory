@@ -248,11 +248,6 @@ const Aircrafts = () => {
 							btnText='Add Aircraft'
 							onClick={handleOpenAddModal}
 						/>
-						<Button
-							type='button'
-							btnText='Edit Aircraft'
-							onClick={handleOpenEditModal}
-						/>
 					</div>
 				</div>
 			</div>
