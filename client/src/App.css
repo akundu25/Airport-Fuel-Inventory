@@ -125,7 +125,7 @@ body {
 /* dashboard */
 
 .dashboard-container {
-	height: 1200px;
+	height: 1800px;
 }
 
 .main-dashboard {
@@ -176,7 +176,7 @@ body {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	height: 20%;
+	height: 10%;
 }
 
 .round-card {
@@ -200,7 +200,7 @@ body {
 .dashboard-items .row-2 {
 	display: flex;
 	justify-content: space-around;
-	height: 40%;
+	height: 30%;
 	padding: 50px 0px;
 }
 
@@ -237,15 +237,30 @@ body {
 	color: #f13753;
 }
 
-.dashboard-items .charts {
-	margin: 100px 0px 50px 0px;
+.dashboard-items .charts-1,
+.charts-2 {
+	margin-top: 100px;
 	display: flex;
 	width: 1200px;
-	height: 40%;
+	height: 30%;
 	justify-content: space-between;
 }
 
-.dashboard-items .charts .bar,
+.dashboard-items .charts-1 {
+	margin-left: 30px;
+	margin-bottom: 100px;
+}
+
+.dashboard-items .charts-1 .pie,
+.doughnut {
+	font-size: 20px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	width: 40%;
+}
+
+.dashboard-items .charts-2 .bar,
 .line {
 	width: 50%;
 	display: flex;
@@ -254,12 +269,14 @@ body {
 	font-size: 15px;
 }
 
-.dashboard-items .charts .bar h7 {
+.dashboard-items .charts-2 .bar h7,
+.charts-1 .pie h7 {
 	color: #0715d0;
 	margin-bottom: 25px;
 }
 
-.dashboard-items .charts .line h7 {
+.dashboard-items .charts-2 .line h7,
+.charts-1 .doughnut h7 {
 	color: #f13753;
 	margin-bottom: 25px;
 }

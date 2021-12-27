@@ -9,6 +9,7 @@ const LineChart = ({
 	dataset,
 	borderColor,
 	backgroundColor,
+	pointBackgroundColor,
 }) => {
 	const data = {
 		labels: labels,
@@ -16,17 +17,28 @@ const LineChart = ({
 			{
 				label,
 				data: dataset,
+				fill: true,
 				borderColor,
 				backgroundColor,
+				pointBackgroundColor,
+				tension: 0.5,
 			},
 		],
 	};
 
 	const options = {
+		radius: 5,
+		hitRadius: 40,
+		hoverRadius: 10,
 		scales: {
 			y: {
 				suggestedMin: 0,
 				suggestedMax: 50000,
+				ticks: {
+					callback: function (value) {
+						return value + ' L';
+					},
+				},
 			},
 		},
 	};

@@ -23,7 +23,6 @@ const BarChart = ({ labels, label, dataset, borderColor, backgroundColor }) => {
 				suggestedMax: 5,
 			},
 		},
-		maintainAspectratio: false,
 	};
 	return <Bar data={data} options={options} />;
 };

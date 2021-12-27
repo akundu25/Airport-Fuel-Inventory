@@ -108,24 +108,23 @@ export const fetchAllAirports = async (req, res) => {
 
 export const fetchTopFiveAirports = async (req, res) => {
 	try {
-		const top5Airports = await airport
+		const top5NoOfTransactions = await airport
 			.find()
 			.limit(5)
 			.sort({ no_of_transactions: -1 });
-		res.status(200).json(top5Airports);
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ message: error.message });
-	}
-};
 
-export const fetchTopFiveFuelAvailable = async (req, res) => {
-	try {
 		const top5FuelAvailable = await airport
 			.find()
 			.limit(5)
 			.sort({ fuel_available: -1 });
-		res.status(200).json(top5FuelAvailable);
+
+		const top5FuelCapacity = await airport
+			.find()
+			.limit(5)
+			.sort({ fuel_capacity: -1 });
+		res
+			.status(200)
+			.json({ top5NoOfTransactions, top5FuelAvailable, top5FuelCapacity });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ message: error.message });

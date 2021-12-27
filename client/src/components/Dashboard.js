@@ -6,15 +6,13 @@ import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import RoundCard from '../utility/RoundCard';
 import LargeCard from '../utility/LargeCard';
+import PieChart from '../utility/PieChart';
 import BarChart from '../utility/BarChart';
+import DoughNutChart from '../utility/DoughNutChart';
 import LineChart from '../utility/LineChart';
 import PdfAirportSummaryReport from '../PDF/PdfAirportSummaryReport';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
-import {
-	getAllAirports,
-	getTopFiveAirports,
-	getTopFiveFuelAvailable,
-} from '../actions/airport';
+import { getAllAirports, getTopFiveAirports } from '../actions/airport';
 import { getAllFuelConsumption } from '../actions/fuelConsumption';
 
 import '../App.css';
@@ -72,13 +70,21 @@ const Dashboard = () => {
 	const date = new Date().toDateString();
 	const allAirports = useSelector((state) => state.airport.allAirports);
 	const [allAirportsData, setAllAirportsData] = useState(allAirports);
-	const top5Airports = useSelector((state) => state.airport.top5Airports);
-	const [top5AirportsData, setTop5AirportsData] = useState(top5Airports);
+	const top5NoOfTransactions = useSelector(
+		(state) => state.airport.top5NoOfTransactions
+	);
+	const [top5NoOfTransactionsData, setTop5NoOfTransactionsData] =
+		useState(top5NoOfTransactions);
 	const top5FuelAvailable = useSelector(
 		(state) => state.airport.top5FuelAvailable
 	);
 	const [top5FuelAvailableData, setTop5FuelAvailableData] =
 		useState(top5FuelAvailable);
+	const top5FuelCapacity = useSelector(
+		(state) => state.airport.top5FuelCapacity
+	);
+	const [top5FuelCapacityData, setTop5FuelCapacityData] =
+		useState(top5FuelCapacity);
 	const allTransactions = useSelector(
 		(state) => state.fuelConsumption.allTransactions
 	);
@@ -94,10 +100,11 @@ const Dashboard = () => {
 	});
 
 	const data =
-		top5AirportsData &&
-		top5AirportsData.map((airport) => airport.no_of_transactions);
+		top5NoOfTransactionsData &&
+		top5NoOfTransactionsData.map((airport) => airport.no_of_transactions);
 	const labels =
-		top5AirportsData && top5AirportsData.map((airport) => airport.airport_name);
+		top5NoOfTransactionsData &&
+		top5NoOfTransactionsData.map((airport) => airport.airport_name);
 	const label = 'No of transactions';
 	const borderColor = [
 		'rgba(8, 14, 94, 0.2)',
@@ -107,11 +114,11 @@ const Dashboard = () => {
 		'rgba(8, 14, 94, 0.2)',
 	];
 	const backgroundColor = [
-		'rgba(7, 21, 208, 0.7)',
-		'rgba(7, 21, 208, 0.7)',
-		'rgba(7, 21, 208, 0.7)',
-		'rgba(7, 21, 208, 0.7)',
-		'rgba(7, 21, 208, 0.7)',
+		'rgba(7, 21, 208, 0.9)',
+		'rgba(244, 56, 73, 0.9)',
+		'rgba(231, 36, 223 , 0.9)',
+		'rgba(56, 228, 37 , 0.9)',
+		'rgba(213, 231, 31 , 0.9)',
 	];
 
 	const data_top5FuelAvailable =
@@ -123,8 +130,19 @@ const Dashboard = () => {
 		top5FuelAvailableData.map((airport) => airport.airport_name);
 
 	const label_top5FuelAvailable = 'Fuel Available (L)';
-	const borderColor_top5FuelAvailable = ['rgba(184, 74, 3, 0.2)'];
-	const backgroundColor_top5FuelAvailable = ['rgba(217, 114, 48, 0.7)'];
+	const borderColor_top5FuelAvailable = ['rgba(211, 25, 6, 0.5)'];
+	const pointBackgroundColor = ['rgba(182, 5, 21, 0.8)'];
+	const backgroundColor_top5FuelAvailable = ['rgba(217, 114, 48, 0.3)'];
+
+	const data_top5FuelCapacity =
+		top5FuelCapacityData &&
+		top5FuelCapacityData.map((airport) => airport.fuel_available);
+
+	const labels_top5FuelCapacity =
+		top5FuelCapacityData &&
+		top5FuelCapacityData.map((airport) => airport.airport_name);
+
+	const label_top5FuelCapacity = 'Fuel Capacity (L)';
 
 	useEffect(() => {
 		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
@@ -134,15 +152,24 @@ const Dashboard = () => {
 		!allAirports && dispatch(getAllAirports());
 		setAllAirportsData(allAirports);
 
-		!top5Airports && dispatch(getTopFiveAirports());
-		setTop5AirportsData(top5Airports);
-
-		!top5FuelAvailable && dispatch(getTopFiveFuelAvailable());
+		!top5NoOfTransactions &&
+			!top5FuelAvailable &&
+			!top5FuelCapacity &&
+			dispatch(getTopFiveAirports());
+		setTop5NoOfTransactionsData(top5NoOfTransactions);
 		setTop5FuelAvailableData(top5FuelAvailable);
+		setTop5FuelCapacityData(top5FuelCapacity);
 
 		!allTransactions && dispatch(getAllFuelConsumption());
 		setAllTransactionsData(allTransactions);
-	}, [dispatch, allAirports, allTransactions, top5Airports, top5FuelAvailable]);
+	}, [
+		dispatch,
+		allAirports,
+		allTransactions,
+		top5NoOfTransactions,
+		top5FuelAvailable,
+		top5FuelCapacity,
+	]);
 
 	return (
 		<div className='dashboard-container'>
@@ -171,7 +198,7 @@ const Dashboard = () => {
 						<RoundCard title='AIRCRAFTS' to='/aircrafts' />
 						<RoundCard title='TRANSACTIONS' to='/transactions' />
 					</div>
-					<div className='charts'>
+					<div className='charts-2'>
 						<div className='bar'>
 							<h7>Top 5 Airports for most number of transactions</h7>
 							<BarChart
@@ -190,6 +217,29 @@ const Dashboard = () => {
 								dataset={data_top5FuelAvailable}
 								borderColor={borderColor_top5FuelAvailable}
 								backgroundColor={backgroundColor_top5FuelAvailable}
+								pointBackgroundColor={pointBackgroundColor}
+							/>
+						</div>
+					</div>
+					<div className='charts-1'>
+						<div className='pie'>
+							<h7>Top 5 Airports for most number of transactions</h7>
+							<PieChart
+								labels={labels}
+								label={label}
+								dataset={data}
+								borderColor={borderColor}
+								backgroundColor={backgroundColor}
+							/>
+						</div>
+						<div className='doughnut'>
+							<h7>Top 5 Airports in terms of fuel capacity</h7>
+							<DoughNutChart
+								labels={labels_top5FuelCapacity}
+								label={label_top5FuelCapacity}
+								dataset={data_top5FuelCapacity}
+								borderColor={borderColor}
+								backgroundColor={backgroundColor}
 							/>
 						</div>
 					</div>

@@ -3,8 +3,9 @@ import * as types from '../types';
 const initialState = {
 	airports: null,
 	allAirports: null,
-	top5Airports: null,
+	top5NoOfTransactions: null,
 	top5FuelAvailable: null,
+	top5FuelCapacity: null,
 	next: null,
 	prev: null,
 };
@@ -28,12 +29,9 @@ const airport = (state = initialState, action) => {
 		case types.FETCH_TOP_FIVE_AIRPORTS:
 			return {
 				...state,
-				top5Airports: action?.payload,
-			};
-		case types.FETCH_TOP_FIVE_FUEL_AVAILABLE:
-			return {
-				...state,
-				top5FuelAvailable: action?.payload,
+				top5NoOfTransactions: action?.payload?.top5NoOfTransactions,
+				top5FuelAvailable: action?.payload?.top5FuelAvailable,
+				top5FuelCapacity: action?.payload?.top5FuelCapacity,
 			};
 		case types.CLEAN_AIRPORTS:
 			return {
@@ -45,8 +43,9 @@ const airport = (state = initialState, action) => {
 		case types.CLEAN_CHARTS_DATA:
 			return {
 				...state,
-				top5Airports: null,
+				top5NoOfTransactions: null,
 				top5FuelAvailable: null,
+				top5FuelCapacity: null,
 			};
 		default:
 			return state;

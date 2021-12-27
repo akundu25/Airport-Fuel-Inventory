@@ -45,12 +45,3 @@ export const getTopFiveAirports = () => async (dispatch) => {
 		console.log(error);
 	}
 };
-
-export const getTopFiveFuelAvailable = () => async (dispatch) => {
-	try {
-		const { data } = await api.fetchTopFiveFuelAvailable();
-		dispatch({ type: types.FETCH_TOP_FIVE_FUEL_AVAILABLE, payload: data });
-	} catch (error) {
-		console.log(error);
-	}
-};
