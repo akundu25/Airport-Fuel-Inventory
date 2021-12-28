@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.post('/', userAuth, addTransaction);
+router.post('/add', userAuth, addTransaction);
 router.get('/', userAuth, fetchTransactions);
 router.get('/all', userAuth, fetchAllTransactions);
 router.post('/reverse', userAuth, reverseTransaction);

@@ -46,7 +46,7 @@ export const fetchAllAircrafts = () => API.get('/aircraft/all');
 // transactions
 
 export const addTransaction = (transaction, page, limit) =>
-	API.post(`/transaction?page=${page}&limit=${limit}`, transaction);
+	API.post(`/transaction/add?page=${page}&limit=${limit}`, transaction);
 
 export const fetchTransactions = (page, limit) =>
 	API.get(`/transaction?page=${page}&limit=${limit}`);

@@ -1,0 +1,981 @@
+openapi: 3.0.1
+info:
+  title: Airport Fuel Inventory
+  description: Admin website for airport fuel management
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Development server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    user:
+      type: object,
+      properties:
+        name:
+          type: string
+          example: Arnab Kundu
+        email:
+          type: string
+          example: ak@gmail.com
+        password:
+          type: string
+        confirmPassword:
+          type: string
+      required:
+        - email
+        - password
+    airport:
+      type: object
+      properties:
+        _id:
+          type: string
+        airport_name:
+          type: string
+        fuel_available:
+          type: number
+        fuel_capacity:
+          type: number
+        no_of_transactions:
+          type: number
+      required:
+        - airport_name
+        - fuel_available
+        - fuel_capacity
+    aircraft:
+      type: object
+      properties:
+        _id:
+          type: string
+        aircraft_no:
+          type: string
+        airline:
+          type: string
+      required:
+        - aircraft_no
+        - airline
+    transaction:
+      type: object
+      properties:
+        transaction_date_time:
+          type: string
+        transaction_type:
+          type: string
+        airport_id:
+          type: string
+        airport_name:
+          type: string
+        aircraft_id:
+          type: string
+        aircraft_name:
+          type: string
+        quantity:
+          type: number
+        transaction_id_parent:
+          type: string
+      required:
+        - transaction_date_time
+        - transaction_type
+        - airport_id
+        - airport_name
+        - quantity
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              msg:
+                type: string
+              location:
+                type: string
+              param:
+                type: string
+            required:
+              - msg
+      required:
+        - errors
+    pagination:
+      type: object
+      properties:
+        limit:
+          type: number
+        page:
+          type: number
+      required:
+        - limit
+        - page
+security:
+  - bearerAuth: []
+tags:
+  name: UserAuthentication
+  description: Authenticating and authorising users
+  name: Airport
+  description: All operations relating to airport
+  name: Aircraft
+  description: All operations relating to aircraft
+  name: Transaction
+  description: All operations relating to transactions
+paths:
+  /user/login:
+    post:
+      tags: [UserAuthentication]
+      summary: Login of a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clientUser:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                  token:
+                    type: string
+                required:
+                  - clientUser
+                  - token
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /user/signup:
+    post:
+      tags: [UserAuthentication]
+      summary: Signup of a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clientUser:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                  token:
+                    type: string
+                required:
+                  - clientUser
+                  - token
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /airport:
+    get:
+      tags: [Airport]
+      summary: Fetching of airports
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      responses:
+        200:
+          description: Fetching of airports successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                required:
+                  - airports
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      
+  /airport/add:
+    post:
+      tags: [Airport]
+      summary: Adding a new airport
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/airport'
+      responses:
+        200:
+          description: Adding of airports successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                required:
+                  - airports
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      
+  /airport/edit:
+    patch:
+      tags: [Airport]
+      summary: To edit an airport
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/airport'
+      responses:
+        200:
+          description: Editing of airports successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                required:
+                  - airports
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              
+  /airport/all:
+    get:
+      tags: [Airport]
+      summary: Fetching all airports at once
+      responses:
+        200:
+          description: Fetching of all airports successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/airport'
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /airport/top-5-airports:
+    get:
+      tags: [Airport]
+      summary: Fetching top 5 airports based on various metrics
+      responses:
+        200:
+          description: Fetching of top 5 airports successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  top5NoOfTransactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                  top5FuelAvailable:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                  top5FuelCapacity:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                required:
+                  - top5NoOfTransactions
+                  - top5FuelAvailable
+                  - top5FuelCapacity
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /aircraft:
+    get:
+      tags: [Aircraft]
+      summary: Fetching aircrafts
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      responses:
+        200:
+          description: Fetching of aircrafts successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  aircrafts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/aircraft'
+                required:
+                  - aircrafts
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /aircraft/add:
+    post:
+      tags: [Aircraft]
+      summary: Adding a new aircraft
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/aircraft'
+      responses:
+        200:
+          description: Adding of aircrafts successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  aircrafts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/aircraft'
+                required:
+                  - aircrafts
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /aircraft/edit:
+    patch:
+      tags: [Aircraft]
+      summary: To edit an aircraft
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/aircraft'
+      responses:
+        200:
+          description: Editing of aircrafts successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  aircrafts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/aircraft'
+                required:
+                  - aircrafts
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /aircraft/all:
+    get:
+      tags: [Aircraft]
+      summary: Fetching all aircrafts at once
+      responses:
+        200:
+          description: Fetching of all aircrafts successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/aircraft'
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /transaction:
+    get:
+      tags: [Transaction]
+      summary: Fetch transactions
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      responses:
+        200:
+          description: Fetching of transactions successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transaction'
+                required:
+                  - transactions
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /transaction/all:
+    get:
+      tags: [Transaction]
+      summary: Fetching all transactions at once
+      responses:
+        200:
+          description: Fetching of all transactions successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/transaction'
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /transaction/add:
+    post:
+      tags: [Transaction]
+      summary: Adding a transaction
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction'
+      responses:
+        200:
+          description: Adding of transactions successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transaction'
+                required:
+                  - transactions
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /transaction/edit:
+    patch:
+      tags: [Transaction]
+      summary: To edit a transaction
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transaction'
+      responses:
+        200:
+          description: Editing of aircrafts successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    $ref: '#/components/schemas/pagination'
+                  prev:
+                    $ref: '#/components/schemas/pagination'
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transaction'
+                required:
+                  - transactions
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /fuel-consumption:
+    get:
+      tags: [FuelConsumption]
+      summary: Fetching airports and their corresponding transactions
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: Number of docs per page
+          schema:
+            type: number
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: number
+      responses:
+        200:
+          description: Fetching of airports and their corresponding transactions successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transaction'
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /fuel-consumption/all:
+    get:
+      tags: [FuelConsumption]
+      summary: Fetching of all airports and their corresponding transactions
+      responses:
+        200:
+          description: Fetching of airports and their corresponding transactions successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/airport'
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/transaction'
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  
+
+
