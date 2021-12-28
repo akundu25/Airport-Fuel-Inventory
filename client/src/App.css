@@ -307,10 +307,36 @@ body {
 	height: 10%;
 	margin: 20px;
 	text-align: right;
+	display: flex;
+	justify-content: space-around;
 }
 
-.airport-top .page-limit {
-	margin-right: 20px;
+.airport-top .search-airport {
+	width: 60%;
+	display: flex;
+}
+
+.airport-top label {
+	margin: auto 0px auto 30px;
+}
+
+.airport-top .pagination {
+	width: 40%;
+	padding-left: 100px;
+}
+
+.airport-top .search {
+	width: 45px;
+	height: 45px;
+	cursor: pointer;
+}
+
+.airport-top .pagination .page-limit {
+	margin: auto 20px auto 0px;
+}
+
+.airport-top .pagination span {
+	margin: auto 0px;
 }
 
 .airport-container .left-arrow,

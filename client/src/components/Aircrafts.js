@@ -81,6 +81,7 @@ const Aircrafts = () => {
 	const [selectedAircraft, setSelectedAircraft] = useState(sampleAircraft);
 	const [isAscendingByName, setIsAscendingByName] = useState(false);
 	const [isAscendingByAirline, setIsAscendingByAirline] = useState(false);
+	const [searchAircraft, setSearchAircraft] = useState('');
 
 	useEffect(() => {
 		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
@@ -192,6 +193,16 @@ const Aircrafts = () => {
 		AIRLINE: sortAircraftByAirline,
 	};
 
+	const handleSearchAircraftChange = (e) => {
+		const searchedAircrafts =
+			aircrafts &&
+			aircrafts.filter(({ aircraft_no }) =>
+				aircraft_no.toLowerCase().startsWith(e.target.value.toLowerCase())
+			);
+		setAircraftsData(searchedAircrafts);
+		setSearchAircraft(e.target.value);
+	};
+
 	return (
 		<div
 			className={`airport-container ${
@@ -203,36 +214,53 @@ const Aircrafts = () => {
 				<Sidebar listItems={listItems} />
 				<div className='airport-list'>
 					<div className='airport-top'>
-						<select className='page-limit' onChange={handleChange}>
-							<option>4</option>
-							<option>8</option>
-						</select>
-						<span>Page limit</span>
-						<Button
-							type='button'
-							btnText={
-								<img
-									src={images.leftArrow}
-									alt='left-arrow'
-									className='left-arrow'
+						<div className='search-airport'>
+							<label>
+								<input
+									type='text'
+									placeholder='Search aircraft'
+									value={searchAircraft}
+									onChange={handleSearchAircraftChange}
 								/>
-							}
-							onClick={handlePrevPage}
-							disabled={prevDisabled}
-						/>
-						<span className='page-number'>Page: {page}</span>
-						<Button
-							type='button'
-							btnText={
 								<img
-									src={images.rightArrow}
-									alt='right-arrow'
-									className='right-arrow'
+									src={images.searchIcon}
+									alt='search airport'
+									className='search'
 								/>
-							}
-							onClick={handleNextPage}
-							disabled={nextDisabled}
-						/>
+							</label>
+						</div>
+						<div className='pagination'>
+							<select className='page-limit' onChange={handleChange}>
+								<option>4</option>
+								<option>8</option>
+							</select>
+							<span>Page limit</span>
+							<Button
+								type='button'
+								btnText={
+									<img
+										src={images.leftArrow}
+										alt='left-arrow'
+										className='left-arrow'
+									/>
+								}
+								onClick={handlePrevPage}
+								disabled={prevDisabled}
+							/>
+							<span className='page-number'>Page: {page}</span>
+							<Button
+								type='button'
+								btnText={
+									<img
+										src={images.rightArrow}
+										alt='right-arrow'
+										className='right-arrow'
+									/>
+								}
+								onClick={handleNextPage}
+								disabled={nextDisabled}
+							/>
+						</div>
 					</div>
 					<Table
 						columns={columns}
