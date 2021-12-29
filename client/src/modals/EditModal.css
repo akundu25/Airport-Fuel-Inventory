@@ -1,8 +1,8 @@
 .EditModal {
 	position: absolute;
-	top: 180px;
+	top: 130px;
 	right: 600px;
-	bottom: 180px;
+	bottom: 130px;
 	left: 600px;
 	background-color: #ffffff;
 	display: flex;
@@ -25,17 +25,37 @@
 }
 
 .EditModal .airport-edit-form {
-	height: 60%;
+	height: 58%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 }
 
+.EditModal .airport-edit-form .warnings {
+	height: 30%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.EditModal .airport-edit-form .input-fields {
+	height: 70%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.EditModal .airport-edit-form .warning-message {
+	font-size: 20px;
+	color: #b32209;
+	display: block;
+}
+
 .EditModal .edit-modal-btn {
-	height: 25%;
+	height: 27%;
 	display: flex;
 	justify-content: space-around;
-	padding: 30px 20px 0px 20px;
+	padding: 65px 20px 0px 20px;
 }
 
 .EditModal .edit-modal-btn button {

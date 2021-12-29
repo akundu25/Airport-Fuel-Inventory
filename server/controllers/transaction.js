@@ -34,7 +34,7 @@ const fetchingTransactions = async (page, limit, res) => {
 		return res.status(200).json(results);
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -63,12 +63,12 @@ export const addTransaction = async (req, res) => {
 			if (int_fuel_available < int_quantity)
 				return res
 					.status(400)
-					.json({ message: 'This much fuel is not available at the airport' });
+					.json({ errors: [{ msg: 'Not enough fuel available' }] });
 			else newFuelAvailable = int_fuel_available - int_quantity;
 		} else {
 			if (int_fuel_available + int_quantity > int_fuel_capacity)
 				return res.status(400).json({
-					message: 'More fuel available than capacity of the airport',
+					errors: [{ msg: 'Error: Fuel available > fuel capacity' }],
 				});
 			else newFuelAvailable = int_fuel_available + int_quantity;
 		}
@@ -85,7 +85,7 @@ export const addTransaction = async (req, res) => {
 		return fetchingTransactions(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -102,7 +102,7 @@ export const fetchAllTransactions = async (req, res) => {
 		res.status(200).json(allTransactions);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -131,8 +131,7 @@ export const reverseTransaction = async (req, res) => {
 		if (transaction_type === 'IN') {
 			if (parseInt(quantity) > parseInt(fuel_available))
 				return res.status(400).json({
-					message:
-						'Transaction can not be reversed. Not enough fuel available.',
+					errors: [{ msg: 'Error: Not enough fuel available' }],
 				});
 			else newFuelAvailable = parseInt(fuel_available) - parseInt(quantity);
 		} else {
@@ -141,8 +140,7 @@ export const reverseTransaction = async (req, res) => {
 				parseInt(fuel_capacity)
 			)
 				return res.status(400).json({
-					message:
-						'Transaction can not be reversed. More fuel than capacity at the airport.',
+					errors: [{ msg: 'Error: Fuel available > fuel capacity' }],
 				});
 			else newFuelAvailable = parseInt(fuel_available) + parseInt(quantity);
 		}
@@ -170,6 +168,6 @@ export const reverseTransaction = async (req, res) => {
 		return fetchingTransactions(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };

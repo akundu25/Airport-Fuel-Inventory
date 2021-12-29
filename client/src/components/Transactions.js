@@ -7,6 +7,7 @@ import {
 } from '../actions/transaction';
 import { getAllAircrafts } from '../actions/aircraft';
 import { getAllAirports } from '../actions/airport';
+import { toast, ToastContainer } from 'react-toastify';
 import * as images from '../images';
 import * as types from '../types';
 import Table from '../utility/Table';
@@ -15,6 +16,8 @@ import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import AddTransactionModal from '../modals/AddTransactionModal';
 import ReverseTransactionModal from '../modals/ReverseTransactionModal';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const columns = [
 	{
@@ -51,7 +54,7 @@ const sampleTransaction = {
 	airport_name: '',
 	aircraft_id: '',
 	aircraft_name: 'N/A',
-	quantity: '',
+	quantity: 0,
 	transaction_id_parent: '',
 };
 
@@ -90,6 +93,8 @@ const listItems = [
 
 const Transactions = () => {
 	const dispatch = useDispatch();
+	const transactionSuccess = useSelector((state) => state.transaction.success);
+	const transactionError = useSelector((state) => state.transaction.error);
 	const transactions = useSelector((state) => state.transaction.transactions);
 	const airports = useSelector((state) => state.airport.allAirports);
 	const aircrafts = useSelector((state) => state.aircraft.allAircrafts);
@@ -109,7 +114,7 @@ const Transactions = () => {
 	const [transaction, setTransaction] = useState(sampleTransaction);
 	const [reverseTransaction, setReverseTransaction] =
 		useState(sampleTransaction);
-	const [isAscendingByDate, setIsAscendingByDate] = useState(false);
+	const [isAscendingByDate, setIsAscendingByDate] = useState(true);
 	const [isAscendingByAirport, setIsAscendingByAirport] = useState(false);
 	const [isAscendingByAircraft, setIsAscendingByAircraft] = useState(false);
 	const [isAscendingByQuantity, setIsAscendingByQuantity] = useState(false);
@@ -133,12 +138,47 @@ const Transactions = () => {
 		else setNextDisabled(true);
 		if (prev) setPrevDisabled(false);
 		else setPrevDisabled(true);
-	}, [dispatch, transactions, airports, aircrafts, next, prev, limit, page]);
 
-	const handleCloseAddTransactionModal = () =>
+		transactionError && notify(transactionError.msg, 'error');
+		transactionSuccess !== '' && notify(transactionSuccess);
+
+		setTimeout(() => {
+			dispatch({ type: types.SUCCESS_ERROR_REMOVE_TRANSACTION });
+		}, 8000);
+	}, [
+		dispatch,
+		transactions,
+		airports,
+		aircrafts,
+		next,
+		prev,
+		limit,
+		page,
+		transactionSuccess,
+		transactionError,
+	]);
+
+	const notify = (message, type) => {
+		switch (type) {
+			case 'error':
+				toast.error(message);
+				break;
+			case 'success':
+				toast.success(message);
+				break;
+			default:
+				toast(message);
+		}
+	};
+
+	const handleCloseAddTransactionModal = () => {
+		setTransaction(sampleTransaction);
 		setIsAddTransactionModalOpen(false);
-	const handleOpenAddTransactionModal = () =>
+	};
+
+	const handleOpenAddTransactionModal = () => {
 		setIsAddTransactionModalOpen(true);
+	};
 
 	const handleCloseReverseTransactionModal = () =>
 		setIsReverseTransactionModalOpen(false);
@@ -299,6 +339,7 @@ const Transactions = () => {
 			}`}
 		>
 			<Nav />
+			<ToastContainer />
 			<div className='inner-airport-container'>
 				<Sidebar listItems={listItems} />
 				<div className='airport-list'>

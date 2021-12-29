@@ -1,8 +1,8 @@
 .AddModal {
 	position: absolute;
-	top: 180px;
+	top: 130px;
 	right: 600px;
-	bottom: 180px;
+	bottom: 130px;
 	left: 600px;
 	background-color: #ffffff;
 	display: flex;
@@ -25,14 +25,34 @@
 }
 
 .AddModal .airport-add-form {
-	height: 55%;
+	height: 58%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 }
 
-.AddModal .add-modal-btn {
+.AddModal .airport-add-form .warnings {
 	height: 30%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.AddModal .airport-add-form .input-fields {
+	height: 70%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.AddModal .airport-add-form .warning-message {
+	font-size: 20px;
+	color: #b32209;
+	display: block;
+}
+
+.AddModal .add-modal-btn {
+	height: 27%;
 	display: flex;
 	justify-content: space-around;
 	padding: 65px 20px 0px 20px;

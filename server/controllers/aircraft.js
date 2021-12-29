@@ -29,7 +29,8 @@ const fetchingAircrafts = async (page, limit, res) => {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		return res.status(500).json({ message: error.message });
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -50,7 +51,7 @@ export const editAircraft = async (req, res) => {
 		return fetchingAircrafts(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -63,16 +64,16 @@ export const addAircraft = async (req, res) => {
 		const oldAircraft = await aircraft.findOne({ aircraft_no });
 
 		if (oldAircraft)
-			return res
-				.status(400)
-				.json({ message: 'The airport already exists in the database' });
+			return res.status(400).json({
+				errors: [{ msg: 'Error: Aircraft already exist' }],
+			});
 
 		await aircraft.create({ aircraft_no, airline });
 
 		return fetchingAircrafts(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -82,6 +83,6 @@ export const fetchAllAircrafts = async (req, res) => {
 		res.status(200).json(allAircrafts);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };

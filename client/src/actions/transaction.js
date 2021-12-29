@@ -8,7 +8,9 @@ export const addNewTransaction =
 
 			dispatch({ type: types.ADD_TRANSACTION, payload: data });
 		} catch (error) {
-			console.log(error);
+			console.log(error.response);
+			const { data } = error.response;
+			dispatch({ type: types.TRANSACTION_ERROR, payload: data.errors[0] });
 		}
 	};
 
@@ -19,7 +21,9 @@ export const undoTransaction =
 
 			dispatch({ type: types.REVERSE_TRANSACTION, payload: data });
 		} catch (error) {
-			console.log(error);
+			console.log(error.response);
+			const { data } = error.response;
+			dispatch({ type: types.TRANSACTION_ERROR, payload: data.errors[0] });
 		}
 	};
 
@@ -29,7 +33,9 @@ export const getTransactions = (limit, page) => async (dispatch) => {
 
 		dispatch({ type: types.FETCH_TRANSACTIONS, payload: data });
 	} catch (error) {
-		console.log(error);
+		console.log(error.response);
+		const { data } = error.response;
+		dispatch({ type: types.TRANSACTION_ERROR, payload: data.errors[0] });
 	}
 };
 

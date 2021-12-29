@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAirports, updateAirport, addNewAirport } from '../actions/airport';
+import { toast, ToastContainer } from 'react-toastify';
 import * as images from '../images';
 import * as types from '../types';
 import Table from '../utility/Table';
@@ -9,6 +10,8 @@ import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const columns = [
 	{
@@ -30,8 +33,8 @@ const columns = [
 
 const sampleAirport = {
 	airport_name: '',
-	fuel_available: '',
-	fuel_capacity: '',
+	fuel_available: 0,
+	fuel_capacity: 0,
 };
 
 const listItems = [
@@ -69,6 +72,8 @@ const listItems = [
 
 const Airports = () => {
 	const dispatch = useDispatch();
+	const airportError = useSelector((state) => state.airport.error);
+	const airportSuccess = useSelector((state) => state.airport.success);
 	const airports = useSelector((state) => state.airport.airports);
 	const next = useSelector((state) => state.airport.next);
 	const prev = useSelector((state) => state.airport.prev);
@@ -100,11 +105,42 @@ const Airports = () => {
 		else setNextDisabled(true);
 		if (prev) setPrevDisabled(false);
 		else setPrevDisabled(true);
-	}, [dispatch, airports, next, prev, limit, page]);
+
+		airportError && notify(airportError.msg, 'error');
+		airportSuccess !== '' && notify(airportSuccess);
+
+		setTimeout(() => {
+			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRPORT });
+		}, 8000);
+	}, [
+		dispatch,
+		airports,
+		next,
+		prev,
+		limit,
+		page,
+		airportError,
+		airportSuccess,
+	]);
+
+	const notify = (message, type) => {
+		switch (type) {
+			case 'error':
+				toast.error(message);
+				break;
+			case 'success':
+				toast.success(message);
+				break;
+			default:
+				toast(message);
+		}
+	};
 
 	const handleOpenAddModal = () => setIsAddModalOpen(true);
-	const handleCloseAddModal = () => setIsAddModalOpen(false);
-
+	const handleCloseAddModal = () => {
+		setNewAirport(sampleAirport);
+		setIsAddModalOpen(false);
+	};
 	const handleOpenEditModal = (airport) => {
 		setSelectedAirport(JSON.parse(airport));
 		setIsEditModalOpen(true);
@@ -126,11 +162,13 @@ const Airports = () => {
 	const handleEditAirport = () => {
 		dispatch(updateAirport(selectedAirport, page, limit));
 		setIsEditModalOpen(false);
+		notify();
 	};
 
 	const handleAddAirport = () => {
 		dispatch(addNewAirport(newAirport, page, limit));
 		setIsAddModalOpen(false);
+		setNewAirport(sampleAirport);
 	};
 
 	const handleChange = (e) => {
@@ -235,6 +273,7 @@ const Airports = () => {
 			}`}
 		>
 			<Nav />
+			<ToastContainer />
 			<div className='inner-airport-container'>
 				<Sidebar listItems={listItems} />
 				<div className='airport-list'>
@@ -311,7 +350,7 @@ const Airports = () => {
 				selectedEntity={selectedAirport}
 				handleEditSelectedEntity={handleEditSelectedAirport}
 				heading='SELECT AN AIRPORT TO EDIT'
-				inputLabels={['AIRPORT NAME: ', 'FUEL AVAILABLE: ', 'FUEL CAPACITY: ']}
+				inputLabels={['Airport Name: ', 'Fuel Available: ', 'Fuel Capacity: ']}
 				inputNames={['airport_name', 'fuel_available', 'fuel_capacity']}
 			/>
 			<AddModal
@@ -320,7 +359,7 @@ const Airports = () => {
 				newEntity={newAirport}
 				handleNewEntity={handleNewAirport}
 				handleAddEntity={handleAddAirport}
-				inputLabels={['AIRPORT NAME: ', 'FUEL AVAILABLE: ', 'FUEL CAPACITY: ']}
+				inputLabels={['Airport Name: ', 'Fuel Available: ', 'Fuel Capacity: ']}
 				heading='ENTER DETAILS OF THE AIRPORT'
 				inputNames={['airport_name', 'fuel_available', 'fuel_capacity']}
 			/>

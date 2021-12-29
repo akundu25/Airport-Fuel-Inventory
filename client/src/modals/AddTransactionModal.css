@@ -1,8 +1,8 @@
 .TransactionModal {
 	position: absolute;
-	top: 90px;
+	top: 80px;
 	right: 570px;
-	bottom: 90px;
+	bottom: 80px;
 	left: 570px;
 	background-color: #ffffff;
 	display: flex;
@@ -25,11 +25,31 @@
 }
 
 .TransactionModal .transaction-add-form {
-	height: 60%;
+	height: 59%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 	padding: 20px;
+}
+
+.TransactionModal .transaction-add-form .warnings {
+	height: 20%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.TransactionModal .transaction-add-form .input-fields {
+	height: 80%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.TransactionModal .transaction-add-form .warning-message {
+	font-size: 20px;
+	color: #b32209;
+	display: block;
 }
 
 .TransactionModal .transaction-add-form select {
@@ -39,7 +59,7 @@
 }
 
 .TransactionModal .transaction-modal-btn {
-	height: 25%;
+	height: 26%;
 	display: flex;
 	justify-content: space-around;
 	padding: 40px 20px 40px 20px;

@@ -5,6 +5,7 @@ import {
 	updateAircraft,
 	addNewAircraft,
 } from '../actions/aircraft';
+import { toast, ToastContainer } from 'react-toastify';
 import * as images from '../images';
 import * as types from '../types';
 import Button from '../utility/Button';
@@ -13,6 +14,8 @@ import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const columns = [
 	{
@@ -67,6 +70,8 @@ const listItems = [
 
 const Aircrafts = () => {
 	const dispatch = useDispatch();
+	const aircraftSuccess = useSelector((state) => state.aircraft.success);
+	const aircraftError = useSelector((state) => state.aircraft.error);
 	const aircrafts = useSelector((state) => state.aircraft.aircrafts);
 	const next = useSelector((state) => state.aircraft.next);
 	const prev = useSelector((state) => state.aircraft.prev);
@@ -95,11 +100,42 @@ const Aircrafts = () => {
 		else setNextDisabled(true);
 		if (prev) setPrevDisabled(false);
 		else setPrevDisabled(true);
-	}, [dispatch, aircrafts, next, prev, limit, page]);
+
+		aircraftError && notify(aircraftError.msg, 'error');
+		aircraftSuccess !== '' && notify(aircraftSuccess);
+
+		setTimeout(() => {
+			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRCRAFT });
+		}, 8000);
+	}, [
+		dispatch,
+		aircrafts,
+		next,
+		prev,
+		limit,
+		page,
+		aircraftError,
+		aircraftSuccess,
+	]);
+
+	const notify = (message, type) => {
+		switch (type) {
+			case 'error':
+				toast.error(message);
+				break;
+			case 'success':
+				toast.success(message);
+				break;
+			default:
+				toast(message);
+		}
+	};
 
 	const handleOpenAddModal = () => setIsAddModalOpen(true);
-	const handleCloseAddModal = () => setIsAddModalOpen(false);
-
+	const handleCloseAddModal = () => {
+		setNewAircraft(sampleAircraft);
+		setIsAddModalOpen(false);
+	};
 	const handleOpenEditModal = (aircraft) => {
 		setSelectedAircraft(JSON.parse(aircraft));
 		setIsEditModalOpen(true);
@@ -210,6 +246,7 @@ const Aircrafts = () => {
 			}`}
 		>
 			<Nav />
+			<ToastContainer />
 			<div className='inner-airport-container'>
 				<Sidebar listItems={listItems} />
 				<div className='airport-list'>
@@ -286,7 +323,7 @@ const Aircrafts = () => {
 				selectedEntity={selectedAircraft}
 				handleEditSelectedEntity={handleEditSelectedAircraft}
 				heading='SELECT AN AIRCRAFT TO EDIT'
-				inputLabels={['AIRCRAFT NO: ', 'AIRLINE: ']}
+				inputLabels={['Aircraft No: ', 'Airline: ']}
 				inputNames={['aircraft_no', 'airline']}
 			/>
 			<AddModal
@@ -296,7 +333,7 @@ const Aircrafts = () => {
 				handleNewEntity={handleNewAircraft}
 				handleAddEntity={handleAddAircraft}
 				heading='ENTER DETAILS OF THE AIRCRAFT'
-				inputLabels={['AIRCRAFT NO: ', 'AIRLINE: ']}
+				inputLabels={['Aircraft No: ', 'Airline: ']}
 				inputNames={['aircraft_no', 'airline']}
 			/>
 		</div>

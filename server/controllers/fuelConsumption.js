@@ -38,7 +38,7 @@ export const fetchFuelConsumption = async (req, res) => {
 		res.status(200).json({ airports, transactions });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -52,6 +52,6 @@ export const fetchAllFuelConsumption = async (req, res) => {
 			.json({ airports: allAirports, transactions: allTransactions });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };

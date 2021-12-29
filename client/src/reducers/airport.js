@@ -8,18 +8,45 @@ const initialState = {
 	top5FuelCapacity: null,
 	next: null,
 	prev: null,
+	error: null,
+	success: '',
 };
 
 const airport = (state = initialState, action) => {
 	switch (action.type) {
 		case types.ADD_AIRPORT:
-		case types.EDIT_AIRPORT:
+			return {
+				...state,
+				airports: action?.payload?.airports,
+				next: action?.payload?.next || null,
+				prev: action?.payload?.prev || null,
+				success: 'Airport added successfully',
+			};
 		case types.FETCH_AIRPORTS:
 			return {
 				...state,
 				airports: action?.payload?.airports,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+			};
+		case types.EDIT_AIRPORT:
+			return {
+				...state,
+				airports: action?.payload?.airports,
+				next: action?.payload?.next || null,
+				prev: action?.payload?.prev || null,
+				success: 'Airport updated successfully',
+			};
+		case types.SUCCESS_ERROR_REMOVE_AIRPORT:
+			return {
+				...state,
+				success: '',
+				error: null,
+			};
+		case types.AIRPORT_ERROR:
+			return {
+				...state,
+				error: action?.payload,
 			};
 		case types.FETCH_ALL_AIRPORTS:
 			return {

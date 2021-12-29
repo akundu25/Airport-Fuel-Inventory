@@ -29,7 +29,8 @@ const fetchingAirports = async (page, limit, res) => {
 
 		return res.status(200).json(results);
 	} catch (error) {
-		return res.status(500).json({ message: error.message });
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -49,7 +50,7 @@ export const editAirport = async (req, res) => {
 		if (parseInt(fuel_available) > parseInt(fuel_capacity))
 			return res
 				.status(400)
-				.json({ message: 'More fuel available than capacity of the airport' });
+				.json({ errors: [{ msg: 'Error: Fuel available > fuel capacity' }] });
 
 		await airport.findByIdAndUpdate(id, {
 			airport_name,
@@ -60,7 +61,7 @@ export const editAirport = async (req, res) => {
 		return fetchingAirports(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -73,14 +74,14 @@ export const addAirport = async (req, res) => {
 		const oldAirport = await airport.findOne({ airport_name });
 
 		if (oldAirport)
-			return res
-				.status(400)
-				.json({ message: 'The airport already exists in the database' });
+			return res.status(400).json({
+				errors: [{ msg: 'Error: Airport already exist' }],
+			});
 
 		if (parseInt(fuel_available) > parseInt(fuel_capacity))
-			return res
-				.status(400)
-				.json({ message: 'More fuel available than capacity of the airport' });
+			return res.status(400).json({
+				errors: [{ msg: 'Error: Fuel available > fuel capacity' }],
+			});
 
 		await airport.create({
 			airport_name,
@@ -92,7 +93,7 @@ export const addAirport = async (req, res) => {
 		return fetchingAirports(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -102,7 +103,7 @@ export const fetchAllAirports = async (req, res) => {
 		res.status(200).json(allAirports);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -127,6 +128,6 @@ export const fetchTopFiveAirports = async (req, res) => {
 			.json({ top5NoOfTransactions, top5FuelAvailable, top5FuelCapacity });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ message: error.message });
+		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
