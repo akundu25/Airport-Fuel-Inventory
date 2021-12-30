@@ -41,16 +41,10 @@ const AirportAddModal = ({
 							*Airport name field can not be empty
 						</span>
 					)}
-					{inputNames[0] === 'aircraft_no' && aircraft_no === '' && (
-						<span className='warning-message'>
-							*Aircraft no field can not be empty
-						</span>
-					)}
-					{inputNames[0] === 'aircraft_no' && airline === '' && (
-						<span className='warning-message'>
-							*Airline field can not be empty
-						</span>
-					)}
+					{inputNames[0] === 'aircraft_no' &&
+						(aircraft_no === '' || airline === '') && (
+							<span className='warning-message'>*All fields are mandatory</span>
+						)}
 				</div>
 				<div className='input-fields'>
 					{inputNames.map((name, index) => (

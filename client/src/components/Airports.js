@@ -350,8 +350,8 @@ const Airports = () => {
 				selectedEntity={selectedAirport}
 				handleEditSelectedEntity={handleEditSelectedAirport}
 				heading='SELECT AN AIRPORT TO EDIT'
-				inputLabels={['Airport Name: ', 'Fuel Available: ', 'Fuel Capacity: ']}
-				inputNames={['airport_name', 'fuel_available', 'fuel_capacity']}
+				inputLabels={['Airport Name: ', 'Fuel Capacity: ', 'Fuel Available: ']}
+				inputNames={['airport_name', 'fuel_capacity', 'fuel_available']}
 			/>
 			<AddModal
 				isModalOpen={isAddModalOpen}
@@ -359,9 +359,9 @@ const Airports = () => {
 				newEntity={newAirport}
 				handleNewEntity={handleNewAirport}
 				handleAddEntity={handleAddAirport}
-				inputLabels={['Airport Name: ', 'Fuel Available: ', 'Fuel Capacity: ']}
+				inputLabels={['Airport Name: ', 'Fuel Capacity: ', 'Fuel Available: ']}
 				heading='ENTER DETAILS OF THE AIRPORT'
-				inputNames={['airport_name', 'fuel_available', 'fuel_capacity']}
+				inputNames={['airport_name', 'fuel_capacity', 'fuel_available']}
 			/>
 		</div>
 	);

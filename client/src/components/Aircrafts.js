@@ -162,6 +162,7 @@ const Aircrafts = () => {
 	const handleAddAircraft = () => {
 		dispatch(addNewAircraft(newAircraft, page, limit));
 		setIsAddModalOpen(false);
+		setNewAircraft(sampleAircraft);
 	};
 
 	const handleChange = (e) => {

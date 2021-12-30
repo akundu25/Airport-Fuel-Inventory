@@ -416,6 +416,31 @@ body {
 	background-color: #3845f3;
 }
 
+/* airport summary report */
+
+.airport-summary-table {
+	margin: 0px 50px 40px 50px;
+}
+
+.airport-summary-table table {
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+}
+
+.airport-summary-table th {
+	padding: 20px;
+	background-color: #313137;
+	color: #ffff;
+	letter-spacing: 4px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 600;
+}
+
+.airport-summary-table td {
+	padding: 20px;
+}
+
 /* fuel consumption report */
 
 .fuel-consumption-container {

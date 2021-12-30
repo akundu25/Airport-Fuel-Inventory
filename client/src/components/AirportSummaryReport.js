@@ -206,7 +206,7 @@ const AirportSummaryReport = () => {
 			<div style={{ display: 'none' }}>
 				<PdfTemplate
 					columns={columns}
-					className='airport-table'
+					className='airport-summary-table'
 					data={allAirportsData}
 					date={date}
 					ref={airportSummaryRef}
