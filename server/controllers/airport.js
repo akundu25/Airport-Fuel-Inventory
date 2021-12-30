@@ -131,3 +131,32 @@ export const fetchTopFiveAirports = async (req, res) => {
 		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
+
+export const updateAirport = async (req, res) => {
+	try {
+		const { airportId } = req.params;
+		const { airport_name, fuel_available, fuel_capacity } = req.body;
+		const updatedAirport = await airport.findByIdAndUpdate(
+			airportId,
+			{ airport_name, fuel_available, fuel_capacity },
+			{ new: true }
+		);
+		res.status(200).json(updatedAirport);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+export const deleteAirport = async (req, res) => {
+	try {
+		const { airportId } = req.params;
+		await airport.findByIdAndDelete(airportId);
+		res
+			.status(200)
+			.json({ message: 'The airport has been deleted successfully' });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};

@@ -6,6 +6,8 @@ import {
 	fetchAllAirports,
 	editAirport,
 	fetchTopFiveAirports,
+	updateAirport,
+	deleteAirport,
 } from '../controllers/airport.js';
 
 const router = express.Router();
@@ -15,5 +17,8 @@ router.patch('/edit', userAuth, editAirport);
 router.get('/', userAuth, fetchAirports);
 router.get('/all', userAuth, fetchAllAirports);
 router.get('/top-5-airports', userAuth, fetchTopFiveAirports);
+
+router.put('/:airportId', updateAirport);
+router.delete('/delete/:airportId', deleteAirport);
 
 export default router;

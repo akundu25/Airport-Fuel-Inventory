@@ -888,4 +888,62 @@ paths:
                 $ref: '#/components/schemas/error'
   
 
+  /airport/{airportId}:
+    put:
+      tags: [Airport]
+      summary: For updating an airport by it's id
+      parameters:
+        - name: airportId
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Airport Id for identifying the airport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/airport'
+      responses:
+        200:
+          description: Updated the airport successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/airport'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /airport/delete/{airportId}:
+    delete:
+      tags: [Airport]
+      summary: Deleting an airport
+      parameters:
+        - name: airportId
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Airport Id for identifying the airport
+      responses:
+        200:
+          description: Deleted the airport successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 
