@@ -7,7 +7,7 @@ export const loginUser = (userInfo, navigate) => async (dispatch) => {
 		dispatch({ type: types.USER_AUTH, payload: data });
 		navigate('/dashboard');
 	} catch (error) {
-		const { data } = error.response;
+		const { data } = error?.response;
 		dispatch({ type: types.USER_AUTH_ERROR, payload: data.errors });
 		console.log(error.response);
 	}
@@ -19,7 +19,7 @@ export const signupUser = (userInfo, navigate) => async (dispatch) => {
 		dispatch({ type: types.USER_AUTH, payload: data });
 		navigate('/dashboard');
 	} catch (error) {
-		const { data } = error.response;
+		const { data } = error?.response;
 		dispatch({ type: types.USER_AUTH_ERROR, payload: data.errors });
 		console.log(error.response);
 	}

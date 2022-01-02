@@ -947,3 +947,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
+  /aircraft/top-5-airline:
+    get:
+      tags: [Aircraft]
+      summary: Fetching the top 5 airlines with most number of aircrafts
+      responses:
+        200:
+          description: Top 5 airlines with most number of aircrafts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: array
+                  items:
+                    oneOf:
+                      - type: string
+                      - type: object
+                        properties:
+                          no_of_aircrafts:
+                            type: number
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+

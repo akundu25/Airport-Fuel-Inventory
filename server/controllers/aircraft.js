@@ -86,3 +86,33 @@ export const fetchAllAircrafts = async (req, res) => {
 		res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
+
+const sortAirlines = (a, b) => {
+	if (b[1].no_of_aircrafts < a[1].no_of_aircrafts) return -1;
+	return 1;
+};
+
+export const fetchTopFiveAirline = async (req, res) => {
+	try {
+		const allAircrafts = await aircraft.find();
+		const airlines = {};
+
+		for (let { airline } of allAircrafts) {
+			if (airline in airlines) {
+				airlines[airline].no_of_aircrafts += 1;
+			} else {
+				airlines[airline] = {
+					no_of_aircrafts: 1,
+				};
+			}
+		}
+
+		const airlinesArray = Object.entries(airlines);
+		airlinesArray.sort(sortAirlines);
+		const top5Airlines = airlinesArray.slice(0, 5);
+		res.status(200).json(top5Airlines);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};

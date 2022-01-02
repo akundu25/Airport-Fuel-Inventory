@@ -13,6 +13,7 @@ import LineChart from '../utility/LineChart';
 import PdfAirportSummaryReport from '../PDF/PdfAirportSummaryReport';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
 import { getAllAirports, getTopFiveAirports } from '../actions/airport';
+import { getTopFiveAirline } from '../actions/aircraft';
 import { getAllFuelConsumption } from '../actions/fuelConsumption';
 
 import '../App.css';
@@ -70,6 +71,8 @@ const Dashboard = () => {
 	const date = new Date().toDateString();
 	const allAirports = useSelector((state) => state.airport.allAirports);
 	const [allAirportsData, setAllAirportsData] = useState(allAirports);
+	const top5Airlines = useSelector((state) => state.aircraft.top5Airlines);
+	const [topFiveAirlines, setTopFiveAirlines] = useState(top5Airlines);
 	const top5NoOfTransactions = useSelector(
 		(state) => state.airport.top5NoOfTransactions
 	);
@@ -98,6 +101,13 @@ const Dashboard = () => {
 	const handleFuelConsumptionPrint = useReactToPrint({
 		content: () => fuelConsumptionRef.current,
 	});
+
+	const data_top5Airlines =
+		topFiveAirlines &&
+		topFiveAirlines.map((airline) => airline[1].no_of_aircrafts);
+	const labels_top5Airlines =
+		topFiveAirlines && topFiveAirlines.map((airline) => airline[0]);
+	const label_top5Airlines = 'No of aircrafts';
 
 	const data =
 		top5NoOfTransactionsData &&
@@ -160,6 +170,9 @@ const Dashboard = () => {
 		setTop5FuelAvailableData(top5FuelAvailable);
 		setTop5FuelCapacityData(top5FuelCapacity);
 
+		!top5Airlines && dispatch(getTopFiveAirline());
+		setTopFiveAirlines(top5Airlines);
+
 		!allTransactions && dispatch(getAllFuelConsumption());
 		setAllTransactionsData(allTransactions);
 	}, [
@@ -169,6 +182,7 @@ const Dashboard = () => {
 		top5NoOfTransactions,
 		top5FuelAvailable,
 		top5FuelCapacity,
+		top5Airlines,
 	]);
 
 	return (
@@ -200,11 +214,11 @@ const Dashboard = () => {
 					</div>
 					<div className='charts-2'>
 						<div className='bar'>
-							<h7>Top 5 Airports for most number of transactions</h7>
+							<h7>Top 5 Airlines having most number of aircrafts</h7>
 							<BarChart
-								labels={labels}
-								label={label}
-								dataset={data}
+								labels={labels_top5Airlines}
+								label={label_top5Airlines}
+								dataset={data_top5Airlines}
 								borderColor={borderColor}
 								backgroundColor={backgroundColor}
 							/>

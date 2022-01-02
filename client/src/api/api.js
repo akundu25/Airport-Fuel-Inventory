@@ -43,6 +43,8 @@ export const addAircraft = (newAircraft, page, limit) =>
 
 export const fetchAllAircrafts = () => API.get('/aircraft/all');
 
+export const fetchTopFiveAirline = () => API.get('/aircraft/top-5-airline');
+
 // transactions
 
 export const addTransaction = (transaction, page, limit) =>

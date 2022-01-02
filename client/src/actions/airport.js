@@ -7,7 +7,7 @@ export const getAirports = (limit, page) => async (dispatch) => {
 		dispatch({ type: types.FETCH_AIRPORTS, payload: data });
 	} catch (error) {
 		console.log(error);
-		const { data } = error.response;
+		const { data } = error?.response;
 		dispatch({ type: types.AIRPORT_ERROR, payload: data.errors[0] });
 	}
 };
@@ -18,7 +18,7 @@ export const updateAirport = (newAirport, page, limit) => async (dispatch) => {
 		dispatch({ type: types.EDIT_AIRPORT, payload: data });
 	} catch (error) {
 		console.log(error.response);
-		const { data } = error.response;
+		const { data } = error?.response;
 		dispatch({ type: types.AIRPORT_ERROR, payload: data.errors[0] });
 	}
 };
@@ -29,7 +29,7 @@ export const addNewAirport = (newAirport, page, limit) => async (dispatch) => {
 		dispatch({ type: types.ADD_AIRPORT, payload: data });
 	} catch (error) {
 		console.log(error.response);
-		const { data } = error.response;
+		const { data } = error?.response;
 		dispatch({ type: types.AIRPORT_ERROR, payload: data.errors[0] });
 	}
 };

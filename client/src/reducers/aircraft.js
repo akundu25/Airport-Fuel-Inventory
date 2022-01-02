@@ -7,6 +7,7 @@ const initialState = {
 	prev: null,
 	success: '',
 	error: null,
+	top5Airlines: null,
 };
 
 const aircraft = (state = initialState, action) => {
@@ -49,6 +50,11 @@ const aircraft = (state = initialState, action) => {
 			return {
 				...state,
 				allAircrafts: action?.payload,
+			};
+		case types.FETCH_TOP_FIVE_AIRLINES:
+			return {
+				...state,
+				top5Airlines: action?.payload,
 			};
 		case types.CLEAN_AIRCRAFTS:
 			return {
