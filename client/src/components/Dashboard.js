@@ -191,7 +191,7 @@ const Dashboard = () => {
 			<div style={{ display: 'none' }}>
 				<PdfAirportSummaryReport
 					columns={columns}
-					className='airport-table'
+					className='airport-summary-table'
 					data={allAirportsData}
 					date={date}
 					ref={airportSummaryRef}

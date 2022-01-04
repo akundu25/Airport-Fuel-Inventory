@@ -967,6 +967,12 @@ paths:
                         properties:
                           no_of_aircrafts:
                             type: number
+        401:
+          description: Unauthorized access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
         500:
           description: Internal server error
           content:

@@ -102,7 +102,7 @@ const Aircrafts = () => {
 		else setPrevDisabled(true);
 
 		aircraftError && notify(aircraftError.msg, 'error');
-		aircraftSuccess !== '' && notify(aircraftSuccess);
+		aircraftSuccess !== '' && notify(aircraftSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRCRAFT });

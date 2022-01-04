@@ -107,7 +107,7 @@ const Airports = () => {
 		else setPrevDisabled(true);
 
 		airportError && notify(airportError.msg, 'error');
-		airportSuccess !== '' && notify(airportSuccess);
+		airportSuccess !== '' && notify(airportSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRPORT });

@@ -8,7 +8,7 @@ export const getAircrafts = (limit, page) => async (dispatch) => {
 	} catch (error) {
 		console.log(error.response);
 		const { data } = error?.response;
-		dispatch({ type: types.AIRCRAFT_ERROR, payload: data.errors[0] });
+		dispatch({ type: types.AIRCRAFT_ERROR, payload: data?.errors[0] });
 	}
 };
 
@@ -20,7 +20,7 @@ export const updateAircraft =
 		} catch (error) {
 			console.log(error.response);
 			const { data } = error?.response;
-			dispatch({ type: types.AIRCRAFT_ERROR, payload: data.errors[0] });
+			dispatch({ type: types.AIRCRAFT_ERROR, payload: data?.errors[0] });
 		}
 	};
 
@@ -32,7 +32,7 @@ export const addNewAircraft =
 		} catch (error) {
 			console.log(error.response);
 			const { data } = error?.response;
-			dispatch({ type: types.AIRCRAFT_ERROR, payload: data.errors[0] });
+			dispatch({ type: types.AIRCRAFT_ERROR, payload: data?.errors[0] });
 		}
 	};
 

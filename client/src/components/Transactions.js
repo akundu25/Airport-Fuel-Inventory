@@ -140,7 +140,7 @@ const Transactions = () => {
 		else setPrevDisabled(true);
 
 		transactionError && notify(transactionError.msg, 'error');
-		transactionSuccess !== '' && notify(transactionSuccess);
+		transactionSuccess !== '' && notify(transactionSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_TRANSACTION });

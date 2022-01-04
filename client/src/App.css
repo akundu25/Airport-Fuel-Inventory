@@ -143,6 +143,8 @@ body {
 .sidebar-items {
 	list-style-type: none;
 	padding-left: 0px;
+	position: sticky;
+	top: 50px;
 }
 
 .sidebar-items a {
@@ -516,4 +518,11 @@ table {
 	font-size: 20px;
 	padding: 0px;
 	margin: 30px;
+}
+
+/* Toast notifications */
+
+.Toastify__toast-container {
+	width: 400px !important;
+	font-size: 15px;
 }
