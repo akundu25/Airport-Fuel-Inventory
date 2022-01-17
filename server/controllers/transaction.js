@@ -8,6 +8,7 @@ const fetchingTransactions = async (page, limit, res) => {
 		const endIndex = page * limit;
 
 		const transactionCount = await transaction.countDocuments();
+		const pageCount = Math.ceil(transactionCount / limit);
 
 		const results = {};
 
@@ -30,6 +31,8 @@ const fetchingTransactions = async (page, limit, res) => {
 			.skip(startIndex)
 			.limit(limit)
 			.sort({ transaction_date_time: -1 });
+
+		results.pageCount = pageCount;
 
 		return res.status(200).json(results);
 	} catch (error) {

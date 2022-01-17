@@ -40,11 +40,6 @@ const listItems = [
 		pathName: 'Transactions',
 	},
 	{
-		id: 5,
-		path: '/airport-summary',
-		pathName: 'Airport Summary Report',
-	},
-	{
 		id: 6,
 		path: '/fuel-consumption',
 		pathName: 'Fuel Consumption Report',
@@ -260,7 +255,7 @@ const Dashboard = () => {
 					<div className='row-2'>
 						<LargeCard
 							title='AIRPORT SUMMARY REPORT'
-							to='/airport-summary'
+							to='/airports'
 							handleClick={handleAirportSummaryPrint}
 						/>
 						<LargeCard

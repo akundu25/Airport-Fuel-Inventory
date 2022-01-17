@@ -36,11 +36,6 @@ const listItems = [
 		pathName: 'Transactions',
 	},
 	{
-		id: 5,
-		path: '/airport-summary',
-		pathName: 'Airport Summary Report',
-	},
-	{
 		id: 6,
 		path: '/fuel-consumption',
 		pathName: 'Fuel Consumption Report',

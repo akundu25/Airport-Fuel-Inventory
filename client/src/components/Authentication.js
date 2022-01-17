@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import Input from '../utility/Input';
 import Button from '../utility/Button';
 import * as images from '../images';
@@ -8,6 +9,7 @@ import * as types from '../types';
 import { loginUser, signupUser } from '../actions/user';
 
 import '../App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialSignupForm = {
 	name: '',
@@ -25,25 +27,39 @@ const Authentication = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const authError = useSelector((state) => state.user.error);
-	const [error, setError] = useState(authError);
+	const signupSuccess = useSelector((state) => state.user.success);
 	const [signupForm, setSignupForm] = useState(initialSignupForm);
 	const [loginForm, setLoginForm] = useState(initialLoginForm);
 	const [isLogin, setIsLogin] = useState(true);
 
 	useEffect(() => {
-		authError && setError(authError);
+		authError && authError.forEach((error) => notify(error.msg, 'error'));
+		signupSuccess !== '' && notify(signupSuccess, 'success');
 		setTimeout(() => {
 			dispatch({ type: types.USER_AUTH_ERROR_REMOVE });
-			setError(null);
-		}, 2000);
-	}, [dispatch, authError]);
+		}, 8000);
+	}, [dispatch, authError, signupSuccess]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (isLogin) {
 			dispatch(loginUser(loginForm, navigate));
 		} else {
-			dispatch(signupUser(signupForm, navigate));
+			dispatch(signupUser(signupForm));
+		}
+	};
+
+	const notify = (message, type) => {
+		switch (type) {
+			case 'error':
+				toast.error(message);
+				break;
+			case 'success':
+				toast.success(message);
+				setIsLogin(true);
+				break;
+			default:
+				break;
 		}
 	};
 
@@ -63,6 +79,7 @@ const Authentication = () => {
 
 	return (
 		<div className='auth-container'>
+			<ToastContainer />
 			<form onSubmit={handleSubmit} className='auth-form'>
 				<h3 className='heading'>Airport Management System</h3>
 				<img
@@ -70,13 +87,6 @@ const Authentication = () => {
 					alt='airport-logo'
 					className='airport-logo'
 				/>
-				{error &&
-					error.length &&
-					error.map((err, ind) => (
-						<span key={ind} className='auth-error'>
-							{err.msg}
-						</span>
-					))}
 				{!isLogin ? (
 					<>
 						<Input

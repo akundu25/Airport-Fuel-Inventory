@@ -7,7 +7,6 @@ import Dashboard from './components/Dashboard';
 import Airports from './components/Airports';
 import Aircrafts from './components/Aircrafts';
 import Transactions from './components/Transactions';
-import AirportSummaryReport from './components/AirportSummaryReport';
 import FuelConsumptionReport from './components/FuelConsumptionReport';
 
 const App = () => {
@@ -29,9 +28,6 @@ const App = () => {
 					</Route>
 					<Route path='/transactions' element={<PrivateRoute />}>
 						<Route path='' element={<Transactions />} />
-					</Route>
-					<Route path='/airport-summary' element={<PrivateRoute />}>
-						<Route path='' element={<AirportSummaryReport />} />
 					</Route>
 					<Route path='/fuel-consumption' element={<PrivateRoute />}>
 						<Route path='' element={<FuelConsumptionReport />} />

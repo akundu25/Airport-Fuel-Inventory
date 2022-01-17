@@ -4,7 +4,7 @@ import * as types from '../types';
 export const loginUser = (userInfo, navigate) => async (dispatch) => {
 	try {
 		const { data } = await api.userLogin(userInfo);
-		dispatch({ type: types.USER_AUTH, payload: data });
+		dispatch({ type: types.USER_AUTH_LOGIN, payload: data });
 		navigate('/dashboard');
 	} catch (error) {
 		const { data } = error?.response;
@@ -13,11 +13,10 @@ export const loginUser = (userInfo, navigate) => async (dispatch) => {
 	}
 };
 
-export const signupUser = (userInfo, navigate) => async (dispatch) => {
+export const signupUser = (userInfo) => async (dispatch) => {
 	try {
 		const { data } = await api.signupUser(userInfo);
-		dispatch({ type: types.USER_AUTH, payload: data });
-		navigate('/dashboard');
+		dispatch({ type: types.USER_AUTH_SIGNUP, payload: data });
 	} catch (error) {
 		const { data } = error?.response;
 		dispatch({ type: types.USER_AUTH_ERROR, payload: data?.errors });

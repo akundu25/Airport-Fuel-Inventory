@@ -6,6 +6,7 @@ const fetchingAirports = async (page, limit, res) => {
 		const endIndex = page * limit;
 		const airportCount = await airport.countDocuments();
 		const results = {};
+		const pageCount = Math.ceil(airportCount / limit);
 
 		if (startIndex > 0) {
 			results.prev = {
@@ -26,6 +27,8 @@ const fetchingAirports = async (page, limit, res) => {
 			.limit(limit)
 			.skip(startIndex)
 			.sort({ airport_name: 1 });
+
+		results.pageCount = pageCount;
 
 		return res.status(200).json(results);
 	} catch (error) {

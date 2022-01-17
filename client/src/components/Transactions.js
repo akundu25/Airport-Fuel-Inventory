@@ -80,11 +80,6 @@ const listItems = [
 		pathName: 'Transactions',
 	},
 	{
-		id: 5,
-		path: '/airport-summary',
-		pathName: 'Airport Summary Report',
-	},
-	{
 		id: 6,
 		path: '/fuel-consumption',
 		pathName: 'Fuel Consumption Report',
@@ -100,6 +95,7 @@ const Transactions = () => {
 	const aircrafts = useSelector((state) => state.aircraft.allAircrafts);
 	const next = useSelector((state) => state.transaction.next);
 	const prev = useSelector((state) => state.transaction.prev);
+	const pageCount = useSelector((state) => state.transaction.pageCount);
 	const [transactionsData, setTransactionsData] = useState(transactions);
 	const [allAirportsData, setAllAirports] = useState(airports);
 	const [allAircraftsData, setAllAircrafts] = useState(aircrafts);
@@ -333,18 +329,25 @@ const Transactions = () => {
 
 	return (
 		<div
-			className={`airport-container ${
+			className={`page-container ${
 				(isAddTransactionModalOpen || isReverseTransactionModalOpen) &&
 				'modal-open'
 			}`}
 		>
 			<Nav />
 			<ToastContainer />
-			<div className='inner-airport-container'>
+			<div className='inner-page-container'>
 				<Sidebar listItems={listItems} />
-				<div className='airport-list'>
-					<div className='airport-top'>
-						<div className='search-airport'>
+				<div className='page-list'>
+					<div className='page-top'>
+						<div className='page-btn'>
+							<Button
+								type='button'
+								btnText='Add New Transaction'
+								onClick={handleOpenAddTransactionModal}
+							/>
+						</div>
+						<div className='search-functionality'>
 							<label>
 								<input
 									type='text'
@@ -359,10 +362,32 @@ const Transactions = () => {
 								/>
 							</label>
 						</div>
-						<div className='pagination'>
+					</div>
+					<Table
+						columns={columns}
+						className='transactions-table'
+						data={transactionsData}
+						sorting={sorting}
+						reverse={true}
+						handleOpenModal={handleOpenReverseTransactionModal}
+					/>
+					<div className='page-down'>
+						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option>4</option>
-								<option>8</option>
+								<option
+									selected={transactionsData && transactionsData.length <= 4}
+								>
+									4
+								</option>
+								<option
+									selected={
+										transactionsData &&
+										transactionsData.length > 4 &&
+										transactionsData.length <= 8
+									}
+								>
+									8
+								</option>
 							</select>
 							<span>Page limit</span>
 							<Button
@@ -377,7 +402,9 @@ const Transactions = () => {
 								onClick={handlePrevPage}
 								disabled={prevDisabled}
 							/>
-							<span className='page-number'>Page: {page}</span>
+							<span className='page-number'>
+								{pageCount > 0 ? `Page ${page} of ${pageCount}` : 'No records'}
+							</span>
 							<Button
 								type='button'
 								btnText={
@@ -391,21 +418,6 @@ const Transactions = () => {
 								disabled={nextDisabled}
 							/>
 						</div>
-					</div>
-					<Table
-						columns={columns}
-						className='airport-table'
-						data={transactionsData}
-						sorting={sorting}
-						reverse={true}
-						handleOpenModal={handleOpenReverseTransactionModal}
-					/>
-					<div className='airport-down'>
-						<Button
-							type='button'
-							btnText='Add New Transaction'
-							onClick={handleOpenAddTransactionModal}
-						/>
 					</div>
 				</div>
 			</div>

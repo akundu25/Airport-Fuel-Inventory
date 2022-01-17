@@ -57,11 +57,6 @@ const listItems = [
 		pathName: 'Transactions',
 	},
 	{
-		id: 5,
-		path: '/airport-summary',
-		pathName: 'Airport Summary Report',
-	},
-	{
 		id: 6,
 		path: '/fuel-consumption',
 		pathName: 'Fuel Consumption Report',
@@ -75,6 +70,7 @@ const Aircrafts = () => {
 	const aircrafts = useSelector((state) => state.aircraft.aircrafts);
 	const next = useSelector((state) => state.aircraft.next);
 	const prev = useSelector((state) => state.aircraft.prev);
+	const pageCount = useSelector((state) => state.aircraft.pageCount);
 	const [aircraftsData, setAircraftsData] = useState(aircrafts);
 	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
@@ -89,10 +85,6 @@ const Aircrafts = () => {
 	const [searchAircraft, setSearchAircraft] = useState('');
 
 	useEffect(() => {
-		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
-		dispatch({ type: types.CLEAN_AIRPORTS });
-		dispatch({ type: types.CLEAN_TRANSACTIONS });
-		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!aircrafts && dispatch(getAircrafts(limit, page));
 		setAircraftsData(aircrafts);
 
@@ -242,17 +234,25 @@ const Aircrafts = () => {
 
 	return (
 		<div
-			className={`airport-container ${
+			className={`page-container ${
 				(isEditModalOpen || isAddModalOpen) && 'modal-open'
 			}`}
 		>
 			<Nav />
 			<ToastContainer />
-			<div className='inner-airport-container'>
+			<div className='inner-page-container'>
 				<Sidebar listItems={listItems} />
-				<div className='airport-list'>
-					<div className='airport-top'>
-						<div className='search-airport'>
+				<div className='page-list'>
+					<div className='page-top'>
+						<div className='page-btn'>
+							<Button
+								type='button'
+								btnText='Add Aircraft'
+								onClick={handleOpenAddModal}
+							/>
+						</div>
+
+						<div className='search-functionality'>
 							<label>
 								<input
 									type='text'
@@ -267,10 +267,30 @@ const Aircrafts = () => {
 								/>
 							</label>
 						</div>
-						<div className='pagination'>
+					</div>
+					<Table
+						columns={columns}
+						className='aircrafts-table'
+						data={aircraftsData}
+						sorting={sorting}
+						edit={true}
+						handleOpenModal={handleOpenEditModal}
+					/>
+					<div className='page-down'>
+						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option>4</option>
-								<option>8</option>
+								<option selected={aircraftsData && aircraftsData.length <= 4}>
+									4
+								</option>
+								<option
+									selected={
+										aircraftsData &&
+										aircraftsData.length > 4 &&
+										aircraftsData.length <= 8
+									}
+								>
+									8
+								</option>
 							</select>
 							<span>Page limit</span>
 							<Button
@@ -285,7 +305,9 @@ const Aircrafts = () => {
 								onClick={handlePrevPage}
 								disabled={prevDisabled}
 							/>
-							<span className='page-number'>Page: {page}</span>
+							<span className='page-number'>
+								{pageCount > 0 ? `Page ${page} of ${pageCount}` : 'No records'}
+							</span>
 							<Button
 								type='button'
 								btnText={
@@ -299,21 +321,6 @@ const Aircrafts = () => {
 								disabled={nextDisabled}
 							/>
 						</div>
-					</div>
-					<Table
-						columns={columns}
-						className='airport-table'
-						data={aircraftsData}
-						sorting={sorting}
-						edit={true}
-						handleOpenModal={handleOpenEditModal}
-					/>
-					<div className='airport-down'>
-						<Button
-							type='button'
-							btnText='Add Aircraft'
-							onClick={handleOpenAddModal}
-						/>
 					</div>
 				</div>
 			</div>

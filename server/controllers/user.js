@@ -25,17 +25,8 @@ export const signupUser = async (req, res) => {
 
 		const newUser = { name, email, password: hashedPassword };
 
-		const newlyCreatedUser = await user.create(newUser);
-
-		const token = jwt.sign(
-			{ email, id: newlyCreatedUser._id },
-			process.env.JWT_SECRET,
-			{ expiresIn: process.env.JWT_EXPIRE }
-		);
-
-		const clientUser = { email, name };
-
-		res.status(200).json({ clientUser, token });
+		await user.create(newUser);
+		res.status(201).json({ message: 'User created successfully' });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ errors: [{ msg: error.message }] });

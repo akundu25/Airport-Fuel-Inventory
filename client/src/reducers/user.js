@@ -4,15 +4,21 @@ const initialState = {
 	name: '',
 	email: '',
 	error: null,
+	success: '',
 };
 
 const user = (state = initialState, action) => {
 	switch (action.type) {
-		case types.USER_AUTH:
+		case types.USER_AUTH_LOGIN:
 			localStorage.setItem('userProfile', JSON.stringify(action?.payload));
 			return {
 				...state,
 				...action?.payload?.clientUser,
+			};
+		case types.USER_AUTH_SIGNUP:
+			return {
+				...state,
+				success: action?.payload?.message,
 			};
 		case types.USER_AUTH_ERROR:
 			return {
@@ -23,6 +29,7 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				error: null,
+				success: '',
 			};
 		case types.LOGOUT:
 			localStorage.removeItem('userProfile');

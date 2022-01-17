@@ -10,6 +10,7 @@ const initialState = {
 	prev: null,
 	error: null,
 	success: '',
+	pageCount: 0,
 };
 
 const airport = (state = initialState, action) => {
@@ -20,6 +21,7 @@ const airport = (state = initialState, action) => {
 				airports: action?.payload?.airports,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Airport added successfully',
 			};
 		case types.FETCH_AIRPORTS:
@@ -28,6 +30,7 @@ const airport = (state = initialState, action) => {
 				airports: action?.payload?.airports,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 			};
 		case types.EDIT_AIRPORT:
 			return {
@@ -35,6 +38,7 @@ const airport = (state = initialState, action) => {
 				airports: action?.payload?.airports,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Airport updated successfully',
 			};
 		case types.SUCCESS_ERROR_REMOVE_AIRPORT:
@@ -59,13 +63,6 @@ const airport = (state = initialState, action) => {
 				top5NoOfTransactions: action?.payload?.top5NoOfTransactions,
 				top5FuelAvailable: action?.payload?.top5FuelAvailable,
 				top5FuelCapacity: action?.payload?.top5FuelCapacity,
-			};
-		case types.CLEAN_AIRPORTS:
-			return {
-				...state,
-				airports: null,
-				next: null,
-				prev: null,
 			};
 		case types.CLEAN_CHARTS_DATA:
 			return {

@@ -8,6 +8,7 @@ const initialState = {
 	success: '',
 	error: null,
 	top5Airlines: null,
+	pageCount: 0,
 };
 
 const aircraft = (state = initialState, action) => {
@@ -18,6 +19,7 @@ const aircraft = (state = initialState, action) => {
 				aircrafts: action?.payload?.aircrafts,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Aircraft added successfully',
 			};
 		case types.EDIT_AIRCRAFT:
@@ -26,6 +28,7 @@ const aircraft = (state = initialState, action) => {
 				aircrafts: action?.payload?.aircrafts,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Aircraft updated successfully',
 			};
 		case types.FETCH_AIRCRAFTS:
@@ -34,6 +37,7 @@ const aircraft = (state = initialState, action) => {
 				aircrafts: action?.payload?.aircrafts,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 			};
 		case types.AIRCRAFT_ERROR:
 			return {

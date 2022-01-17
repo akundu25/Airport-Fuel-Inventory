@@ -1,4 +1,5 @@
-export const USER_AUTH = 'USER_AUTH';
+export const USER_AUTH_LOGIN = 'USER_AUTH_LOGIN';
+export const USER_AUTH_SIGNUP = 'USER_AUTH_SIGNUP';
 export const USER_AUTH_ERROR = 'USER_AUTH_ERROR';
 export const USER_AUTH_ERROR_REMOVE = 'USER_AUTH_ERROR_REMOVE';
 export const LOGOUT = 'LOGOUT';

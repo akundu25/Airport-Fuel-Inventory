@@ -289,133 +289,193 @@ body {
 	opacity: 0.1;
 }
 
-.airport-container {
+.page-container {
 	height: 920px;
 }
 
-.inner-airport-container {
+.inner-page-container {
 	display: flex;
 	height: 100%;
 }
 
-.airport-list {
+.page-list {
 	width: 80%;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
 }
 
-.airport-top {
+.page-top {
 	height: 10%;
 	margin: 20px;
 	text-align: right;
 	display: flex;
-	justify-content: space-around;
 }
 
-.airport-top .search-airport {
-	width: 60%;
+.page-top .page-btn {
+	width: 50%;
+	text-align: left;
+	padding: 10px 55px;
 	display: flex;
 }
 
-.airport-top label {
-	margin: auto 0px auto 30px;
+.page-top .page-btn button {
+	background-color: #0715d0;
+	color: #ffff;
+	padding: 15px 20px;
+	margin-right: 20px;
 }
 
-.airport-top .pagination {
-	width: 40%;
-	padding-left: 100px;
+.page-top .page-btn button:hover {
+	color: #ffff;
+	background-color: #3845f3;
 }
 
-.airport-top .search {
+.page-top .search-functionality {
+	width: 50%;
+	display: flex;
+}
+
+.page-top label {
+	margin: auto 55px auto auto;
+}
+
+.page-top .search {
 	width: 45px;
 	height: 45px;
 	cursor: pointer;
 }
 
-.airport-top .pagination .page-limit {
-	margin: auto 20px auto 0px;
-}
-
-.airport-top .pagination span {
-	margin: auto 0px;
-}
-
-.airport-container .left-arrow,
-.right-arrow {
-	width: 50px;
-	height: 50px;
-	cursor: pointer;
-}
-
-.airport-table {
-	height: 70%;
-	margin: 0px 50px 40px 50px;
+.airports-table,
+.aircrafts-table,
+.transactions-table {
+	height: 80%;
+	width: 90%;
+	margin: 0px auto 20px auto;
 	border: 1px solid black;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
-.airport-table table {
+
+.airports-table table,
+.aircrafts-table table,
+.transactions-table table {
 	height: 100%;
 	width: 100%;
 	margin: 0px;
+	display: flex;
+	flex-direction: column;
 }
 
-.airport-table table th img {
+.airports-table thead,
+.aircrafts-table thead,
+.transactions-table thead {
+	height: 20%;
+	position: sticky;
+	top: 0px;
+}
+
+.airports-table tbody,
+.aircrafts-table tbody,
+.transactions-table tbody {
+	height: 80%;
+}
+
+.airports-table table th img,
+.aircrafts-table table th img,
+.transactions-table table th img {
 	cursor: pointer;
 }
 
-.airport-table th {
+.airports-table th,
+.aircrafts-table th,
+.transactions-table th {
 	padding: 20px;
 	background-color: #313137;
 	color: #ffff;
 	letter-spacing: 4px;
 	font-family: 'Open Sans Condensed', sans-serif;
 	font-weight: 600;
+	height: 135px;
 }
 
-.airport-table td {
+.airports-table td,
+.aircrafts-table td {
 	padding: 20px;
+	height: 150px;
 }
 
-.airport-table .text-middle {
+.transactions-table td {
+	padding: 20px;
+	height: 200px;
+}
+
+.airports-table .text-middle,
+.aircrafts-table .text-middle,
+.transactions-table .text-middle {
 	text-align: center;
 }
 
-.airport-table .edit-icon,
-.reverse-transaction-icon {
+.airports-table .edit-icon,
+.aircrafts-table .edit-icon,
+.transactions-table .reverse-transaction-icon {
 	width: 30px;
 	height: 30px;
 	cursor: pointer;
 }
 
-.airport-table tr:hover {
-	background-color: #dcdce2;
+.airports-table tr:nth-child(odd),
+.aircrafts-table tr:nth-child(odd),
+.transactions-table tr:nth-child(odd) {
+	background-color: #efeff3;
 }
 
-.airport-table .loading {
+.airports-table .loading,
+.aircrafts-table .loading,
+.transactions-table .loading {
 	font-size: 30px;
 	font-weight: 600;
 	letter-spacing: 2px;
 }
 
-.airport-down {
-	height: 20%;
+.airports-table th,
+.airports-table td {
+	width: 330px;
+}
+
+.aircrafts-table th,
+.aircrafts-table td {
+	width: 440px;
+}
+
+.transactions-table th,
+.transactions-table td {
+	width: 290px;
+}
+
+.page-container .left-arrow,
+.right-arrow {
+	width: 50px;
+	height: 50px;
+	cursor: pointer;
+}
+
+.page-down {
+	height: 10%;
 	display: flex;
-	justify-content: space-around;
-	margin-bottom: 20px;
+	justify-content: right;
 }
 
-.airport-down button {
-	height: 40%;
-	background-color: #0715d0;
-	color: #ffff;
-	margin-top: auto;
-	margin-bottom: auto;
+.page-down .page-select {
+	height: 100%;
+	margin-right: 70px;
 }
 
-.airport-down button:hover {
-	color: #ffff;
-	background-color: #3845f3;
+.page-down .page-select .page-limit {
+	margin-right: 20px;
+}
+
+.page-down .page-select button {
+	padding: 0px;
 }
 
 /* airport summary report */

@@ -1,7 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAirports, updateAirport, addNewAirport } from '../actions/airport';
+import {
+	getAirports,
+	updateAirport,
+	addNewAirport,
+	getAllAirports,
+} from '../actions/airport';
 import { toast, ToastContainer } from 'react-toastify';
+import { useReactToPrint } from 'react-to-print';
 import * as images from '../images';
 import * as types from '../types';
 import Table from '../utility/Table';
@@ -10,6 +16,7 @@ import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
+import PdfTemplate from '../PDF/PdfAirportSummaryReport';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -59,11 +66,6 @@ const listItems = [
 		pathName: 'Transactions',
 	},
 	{
-		id: 5,
-		path: '/airport-summary',
-		pathName: 'Airport Summary Report',
-	},
-	{
 		id: 6,
 		path: '/fuel-consumption',
 		pathName: 'Fuel Consumption Report',
@@ -72,11 +74,15 @@ const listItems = [
 
 const Airports = () => {
 	const dispatch = useDispatch();
+	const airportSummaryRef = useRef();
 	const airportError = useSelector((state) => state.airport.error);
 	const airportSuccess = useSelector((state) => state.airport.success);
+	const allAirports = useSelector((state) => state.airport.allAirports);
+	const [allAirportsData, setAllAirportsData] = useState(allAirports);
 	const airports = useSelector((state) => state.airport.airports);
 	const next = useSelector((state) => state.airport.next);
 	const prev = useSelector((state) => state.airport.prev);
+	const pageCount = useSelector((state) => state.airport.pageCount);
 	const [airportsData, setAirportsData] = useState(airports);
 	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
@@ -92,14 +98,18 @@ const Airports = () => {
 	const [isAscendingByFuelCapacity, setIsAscendingByFuelCapacity] =
 		useState(false);
 	const [searchAirport, setSearchAirport] = useState('');
+	const date = new Date().toDateString();
+
+	const handlePrint = useReactToPrint({
+		content: () => airportSummaryRef.current,
+	});
 
 	useEffect(() => {
-		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
-		dispatch({ type: types.CLEAN_AIRCRAFTS });
-		dispatch({ type: types.CLEAN_TRANSACTIONS });
-		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!airports && dispatch(getAirports(limit, page));
 		setAirportsData(airports);
+
+		!allAirports && dispatch(getAllAirports());
+		setAllAirportsData(allAirports);
 
 		if (next) setNextDisabled(false);
 		else setNextDisabled(true);
@@ -115,6 +125,7 @@ const Airports = () => {
 	}, [
 		dispatch,
 		airports,
+		allAirports,
 		next,
 		prev,
 		limit,
@@ -268,17 +279,38 @@ const Airports = () => {
 
 	return (
 		<div
-			className={`airport-container ${
+			className={`page-container ${
 				(isEditModalOpen || isAddModalOpen) && 'modal-open'
 			}`}
 		>
+			<div style={{ display: 'none' }}>
+				<PdfTemplate
+					columns={columns}
+					className='airport-summary-table'
+					data={allAirportsData}
+					date={date}
+					ref={airportSummaryRef}
+				/>
+			</div>
 			<Nav />
 			<ToastContainer />
-			<div className='inner-airport-container'>
+			<div className='inner-page-container'>
 				<Sidebar listItems={listItems} />
-				<div className='airport-list'>
-					<div className='airport-top'>
-						<div className='search-airport'>
+				<div className='page-list'>
+					<div className='page-top'>
+						<div className='page-btn'>
+							<Button
+								type='button'
+								btnText='Add Airport'
+								onClick={handleOpenAddModal}
+							/>
+							<Button
+								type='button'
+								btnText='Download Report'
+								onClick={handlePrint}
+							/>
+						</div>
+						<div className='search-functionality'>
 							<label>
 								<input
 									type='text'
@@ -293,10 +325,30 @@ const Airports = () => {
 								/>
 							</label>
 						</div>
-						<div className='pagination'>
+					</div>
+					<Table
+						columns={columns}
+						className='airports-table'
+						data={airportsData}
+						sorting={sorting}
+						edit={true}
+						handleOpenModal={handleOpenEditModal}
+					/>
+					<div className='page-down'>
+						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option>4</option>
-								<option>8</option>
+								<option selected={airportsData && airportsData.length <= 4}>
+									4
+								</option>
+								<option
+									selected={
+										airportsData &&
+										airportsData.length > 4 &&
+										airportsData.length <= 8
+									}
+								>
+									8
+								</option>
 							</select>
 							<span>Page limit</span>
 							<Button
@@ -311,7 +363,9 @@ const Airports = () => {
 								onClick={handlePrevPage}
 								disabled={prevDisabled}
 							/>
-							<span className='page-number'>Page: {page}</span>
+							<span className='page-number'>
+								{pageCount > 0 ? `Page ${page} of ${pageCount}` : 'No records'}
+							</span>
 							<Button
 								type='button'
 								btnText={
@@ -325,21 +379,6 @@ const Airports = () => {
 								disabled={nextDisabled}
 							/>
 						</div>
-					</div>
-					<Table
-						columns={columns}
-						className='airport-table'
-						data={airportsData}
-						sorting={sorting}
-						edit={true}
-						handleOpenModal={handleOpenEditModal}
-					/>
-					<div className='airport-down'>
-						<Button
-							type='button'
-							btnText='Add Airport'
-							onClick={handleOpenAddModal}
-						/>
 					</div>
 				</div>
 			</div>

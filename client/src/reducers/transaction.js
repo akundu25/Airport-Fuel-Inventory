@@ -7,6 +7,7 @@ const initialState = {
 	prev: null,
 	success: '',
 	error: null,
+	pageCount: 0,
 };
 
 const transaction = (state = initialState, action) => {
@@ -17,6 +18,7 @@ const transaction = (state = initialState, action) => {
 				transactions: action?.payload?.transactions,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Transaction added successfully',
 			};
 		case types.FETCH_TRANSACTIONS:
@@ -25,6 +27,7 @@ const transaction = (state = initialState, action) => {
 				transactions: action?.payload?.transactions,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 			};
 		case types.REVERSE_TRANSACTION:
 			return {
@@ -32,6 +35,7 @@ const transaction = (state = initialState, action) => {
 				transactions: action?.payload?.transactions,
 				next: action?.payload?.next || null,
 				prev: action?.payload?.prev || null,
+				pageCount: action?.payload?.pageCount,
 				success: 'Transaction reversed successfully',
 			};
 		case types.TRANSACTION_ERROR:
