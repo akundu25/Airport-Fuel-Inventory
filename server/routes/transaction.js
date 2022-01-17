@@ -1,17 +1,18 @@
 import express from 'express';
 import { userAuth } from '../middlewares/user.js';
 import {
-	addTransaction,
+	performTransactionAction,
 	fetchTransactions,
-	fetchAllTransactions,
-	reverseTransaction,
+	updateTransaction,
+	deleteTransaction,
 } from '../controllers/transaction.js';
 
 const router = express.Router();
 
-router.post('/add', userAuth, addTransaction);
-router.get('/', userAuth, fetchTransactions);
-router.get('/all', userAuth, fetchAllTransactions);
-router.post('/reverse', userAuth, reverseTransaction);
+router.post('/:type', userAuth, performTransactionAction);
+router.get('/fetch/:type', userAuth, fetchTransactions);
+
+router.put('/:transactionId', updateTransaction);
+router.delete('/delete/:transactionId', deleteTransaction);
 
 export default router;

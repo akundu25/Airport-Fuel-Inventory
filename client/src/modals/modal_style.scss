@@ -1,0 +1,86 @@
+$modal_border: 2px solid #313137;
+$button_text_color: #ffff;
+$btn_disabled_bg_color: #5d607c;
+$btn_bg_color: #0715d0;
+$btn_hover_bg_color: #3845f3;
+$btn_cancel_bg_color: #b32209;
+$btn_cancel_hover_bg_color: #d1391e;
+$modal_heading_font: 'Open Sans Condensed', sans-serif;
+
+@mixin flexColumn($direction, $justify-content) {
+	display: flex;
+	flex-direction: $direction;
+	justify-content: $justify-content;
+}
+
+@mixin marginCenter {
+	margin: 0px auto;
+}
+
+.Overlay {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
+
+.warnings {
+	@include flexColumn(column, space-evenly);
+	height: 20%;
+}
+
+.input-fields {
+	@include flexColumn(column, space-around);
+	height: 80%;
+	padding: 30px;
+
+	label {
+		text-align: left;
+		font-size: 22px;
+	}
+
+	input {
+		display: block;
+		width: 100%;
+		border: none;
+		border-bottom: 1px solid #3845f3;
+		font-size: 18px;
+		&:focus {
+			outline: none;
+			box-shadow: 0px 1px 2px #3845f3;
+		}
+	}
+}
+
+.warning-message {
+	font-size: 15px;
+	color: #b32209;
+	display: block;
+}
+
+.disabled {
+	background-color: $btn_disabled_bg_color !important;
+	color: $button_text_color !important;
+}
+
+.btn {
+	background-color: $btn_bg_color;
+	&:hover {
+		color: $button_text_color;
+		background-color: $btn_hover_bg_color;
+	}
+}
+
+.cancel-btn {
+	background-color: $btn_cancel_bg_color;
+	&:hover {
+		background-color: $btn_cancel_hover_bg_color;
+		color: $button_text_color;
+	}
+}
+
+@import './AddModal';
+@import './EditModal';
+@import './AddTransaction';
+@import './ReverseTransaction';

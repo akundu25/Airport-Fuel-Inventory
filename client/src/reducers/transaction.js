@@ -54,13 +54,6 @@ const transaction = (state = initialState, action) => {
 				...state,
 				allTransactions: action?.payload,
 			};
-		case types.CLEAN_TRANSACTIONS:
-			return {
-				...state,
-				transactions: null,
-				next: null,
-				prev: null,
-			};
 		default:
 			return state;
 	}

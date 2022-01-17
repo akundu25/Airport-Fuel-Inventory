@@ -1,0 +1,126 @@
+.fuel-consumption-container {
+	height: 920px;
+	.fuel-consumption-report,
+	.fuel-consumption-report-pdf {
+		margin: 50px;
+		height: 75%;
+	}
+}
+
+.inner-fuel-consumption-container {
+	display: flex;
+	height: 100%;
+
+	.fuel-consumption-list {
+		width: 80%;
+
+		.download-btn {
+			margin: 50px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			img {
+				@include arrowDimentions();
+			}
+
+			.prev-report,
+			.next-report {
+				background-color: #ffff;
+			}
+
+			.download-report {
+				padding: 15px 20px;
+				background-color: $primary-button-color;
+				color: $button-text-color;
+				&:hover {
+					background-color: $primary-button-hover-color;
+					color: $button-text-color;
+				}
+			}
+		}
+	}
+}
+
+.fuel-consumption-report {
+	.each-report-item {
+		@include flexColumn();
+		height: 100%;
+
+		p {
+			height: 10%;
+			margin-top: 30px;
+			font-size: 30px;
+		}
+
+		.fuel-consumption-report-table {
+			height: 80%;
+			overflow-y: auto;
+			border: $black-border;
+		}
+
+		table {
+			@include flexColumn();
+			height: 100%;
+			width: 100%;
+			margin: 0px;
+		}
+
+		thead {
+			height: 25%;
+		}
+
+		tbody {
+			height: 75%;
+		}
+
+		th {
+			padding: 20px;
+			background-color: #313137;
+			color: #ffff;
+			letter-spacing: 4px;
+			font-family: 'Open Sans Condensed', sans-serif;
+			font-weight: 600;
+			height: 115px;
+			width: 342px;
+		}
+
+		td {
+			padding: 20px;
+			width: 340px;
+			height: 120px;
+			font-size: 20px;
+		}
+
+		tr {
+			&:nth-child(odd) {
+				background-color: #efeff3;
+			}
+		}
+	}
+}
+
+.fuel-consumption-report-pdf .each-report-item-pdf {
+	border-bottom: 2px dotted black;
+
+	p {
+		margin: 20px 0px;
+	}
+
+	table {
+		border: $black-border;
+	}
+
+	th {
+		padding: 20px;
+		background-color: #313137;
+		color: #ffff;
+		letter-spacing: 4px;
+		font-family: 'Open Sans Condensed', sans-serif;
+		font-weight: 600;
+	}
+
+	td {
+		padding: 20px;
+	}
+}

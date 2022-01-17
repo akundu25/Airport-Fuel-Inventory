@@ -64,3 +64,37 @@ export const loginUser = async (req, res) => {
 		console.log(error);
 	}
 };
+
+export const getUsers = async (req, res) => {
+	try {
+		const users = await user.find();
+		res.status(200).json(users);
+	} catch (error) {
+		res.status(500).json({ errors: [{ msg: error.message }] });
+		console.log(error);
+	}
+};
+
+export const editUser = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const updatedUser = await user.findByIdAndUpdate(id, req.body, {
+			new: true,
+		});
+		res.status(201).json(updatedUser);
+	} catch (error) {
+		res.status(500).json({ errors: [{ msg: error.message }] });
+		console.log(error);
+	}
+};
+
+export const deleteUser = async (req, res) => {
+	try {
+		const { id } = req.params;
+		await user.findByIdAndDelete(id);
+		res.status(200).json({ message: 'the user has been deleted' });
+	} catch (error) {
+		res.status(500).json({ errors: [{ msg: error.message }] });
+		console.log(error);
+	}
+};

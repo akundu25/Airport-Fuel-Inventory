@@ -14,7 +14,7 @@ components:
       bearerFormat: JWT
   schemas:
     user:
-      type: object,
+      type: object
       properties:
         name:
           type: string
@@ -183,25 +183,15 @@ paths:
             schema:
               $ref: '#/components/schemas/user'
       responses:
-        200:
-          description: Login successful
+        201:
+          description: User created successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  clientUser:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                      email:
-                        type: string
-                  token:
+                  message:
                     type: string
-                required:
-                  - clientUser
-                  - token
         400:
           description: Bad request
           content:
@@ -221,41 +211,149 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /airport:
+  /user:
     get:
-      tags: [Airport]
-      summary: Fetching of airports
-      parameters:
-        - name: limit
-          in: query
-          required: true
-          description: Number of docs per page
-          schema:
-            type: number
-        - name: page
-          in: query
-          required: true
-          description: Page number
-          schema:
-            type: number
+      tags: [UserAuthentication]
+      summary: Fetching all users
       responses:
         200:
-          description: Fetching of airports successful
+          description: All users fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /user/{id}:
+    put:
+      tags: [UserAuthentication]
+      summary: Editing info of an user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User id for user identification
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        200:
+          description: User successfully edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /user/delete/{id}:
+    delete:
+      tags: [UserAuthentication]
+      summary: Deleting an user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User id for user identification
+          schema:
+            type: string
+      responses:
+        200:
+          description: User successfully deleted
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  next:
-                    $ref: '#/components/schemas/pagination'
-                  prev:
-                    $ref: '#/components/schemas/pagination'
-                  airports:
-                    type: array
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+
+
+  /airports/{type}:
+    get:
+      tags: [Airport]
+      summary: Fetching of airports
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: Type of operation to be performed
+          schema:
+            type: string
+            enum: [per-page, all, top-5]
+        - name: limit
+          in: query
+          description: Number of docs per page (for type per-page)
+          schema:
+            type: number
+        - name: page
+          in: query
+          description: Page number (for type per-page)
+          schema:
+            type: number
+      responses:
+        200:
+          description: Fetching of airports successfull
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      next:
+                        $ref: '#/components/schemas/pagination'
+                      prev:
+                        $ref: '#/components/schemas/pagination'
+                      airports:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/airport'
+                    required:
+                      - airports
+                  - type: array
                     items:
                       $ref: '#/components/schemas/airport'
-                required:
-                  - airports
+                  - type: object
+                    properties:
+                      top5NoOfTransactions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/airport'
+                      top5FuelAvailable:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/airport'
+                      top5FuelCapacity:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/airport'
+                    required:
+                      - top5NoOfTransactions
+                      - top5FuelAvailable
+                      - top5FuelCapacity
         401:
           description: Unauthorized access
           content:
@@ -269,7 +367,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       
-  /airport/add:
+  /airports/add:
     post:
       tags: [Airport]
       summary: Adding a new airport
@@ -323,7 +421,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       
-  /airport/edit:
+  /airports/edit:
     patch:
       tags: [Airport]
       summary: To edit an airport
@@ -376,89 +474,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-              
-  /airport/all:
-    get:
-      tags: [Airport]
-      summary: Fetching all airports at once
-      responses:
-        200:
-          description: Fetching of all airports successful
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/airport'
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
 
-  /airport/top-5-airports:
-    get:
-      tags: [Airport]
-      summary: Fetching top 5 airports based on various metrics
-      responses:
-        200:
-          description: Fetching of top 5 airports successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  top5NoOfTransactions:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/airport'
-                  top5FuelAvailable:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/airport'
-                  top5FuelCapacity:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/airport'
-                required:
-                  - top5NoOfTransactions
-                  - top5FuelAvailable
-                  - top5FuelCapacity
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-
-  /aircraft:
+  /aircrafts/{type}:
     get:
       tags: [Aircraft]
       summary: Fetching aircrafts
       parameters:
+        - name: type
+          in: path
+          required: true
+          description: Type of operation to be performed
+          schema:
+            type: string
+            enum: [per-page, all, top-5]
         - name: limit
           in: query
-          required: true
-          description: Number of docs per page
+          description: Number of docs per page (for type per-page)
           schema:
             type: number
         - name: page
           in: query
-          required: true
-          description: Page number
+          description: Page number (for type per-page)
           schema:
             type: number
       responses:
@@ -467,18 +503,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next:
-                    $ref: '#/components/schemas/pagination'
-                  prev:
-                    $ref: '#/components/schemas/pagination'
-                  aircrafts:
-                    type: array
+                oneOf:
+                  - type: object
+                    properties:
+                      next:
+                        $ref: '#/components/schemas/pagination'
+                      prev:
+                        $ref: '#/components/schemas/pagination'
+                      aircrafts:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/aircraft'
+                    required:
+                      - aircrafts
+                  - type: array
                     items:
                       $ref: '#/components/schemas/aircraft'
-                required:
-                  - aircrafts
         401:
           description: Unauthorized access
           content:
@@ -492,7 +532,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /aircraft/add:
+  /aircrafts/add:
     post:
       tags: [Aircraft]
       summary: Adding a new aircraft
@@ -546,7 +586,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /aircraft/edit:
+  /aircrafts/edit:
     patch:
       tags: [Aircraft]
       summary: To edit an aircraft
@@ -600,25 +640,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /aircraft/all:
-    get:
+  /aircrafts/{aircraftId}:
+    put:
       tags: [Aircraft]
-      summary: Fetching all aircrafts at once
+      summary: Updating an aircraft
+      parameters:
+        - name: aircraftId
+          in: path
+          required: true
+          description: aircraft id for identifying the aircraft
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/aircraft'
       responses:
         200:
-          description: Fetching of all aircrafts successful
+          description: Aircraft successfully updated
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/aircraft'
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/aircraft'
         500:
           description: Internal server error
           content:
@@ -626,21 +671,54 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /transaction:
+  /aircrafts/delete/{aircraftId}:
+    delete:
+      tags: [Aircraft]
+      summary: Deleting an aircraft
+      parameters:
+        - name: aircraftId
+          in: path
+          required: true
+          description: aircraft id for identifying the aircraft
+          schema:
+            type: string
+      responses:
+        200:
+          description: Aircraft deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+  /transactions/fetch/{type}:
     get:
       tags: [Transaction]
       summary: Fetch transactions
       parameters:
+        - name: type
+          in: path
+          required: true
+          description: Type of operation to be performed
+          schema:
+            type: string
+            enum: [per-page, all]
         - name: limit
           in: query
-          required: true
-          description: Number of docs per page
+          description: Number of docs per page (for type per-page)
           schema:
             type: number
         - name: page
           in: query
-          required: true
-          description: Page number
+          description: Page number (for type per-page)
           schema:
             type: number
       responses:
@@ -649,18 +727,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next:
-                    $ref: '#/components/schemas/pagination'
-                  prev:
-                    $ref: '#/components/schemas/pagination'
-                  transactions:
-                    type: array
+                oneOf:
+                  - type: object
+                    properties:
+                      next:
+                        $ref: '#/components/schemas/pagination'
+                      prev:
+                        $ref: '#/components/schemas/pagination'
+                      transactions:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/transaction'
+                    required:
+                      - transactions
+                  - type: array
                     items:
                       $ref: '#/components/schemas/transaction'
-                required:
-                  - transactions
         401:
           description: Unauthorized access
           content:
@@ -674,37 +756,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /transaction/all:
-    get:
-      tags: [Transaction]
-      summary: Fetching all transactions at once
-      responses:
-        200:
-          description: Fetching of all transactions successful
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/transaction'
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-
-  /transaction/add:
+  /transactions/{type}:
     post:
       tags: [Transaction]
       summary: Adding a transaction
       parameters:
+        - name: type
+          in: path
+          required: true
+          description: Type of operation to be performed
+          schema:
+            type: string
+            enum: [add, reverse]
         - name: limit
           in: query
           required: true
@@ -730,17 +793,17 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  next:
-                    $ref: '#/components/schemas/pagination'
-                  prev:
-                    $ref: '#/components/schemas/pagination'
-                  transactions:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/transaction'
-                required:
-                  - transactions
+                  properties:
+                    next:
+                      $ref: '#/components/schemas/pagination'
+                    prev:
+                      $ref: '#/components/schemas/pagination'
+                    transactions:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/transaction'
+                  required:
+                    - transactions
         401:
           description: Unauthorized access
           content:
@@ -754,23 +817,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
 
-  /transaction/edit:
-    patch:
+  /transactions/{transactionId}:
+    put:
       tags: [Transaction]
-      summary: To edit a transaction
+      summary: Updating a transaction
       parameters:
-        - name: limit
-          in: query
+        - name: transactionId
           required: true
-          description: Number of docs per page
+          in: path
+          description: Transaction id
           schema:
-            type: number
-        - name: page
-          in: query
-          required: true
-          description: Page number
-          schema:
-            type: number
+            type: string
       requestBody:
         required: true
         content:
@@ -779,34 +836,46 @@ paths:
               $ref: '#/components/schemas/transaction'
       responses:
         200:
-          description: Editing of aircrafts successful
+          description: Transaction updated successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  next:
-                    $ref: '#/components/schemas/pagination'
-                  prev:
-                    $ref: '#/components/schemas/pagination'
-                  transactions:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/transaction'
-                required:
-                  - transactions
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/transaction'
         500:
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+
+  /transactions/delete/{transactionId}:
+    delete:
+      tags: [Transaction]
+      summary: Deleting a transaction
+      parameters:
+        - name: transactionId
+          required: true
+          in: path
+          description: Transaction id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Deleted the transaction successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
 
   /fuel-consumption:
     get:
@@ -825,39 +894,6 @@ paths:
           description: Page number
           schema:
             type: number
-      responses:
-        200:
-          description: Fetching of airports and their corresponding transactions successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  airports:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/airport'
-                  transactions:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/transaction'
-        401:
-          description: Unauthorized access
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-        500:
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-
-  /fuel-consumption/all:
-    get:
-      tags: [FuelConsumption]
-      summary: Fetching of all airports and their corresponding transactions
       responses:
         200:
           description: Fetching of airports and their corresponding transactions successful

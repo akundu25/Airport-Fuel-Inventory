@@ -23,10 +23,10 @@ const swaggerDocument = YAML.load('./yamls/swagger.yaml');
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/user', userRoutes);
-app.use('/airport', airportRoutes);
-app.use('/aircraft', aircraftRoutes);
-app.use('/transaction', transactionRoutes);
-app.use('/fuel-consumption', fuelConsumptionRoutes);
+app.use('/airports', airportRoutes);
+app.use('/aircrafts', aircraftRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/fuel-consumption-report', fuelConsumptionRoutes);
 
 mongoose
 	.connect(process.env.CONNECTION_URL, {

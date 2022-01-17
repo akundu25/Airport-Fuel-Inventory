@@ -121,7 +121,7 @@ const Airports = () => {
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRPORT });
-		}, 8000);
+		}, 5000);
 	}, [
 		dispatch,
 		airports,
@@ -355,7 +355,9 @@ const Airports = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.leftArrow}
+										src={
+											prevDisabled ? images.leftArrowDisabled : images.leftArrow
+										}
 										alt='left-arrow'
 										className='left-arrow'
 									/>
@@ -370,7 +372,11 @@ const Airports = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.rightArrow}
+										src={
+											nextDisabled
+												? images.rightArrowDisabled
+												: images.rightArrow
+										}
 										alt='right-arrow'
 										className='right-arrow'
 									/>

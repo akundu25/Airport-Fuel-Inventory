@@ -38,9 +38,16 @@ const fetchingAircrafts = async (page, limit, res) => {
 };
 
 export const fetchAircrafts = (req, res) => {
-	const page = parseInt(req.query.page);
-	const limit = parseInt(req.query.limit);
-	return fetchingAircrafts(page, limit, res);
+	const { type } = req.params;
+	if (type === 'per-page') {
+		const page = parseInt(req.query.page);
+		const limit = parseInt(req.query.limit);
+		return fetchingAircrafts(page, limit, res);
+	} else if (type === 'all') {
+		return fetchAllAircrafts(res);
+	} else if (type === 'top-5') {
+		return fetchTopFiveAirline(res);
+	}
 };
 
 export const editAircraft = async (req, res) => {
@@ -80,13 +87,13 @@ export const addAircraft = async (req, res) => {
 	}
 };
 
-export const fetchAllAircrafts = async (req, res) => {
+const fetchAllAircrafts = async (res) => {
 	try {
 		const allAircrafts = await aircraft.find();
-		res.status(200).json(allAircrafts);
+		return res.status(200).json(allAircrafts);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
@@ -95,7 +102,7 @@ const sortAirlines = (a, b) => {
 	return 1;
 };
 
-export const fetchTopFiveAirline = async (req, res) => {
+const fetchTopFiveAirline = async (res) => {
 	try {
 		const allAircrafts = await aircraft.find();
 		const airlines = {};
@@ -113,7 +120,35 @@ export const fetchTopFiveAirline = async (req, res) => {
 		const airlinesArray = Object.entries(airlines);
 		airlinesArray.sort(sortAirlines);
 		const top5Airlines = airlinesArray.slice(0, 5);
-		res.status(200).json(top5Airlines);
+		return res.status(200).json(top5Airlines);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+export const updateAircraft = async (req, res) => {
+	try {
+		const { aircraftId } = req.params;
+		const updatedAircraft = await aircraft.findByIdAndUpdate(
+			aircraftId,
+			req.body,
+			{ new: true }
+		);
+		res.status(200).json(updatedAircraft);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+export const deleteAircraft = async (req, res) => {
+	try {
+		const { aircraftId } = req.params;
+		await aircraft.findByIdAndDelete(aircraftId);
+		res
+			.status(200)
+			.json({ message: 'The aircraft has been deleted successfully' });
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ errors: [{ msg: error.message }] });

@@ -64,13 +64,6 @@ const airport = (state = initialState, action) => {
 				top5FuelAvailable: action?.payload?.top5FuelAvailable,
 				top5FuelCapacity: action?.payload?.top5FuelCapacity,
 			};
-		case types.CLEAN_CHARTS_DATA:
-			return {
-				...state,
-				top5NoOfTransactions: null,
-				top5FuelAvailable: null,
-				top5FuelCapacity: null,
-			};
 		default:
 			return state;
 	}

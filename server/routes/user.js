@@ -1,6 +1,12 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { loginUser, signupUser } from '../controllers/user.js';
+import {
+	loginUser,
+	signupUser,
+	getUsers,
+	editUser,
+	deleteUser,
+} from '../controllers/user.js';
 
 const router = express.Router();
 
@@ -15,5 +21,9 @@ router.post(
 		),
 	signupUser
 );
+
+router.get('/', getUsers);
+router.put('/:id', editUser);
+router.delete('/delete/:id', deleteUser);
 
 export default router;

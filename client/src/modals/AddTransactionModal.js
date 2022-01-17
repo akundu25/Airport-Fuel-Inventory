@@ -4,7 +4,7 @@ import Button from '../utility/Button';
 import Input from '../utility/Input';
 import moment from 'moment';
 
-import './AddTransactionModal.css';
+import './modal_style.css';
 
 Modal.setAppElement('#root');
 
@@ -28,6 +28,13 @@ const AddTransactionModal = ({
 
 	const { transaction_type, airport_name, aircraft_name } = transaction;
 	const quantity = parseInt(transaction.quantity);
+
+	const addTransactionDisabled =
+		transaction_type === '' ||
+		airport_name === '' ||
+		quantity <= 0 ||
+		isNaN(quantity) ||
+		(transaction_type === 'OUT' && aircraft_name === 'N/A');
 
 	return (
 		<Modal
@@ -121,18 +128,18 @@ const AddTransactionModal = ({
 				</div>
 			</form>
 			<div className='transaction-modal-btn'>
-				<Button type='button' btnText='Cancel' onClick={handleCloseModal} />
+				<Button
+					type='button'
+					btnText='Cancel'
+					className='cancel-btn'
+					onClick={handleCloseModal}
+				/>
 				<Button
 					type='button'
 					btnText='Add Transaction'
 					onClick={handleAddTransaction}
-					disabled={
-						transaction_type === '' ||
-						airport_name === '' ||
-						quantity <= 0 ||
-						isNaN(quantity) ||
-						(transaction_type === 'OUT' && aircraft_name === 'N/A')
-					}
+					className={addTransactionDisabled ? 'disabled' : 'btn'}
+					disabled={addTransactionDisabled}
 				/>
 			</div>
 		</Modal>

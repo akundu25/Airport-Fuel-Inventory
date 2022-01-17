@@ -2,7 +2,7 @@ import Modal from 'react-modal';
 import Button from '../utility/Button';
 import Input from '../utility/Input';
 
-import './EditModal.css';
+import './modal_style.css';
 
 Modal.setAppElement('#root');
 
@@ -19,6 +19,14 @@ const AirportEditModal = ({
 	const fuel_available = parseInt(selectedEntity.fuel_available);
 	const fuel_capacity = parseInt(selectedEntity.fuel_capacity);
 	const { airport_name, aircraft_no, airline } = selectedEntity;
+
+	const editAirportDisabled =
+		fuel_capacity <= 0 ||
+		fuel_available > fuel_capacity ||
+		isNaN(fuel_capacity) ||
+		airport_name === '';
+
+	const editAircraftDisabled = aircraft_no === '' || airline === '';
 
 	return (
 		<Modal
@@ -66,25 +74,27 @@ const AirportEditModal = ({
 				</div>
 			</form>
 			<div className='edit-modal-btn'>
-				<Button type='button' btnText='Cancel' onClick={handleCloseEditModal} />
+				<Button
+					type='button'
+					btnText='Cancel'
+					className='cancel-btn'
+					onClick={handleCloseEditModal}
+				/>
 				{inputNames[0] === 'airport_name' ? (
 					<Button
 						type='button'
 						btnText='Update'
 						onClick={handleEditEntity}
-						disabled={
-							fuel_capacity <= 0 ||
-							fuel_available > fuel_capacity ||
-							isNaN(fuel_capacity) ||
-							airport_name === ''
-						}
+						className={editAirportDisabled ? 'disabled' : 'btn'}
+						disabled={editAirportDisabled}
 					/>
 				) : (
 					<Button
 						type='button'
 						btnText='Update'
 						onClick={handleEditEntity}
-						disabled={aircraft_no === '' || airline === ''}
+						className={editAircraftDisabled ? 'disabled' : 'btn'}
+						disabled={editAircraftDisabled}
 					/>
 				)}
 			</div>

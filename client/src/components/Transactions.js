@@ -117,10 +117,6 @@ const Transactions = () => {
 	const [searchTransaction, setSearchTransaction] = useState('');
 
 	useEffect(() => {
-		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
-		dispatch({ type: types.CLEAN_AIRPORTS });
-		dispatch({ type: types.CLEAN_AIRCRAFTS });
-		dispatch({ type: types.CLEAN_CHARTS_DATA });
 		!transactions && dispatch(getTransactions(limit, page));
 		setTransactionsData(transactions);
 
@@ -140,7 +136,7 @@ const Transactions = () => {
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_TRANSACTION });
-		}, 8000);
+		}, 5000);
 	}, [
 		dispatch,
 		transactions,
@@ -394,7 +390,9 @@ const Transactions = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.leftArrow}
+										src={
+											prevDisabled ? images.leftArrowDisabled : images.leftArrow
+										}
 										alt='left-arrow'
 										className='left-arrow'
 									/>
@@ -409,7 +407,11 @@ const Transactions = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.rightArrow}
+										src={
+											nextDisabled
+												? images.rightArrowDisabled
+												: images.rightArrow
+										}
 										alt='right-arrow'
 										className='right-arrow'
 									/>

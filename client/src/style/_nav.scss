@@ -1,0 +1,42 @@
+.nav-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20px 10px;
+	box-shadow: 0 10px 20px #d2d2da;
+	position: sticky;
+
+	.logout-btn {
+		width: 15%;
+		button {
+			width: 60%;
+			margin-left: 40px;
+			background-color: $primary-button-color;
+			color: $button-text-color;
+			padding: 10px 20px;
+			font-family: $button-font-family;
+			&:hover {
+				background-color: $primary-button-hover-color;
+				color: $button-text-color;
+			}
+		}
+	}
+
+	.nav-heading {
+		width: 60%;
+		margin-left: 40px;
+		font-family: 'Oswald', sans-serif;
+		letter-spacing: 2px;
+		.airport-logo {
+			width: 50px;
+			height: 50px;
+			margin-right: 20px;
+		}
+	}
+
+	.user-name {
+		width: 25%;
+		margin-right: 30px;
+		text-align: right;
+	}
+}

@@ -4,16 +4,17 @@ import {
 	addAircraft,
 	editAircraft,
 	fetchAircrafts,
-	fetchAllAircrafts,
-	fetchTopFiveAirline,
+	updateAircraft,
+	deleteAircraft,
 } from '../controllers/aircraft.js';
 
 const router = express.Router();
 
 router.post('/add', userAuth, addAircraft);
 router.patch('/edit', userAuth, editAircraft);
-router.get('/', userAuth, fetchAircrafts);
-router.get('/all', userAuth, fetchAllAircrafts);
-router.get('/top-5-airline', userAuth, fetchTopFiveAirline);
+router.get('/:type', userAuth, fetchAircrafts);
+
+router.put('/:aircraftId', updateAircraft);
+router.delete('/delete/:aircraftId', deleteAircraft);
 
 export default router;

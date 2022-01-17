@@ -1,0 +1,67 @@
+.dashboard-container {
+	height: 1800px;
+
+	.main-dashboard {
+		display: flex;
+		height: 100%;
+
+		.dashboard-items {
+			@include flexColumn();
+			width: 80%;
+			height: 100%;
+			padding: 100px;
+
+			.cards {
+				display: flex;
+				justify-content: space-around;
+				height: 30%;
+				padding: 50px 0px;
+			}
+
+			.charts-1,
+			.charts-2 {
+				display: flex;
+				width: 1200px;
+				height: 35%;
+				justify-content: space-between;
+			}
+
+			.charts-1 {
+				margin-left: 30px;
+				margin-bottom: 100px;
+				margin-top: 100px;
+
+				.pie,
+				.doughnut {
+					@include flexColumn();
+					font-size: 20px;
+					text-align: center;
+					width: 40%;
+				}
+
+				h6 {
+					color: #d1391e;
+					margin-bottom: 25px;
+				}
+			}
+
+			.charts-2 {
+				.bar,
+				.line {
+					@include flexColumn();
+					width: 50%;
+					text-align: center;
+					font-size: 15px;
+				}
+
+				h6 {
+					color: #0715d0;
+					margin-bottom: 25px;
+				}
+			}
+		}
+	}
+}
+
+@import './sidebar';
+@import './largeCard';

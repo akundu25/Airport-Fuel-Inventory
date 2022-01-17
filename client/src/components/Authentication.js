@@ -8,7 +8,6 @@ import * as images from '../images';
 import * as types from '../types';
 import { loginUser, signupUser } from '../actions/user';
 
-import '../App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const initialSignupForm = {
@@ -37,7 +36,7 @@ const Authentication = () => {
 		signupSuccess !== '' && notify(signupSuccess, 'success');
 		setTimeout(() => {
 			dispatch({ type: types.USER_AUTH_ERROR_REMOVE });
-		}, 8000);
+		}, 5000);
 	}, [dispatch, authError, signupSuccess]);
 
 	const handleSubmit = (e) => {

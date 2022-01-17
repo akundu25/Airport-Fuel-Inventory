@@ -38,10 +38,17 @@ const fetchingAirports = async (page, limit, res) => {
 };
 
 export const fetchAirports = (req, res) => {
-	const page = parseInt(req.query.page);
-	const limit = parseInt(req.query.limit);
+	const { type } = req.params;
+	if (type === 'per-page') {
+		const page = parseInt(req.query.page);
+		const limit = parseInt(req.query.limit);
 
-	return fetchingAirports(page, limit, res);
+		return fetchingAirports(page, limit, res);
+	} else if (type === 'all') {
+		return fetchAllAirports(res);
+	} else if (type === 'top-5') {
+		return fetchTopFiveAirports(res);
+	}
 };
 
 export const editAirport = async (req, res) => {
@@ -100,17 +107,17 @@ export const addAirport = async (req, res) => {
 	}
 };
 
-export const fetchAllAirports = async (req, res) => {
+const fetchAllAirports = async (res) => {
 	try {
 		const allAirports = await airport.find();
-		res.status(200).json(allAirports);
+		return res.status(200).json(allAirports);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
-export const fetchTopFiveAirports = async (req, res) => {
+const fetchTopFiveAirports = async (res) => {
 	try {
 		const top5NoOfTransactions = await airport
 			.find()
@@ -126,12 +133,12 @@ export const fetchTopFiveAirports = async (req, res) => {
 			.find()
 			.limit(5)
 			.sort({ fuel_capacity: -1 });
-		res
+		return res
 			.status(200)
 			.json({ top5NoOfTransactions, top5FuelAvailable, top5FuelCapacity });
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 

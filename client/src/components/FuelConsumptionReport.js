@@ -1,18 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
-import {
-	getFuelConsumption,
-	getAllFuelConsumption,
-} from '../actions/fuelConsumption';
+import { getFuelConsumption } from '../actions/fuelConsumption';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
-import * as types from '../types';
+import * as images from '../images';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
-
-const limit = 2;
-const page = 1;
 
 const listItems = [
 	{
@@ -48,50 +42,40 @@ const FuelConsumptionReport = () => {
 	const transactions = useSelector(
 		(state) => state.fuelConsumption.transactions
 	);
-	const [transactionsData, setTransactionsData] = useState(transactions);
 	const airports = useSelector((state) => state.fuelConsumption.airports);
-	const [airportsData, setAirportsData] = useState(airports);
-	const allTransactions = useSelector(
-		(state) => state.fuelConsumption.allTransactions
+	const nonTransactionAirports = useSelector(
+		(state) => state.fuelConsumption.nonTransactionAirports
 	);
-	const [allTransactionsData, setAllTransactionsData] =
-		useState(allTransactions);
-	const allAirports = useSelector((state) => state.fuelConsumption.allAirports);
-	const [allAirportsData, setAllAirportsData] = useState(allAirports);
-	const next = useSelector((state) => state.fuelConsumption.next);
-	const [load, setLoad] = useState(false);
+	const [allAirports, setAllAirports] = useState([]);
+	const [airportNumber, setAirportNumber] = useState(1);
 
 	const handlePrint = useReactToPrint({
 		content: () => fuelConsumptionRef.current,
 	});
 
 	useEffect(() => {
-		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
-		dispatch({ type: types.CLEAN_AIRCRAFTS });
-		dispatch({ type: types.CLEAN_TRANSACTIONS });
-		dispatch({ type: types.CLEAN_CHARTS_DATA });
-		!airports && !transactions && dispatch(getFuelConsumption(limit, page));
-		setTransactionsData(transactions);
-		setAirportsData(airports);
+		!airports && !transactions && dispatch(getFuelConsumption());
+		airports &&
+			nonTransactionAirports &&
+			setAllAirports([...airports, ...nonTransactionAirports]);
+	}, [dispatch, transactions, airports, nonTransactionAirports]);
 
-		!allAirports && !allTransactions && dispatch(getAllFuelConsumption());
-		setAllTransactionsData(allTransactions);
-		setAllAirportsData(allAirports);
-
-		if (next) setLoad(false);
-		else setLoad(true);
-	}, [dispatch, transactions, allTransactions, allAirports, airports, next]);
-
-	const handleLoadMore = () => {
-		dispatch(getFuelConsumption(limit, next.page));
-	};
+	const oneAirportTransactions =
+		airports &&
+		airports.length &&
+		transactions &&
+		transactions.length &&
+		transactions.filter(
+			(transaction) =>
+				transaction.airport_name === airports[airportNumber - 1].airport_name
+		);
 
 	return (
 		<div className='fuel-consumption-container'>
 			<div style={{ display: 'none' }}>
 				<PdfFuelConsumptionReport
-					allAirports={allAirportsData}
-					allTransactions={allTransactionsData}
+					allAirports={allAirports}
+					allTransactions={transactions}
 					ref={fuelConsumptionRef}
 				/>
 			</div>
@@ -104,63 +88,92 @@ const FuelConsumptionReport = () => {
 							type='button'
 							btnText='Download Report'
 							onClick={handlePrint}
+							className='download-report'
 						/>
+						<div className='report-change'>
+							<Button
+								type='button'
+								btnText={
+									<img
+										src={
+											airports && airportNumber === 1
+												? images.leftArrowDisabled
+												: images.leftArrow
+										}
+										alt='left-arrow'
+										className='left-arrow'
+									/>
+								}
+								disabled={airports && airportNumber === 1}
+								onClick={() =>
+									setAirportNumber((prevAirportNumber) => prevAirportNumber - 1)
+								}
+								className='prev-report'
+							/>
+							<span className='report-number'>
+								{airports && airports.length
+									? `Report ${airportNumber} of ${airports.length}`
+									: 'No reports'}
+							</span>
+							<Button
+								type='button'
+								className='next-report'
+								btnText={
+									<img
+										src={
+											airports && airportNumber === airports?.length
+												? images.rightArrowDisabled
+												: images.rightArrow
+										}
+										alt='right-arrow'
+										className='right-arrow'
+									/>
+								}
+								disabled={airports && airportNumber === airports?.length}
+								onClick={() =>
+									setAirportNumber((prevAirportNumber) => prevAirportNumber + 1)
+								}
+							/>
+						</div>
 					</div>
 					<div className='fuel-consumption-report'>
-						{airportsData && airportsData.length ? (
-							airportsData.map(({ _id, airport_name, fuel_available }) => {
-								const oneAirportTransactions = transactionsData.filter(
-									(transaction) => transaction.airport_name === airport_name
-								);
-								return (
-									<div key={_id} className='each-report-item'>
-										<p>
-											<b>Airport:</b> {airport_name}
-										</p>
-										<table>
-											<thead>
-												<tr>
-													<th>DATE/TIME</th>
-													<th>TYPE</th>
-													<th>FUEL</th>
-													<th>AIRCRAFT</th>
-												</tr>
-											</thead>
-											<tbody>
-												{oneAirportTransactions.length ? (
-													oneAirportTransactions.map((transaction) => (
-														<tr key={transaction._id}>
-															<td>{transaction.transaction_date_time}</td>
-															<td>{transaction.transaction_type}</td>
-															<td>{transaction.quantity}</td>
-															<td>{transaction.aircraft_name}</td>
-														</tr>
-													))
-												) : (
-													<tr>
-														<td>N/A</td>
-														<td>N/A</td>
-														<td>N/A</td>
-														<td>N/A</td>
+						{airports ? (
+							<div className='each-report-item'>
+								<p>
+									<b>Airport:</b>{' '}
+									{airports && airports[airportNumber - 1].airport_name}
+								</p>
+								<div className='fuel-consumption-report-table'>
+									<table>
+										<thead>
+											<tr>
+												<th>DATE/TIME</th>
+												<th>TYPE</th>
+												<th>FUEL</th>
+												<th>AIRCRAFT</th>
+											</tr>
+										</thead>
+										<tbody>
+											{oneAirportTransactions &&
+												oneAirportTransactions.map((transaction) => (
+													<tr key={transaction._id}>
+														<td>{transaction.transaction_date_time}</td>
+														<td>{transaction.transaction_type}</td>
+														<td>{transaction.quantity}</td>
+														<td>{transaction.aircraft_name}</td>
 													</tr>
-												)}
-											</tbody>
-										</table>
-										<p>
-											<b>Fuel Available:</b> {fuel_available}
-										</p>
-									</div>
-								);
-							})
+												))}
+										</tbody>
+									</table>
+								</div>
+								<p>
+									<b>Fuel Available:</b>{' '}
+									{airports && airports[airportNumber - 1].fuel_available}
+								</p>
+							</div>
 						) : (
-							<div className='loading'>Loading...</div>
+							<div className='loading'>No records available</div>
 						)}
-						<Button
-							type='button'
-							btnText='load more'
-							disabled={load}
-							onClick={handleLoadMore}
-						/>
 					</div>
 				</div>
 			</div>

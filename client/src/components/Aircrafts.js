@@ -98,7 +98,7 @@ const Aircrafts = () => {
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRCRAFT });
-		}, 8000);
+		}, 5000);
 	}, [
 		dispatch,
 		aircrafts,
@@ -297,7 +297,9 @@ const Aircrafts = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.leftArrow}
+										src={
+											prevDisabled ? images.leftArrowDisabled : images.leftArrow
+										}
 										alt='left-arrow'
 										className='left-arrow'
 									/>
@@ -312,7 +314,11 @@ const Aircrafts = () => {
 								type='button'
 								btnText={
 									<img
-										src={images.rightArrow}
+										src={
+											nextDisabled
+												? images.rightArrowDisabled
+												: images.rightArrow
+										}
 										alt='right-arrow'
 										className='right-arrow'
 									/>

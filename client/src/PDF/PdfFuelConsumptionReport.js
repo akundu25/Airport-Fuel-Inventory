@@ -5,8 +5,9 @@ const emptyArray = [];
 const PdfFuelConsumptionReport = React.forwardRef(
 	({ allAirports, allTransactions }, ref) => {
 		return (
-			<div className='fuel-consumption-report' ref={ref}>
-				{allAirports && allAirports.length ? (
+			<div className='fuel-consumption-report-pdf' ref={ref}>
+				{allAirports &&
+					allAirports.length &&
 					allAirports.map(({ _id, airport_name, fuel_available }) => {
 						const oneAirportTransactions =
 							allTransactions && allTransactions.length
@@ -15,7 +16,7 @@ const PdfFuelConsumptionReport = React.forwardRef(
 								  )
 								: emptyArray;
 						return (
-							<div key={_id} className='each-report-item'>
+							<div key={_id} className='each-report-item-pdf'>
 								<p>
 									<b>Airport:</b> {airport_name}
 								</p>
@@ -53,10 +54,7 @@ const PdfFuelConsumptionReport = React.forwardRef(
 								</p>
 							</div>
 						);
-					})
-				) : (
-					<div className='loading'>No records available</div>
-				)}
+					})}
 			</div>
 		);
 	}

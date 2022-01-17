@@ -31,14 +31,6 @@ const user = (state = initialState, action) => {
 				error: null,
 				success: '',
 			};
-		case types.LOGOUT:
-			localStorage.removeItem('userProfile');
-			return {
-				...state,
-				name: '',
-				email: '',
-				error: null,
-			};
 		default:
 			return state;
 	}

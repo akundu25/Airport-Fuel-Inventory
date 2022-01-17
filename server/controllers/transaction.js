@@ -41,13 +41,9 @@ const fetchingTransactions = async (page, limit, res) => {
 	}
 };
 
-export const addTransaction = async (req, res) => {
+const addTransaction = async (page, limit, transactionToBeAdded, res) => {
 	try {
-		const newTransaction = req.body;
-		const page = parseInt(req.query.page);
-		const limit = parseInt(req.query.limit);
-
-		const { transaction_type, airport_id, quantity } = newTransaction;
+		const { transaction_type, airport_id, quantity } = transactionToBeAdded;
 
 		const { fuel_available, fuel_capacity, no_of_transactions } =
 			await airport.findById(airport_id, {
@@ -83,36 +79,44 @@ export const addTransaction = async (req, res) => {
 			},
 		});
 
-		await transaction.create(newTransaction);
+		await transaction.create(transactionToBeAdded);
 
 		return fetchingTransactions(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };
 
-export const fetchTransactions = async (req, res) => {
-	const page = parseInt(req.query.page);
-	const limit = parseInt(req.query.limit);
-
-	return fetchingTransactions(page, limit, res);
-};
-
-export const fetchAllTransactions = async (req, res) => {
-	try {
-		const allTransactions = await transaction.find();
-		res.status(200).json(allTransactions);
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
-	}
-};
-
-export const reverseTransaction = async (req, res) => {
-	try {
+export const fetchTransactions = (req, res) => {
+	const { type } = req.params;
+	if (type === 'per-page') {
 		const page = parseInt(req.query.page);
 		const limit = parseInt(req.query.limit);
+
+		return fetchingTransactions(page, limit, res);
+	} else if (type === 'all') {
+		return fetchAllTransactions(res);
+	}
+};
+
+const fetchAllTransactions = async (res) => {
+	try {
+		const allTransactions = await transaction.find();
+		return res.status(200).json(allTransactions);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+const reverseTransaction = async (
+	page,
+	limit,
+	transactionToBeReversed,
+	res
+) => {
+	try {
 		const {
 			_id,
 			transaction_type,
@@ -121,7 +125,7 @@ export const reverseTransaction = async (req, res) => {
 			airport_name,
 			aircraft_id,
 			aircraft_name,
-		} = req.body;
+		} = transactionToBeReversed;
 		let newFuelAvailable;
 
 		const { fuel_available, fuel_capacity, no_of_transactions } =
@@ -171,6 +175,47 @@ export const reverseTransaction = async (req, res) => {
 		return fetchingTransactions(page, limit, res);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ errors: [{ msg: error.message }] });
+		return res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+export const performTransactionAction = (req, res) => {
+	const { type } = req.params;
+	const page = parseInt(req.query.page);
+	const limit = parseInt(req.query.limit);
+	if (type === 'reverse') {
+		const transactionToBeReversed = req.body;
+		return reverseTransaction(page, limit, transactionToBeReversed, res);
+	} else if (type === 'add') {
+		const transactionToBeAdded = req.body;
+		return addTransaction(page, limit, transactionToBeAdded, res);
+	}
+};
+
+export const updateTransaction = async (req, res) => {
+	try {
+		const { transactionId } = req.params;
+		const updatedTransaction = await transaction.findByIdAndUpdate(
+			transactionId,
+			req.body,
+			{ new: true }
+		);
+		res.status(200).json(updatedTransaction);
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
+	}
+};
+
+export const deleteTransaction = async (req, res) => {
+	try {
+		const { transactionId } = req.params;
+		const deletedTransaction = await transaction.findByIdAndDelete(
+			transactionId
+		);
+		res.status(200).json({ message: 'The transaction has been deleted' });
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ errors: [{ msg: error.message }] });
 	}
 };

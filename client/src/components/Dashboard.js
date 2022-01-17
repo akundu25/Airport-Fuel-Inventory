@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
-import * as types from '../types';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
-import RoundCard from '../utility/RoundCard';
 import LargeCard from '../utility/LargeCard';
 import PieChart from '../utility/PieChart';
 import BarChart from '../utility/BarChart';
@@ -13,10 +11,8 @@ import LineChart from '../utility/LineChart';
 import PdfAirportSummaryReport from '../PDF/PdfAirportSummaryReport';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
 import { getAllAirports, getTopFiveAirports } from '../actions/airport';
+import { getFuelConsumption } from '../actions/fuelConsumption';
 import { getTopFiveAirline } from '../actions/aircraft';
-import { getAllFuelConsumption } from '../actions/fuelConsumption';
-
-import '../App.css';
 
 const listItems = [
 	{
@@ -66,6 +62,14 @@ const Dashboard = () => {
 	const date = new Date().toDateString();
 	const allAirports = useSelector((state) => state.airport.allAirports);
 	const [allAirportsData, setAllAirportsData] = useState(allAirports);
+	const transactions = useSelector(
+		(state) => state.fuelConsumption.transactions
+	);
+	const airports = useSelector((state) => state.fuelConsumption.airports);
+	const nonTransactionAirports = useSelector(
+		(state) => state.fuelConsumption.nonTransactionAirports
+	);
+	const [everyAirport, setEveryAirport] = useState([]);
 	const top5Airlines = useSelector((state) => state.aircraft.top5Airlines);
 	const [topFiveAirlines, setTopFiveAirlines] = useState(top5Airlines);
 	const top5NoOfTransactions = useSelector(
@@ -83,11 +87,6 @@ const Dashboard = () => {
 	);
 	const [top5FuelCapacityData, setTop5FuelCapacityData] =
 		useState(top5FuelCapacity);
-	const allTransactions = useSelector(
-		(state) => state.fuelConsumption.allTransactions
-	);
-	const [allTransactionsData, setAllTransactionsData] =
-		useState(allTransactions);
 
 	const handleAirportSummaryPrint = useReactToPrint({
 		content: () => airportSummaryRef.current,
@@ -150,10 +149,6 @@ const Dashboard = () => {
 	const label_top5FuelCapacity = 'Fuel Capacity (L)';
 
 	useEffect(() => {
-		dispatch({ type: types.CLEAN_AIRPORTS_SUMMARY });
-		dispatch({ type: types.CLEAN_AIRPORTS });
-		dispatch({ type: types.CLEAN_AIRCRAFTS });
-		dispatch({ type: types.CLEAN_TRANSACTIONS });
 		!allAirports && dispatch(getAllAirports());
 		setAllAirportsData(allAirports);
 
@@ -165,19 +160,23 @@ const Dashboard = () => {
 		setTop5FuelAvailableData(top5FuelAvailable);
 		setTop5FuelCapacityData(top5FuelCapacity);
 
+		!airports && !transactions && dispatch(getFuelConsumption());
+		airports &&
+			nonTransactionAirports &&
+			setEveryAirport([...airports, ...nonTransactionAirports]);
+
 		!top5Airlines && dispatch(getTopFiveAirline());
 		setTopFiveAirlines(top5Airlines);
-
-		!allTransactions && dispatch(getAllFuelConsumption());
-		setAllTransactionsData(allTransactions);
 	}, [
 		dispatch,
 		allAirports,
-		allTransactions,
 		top5NoOfTransactions,
 		top5FuelAvailable,
 		top5FuelCapacity,
 		top5Airlines,
+		airports,
+		transactions,
+		nonTransactionAirports,
 	]);
 
 	return (
@@ -194,22 +193,17 @@ const Dashboard = () => {
 			</div>
 			<div style={{ display: 'none' }}>
 				<PdfFuelConsumptionReport
-					allAirports={allAirportsData}
-					allTransactions={allTransactionsData}
+					allAirports={everyAirport}
+					allTransactions={transactions}
 					ref={fuelConsumptionRef}
 				/>
 			</div>
 			<div className='main-dashboard'>
 				<Sidebar listItems={listItems} />
 				<div className='dashboard-items'>
-					<div className='row-1'>
-						<RoundCard title='AIRPORTS' to='/airports' />
-						<RoundCard title='AIRCRAFTS' to='/aircrafts' />
-						<RoundCard title='TRANSACTIONS' to='/transactions' />
-					</div>
 					<div className='charts-2'>
 						<div className='bar'>
-							<h7>Top 5 Airlines having most number of aircrafts</h7>
+							<h6>Top 5 Airlines having most number of aircrafts</h6>
 							<BarChart
 								labels={labels_top5Airlines}
 								label={label_top5Airlines}
@@ -219,7 +213,7 @@ const Dashboard = () => {
 							/>
 						</div>
 						<div className='line'>
-							<h7>Top 5 Airports in terms of fuel availability</h7>
+							<h6>Top 5 Airports in terms of fuel availability</h6>
 							<LineChart
 								labels={labels_top5FuelAvailable}
 								label={label_top5FuelAvailable}
@@ -232,7 +226,7 @@ const Dashboard = () => {
 					</div>
 					<div className='charts-1'>
 						<div className='pie'>
-							<h7>Top 5 Airports for most number of transactions</h7>
+							<h6>Top 5 Airports for most number of transactions</h6>
 							<PieChart
 								labels={labels}
 								label={label}
@@ -242,7 +236,7 @@ const Dashboard = () => {
 							/>
 						</div>
 						<div className='doughnut'>
-							<h7>Top 5 Airports in terms of fuel capacity</h7>
+							<h6>Top 5 Airports in terms of fuel capacity</h6>
 							<DoughNutChart
 								labels={labels_top5FuelCapacity}
 								label={label_top5FuelCapacity}
@@ -252,7 +246,7 @@ const Dashboard = () => {
 							/>
 						</div>
 					</div>
-					<div className='row-2'>
+					<div className='cards'>
 						<LargeCard
 							title='AIRPORT SUMMARY REPORT'
 							to='/airports'
