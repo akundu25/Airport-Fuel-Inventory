@@ -9,7 +9,12 @@ import { getAllAircrafts } from '../actions/aircraft';
 import { getAllAirports } from '../actions/airport';
 import { toast, ToastContainer } from 'react-toastify';
 import * as images from '../images';
-import * as types from '../types';
+import * as types from '../constants/types';
+import {
+	listItems,
+	sampleTransaction,
+	transactionColumns,
+} from '../constants/constants';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
@@ -18,73 +23,6 @@ import AddTransactionModal from '../modals/AddTransactionModal';
 import ReverseTransactionModal from '../modals/ReverseTransactionModal';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-const columns = [
-	{
-		id: 1,
-		col_name: 'DATE & TIME',
-		col_key: 'transaction_date_time',
-	},
-	{
-		id: 2,
-		col_name: 'TRANSACTION TYPE',
-		col_key: 'transaction_type',
-	},
-	{
-		id: 3,
-		col_name: 'QUANTITY',
-		col_key: 'quantity',
-	},
-	{
-		id: 4,
-		col_name: 'AIRPORT',
-		col_key: 'airport_name',
-	},
-	{
-		id: 5,
-		col_name: 'AIRCRAFT',
-		col_key: 'aircraft_name',
-	},
-];
-
-const sampleTransaction = {
-	transaction_date_time: '',
-	transaction_type: '',
-	airport_id: '',
-	airport_name: '',
-	aircraft_id: '',
-	aircraft_name: 'N/A',
-	quantity: 0,
-	transaction_id_parent: '',
-};
-
-const listItems = [
-	{
-		id: 1,
-		path: '/dashboard',
-		pathName: 'Dashboard',
-	},
-	{
-		id: 2,
-		path: '/airports',
-		pathName: 'Airports',
-	},
-	{
-		id: 3,
-		path: '/aircrafts',
-		pathName: 'Aircrafts',
-	},
-	{
-		id: 4,
-		path: '/transactions',
-		pathName: 'Transactions',
-	},
-	{
-		id: 6,
-		path: '/fuel-consumption',
-		pathName: 'Fuel Consumption Report',
-	},
-];
 
 const Transactions = () => {
 	const dispatch = useDispatch();
@@ -366,7 +304,7 @@ const Transactions = () => {
 						</div>
 					</div>
 					<Table
-						columns={columns}
+						columns={transactionColumns}
 						className='transactions-table'
 						data={transactionsData}
 						sorting={sorting}

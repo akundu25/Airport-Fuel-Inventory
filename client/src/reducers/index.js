@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as types from '../types';
+import * as types from '../constants/types';
 import user from './user';
 import airport from './airport';
 import aircraft from './aircraft';

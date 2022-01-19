@@ -1,5 +1,5 @@
 import * as api from '../api/api';
-import * as types from '../types';
+import * as types from '../constants/types';
 
 export const getAircrafts = (limit, page) => async (dispatch) => {
 	try {

@@ -7,7 +7,12 @@ import {
 } from '../actions/aircraft';
 import { toast, ToastContainer } from 'react-toastify';
 import * as images from '../images';
-import * as types from '../types';
+import * as types from '../constants/types';
+import {
+	sampleAircraft,
+	aircraftColumns,
+	listItems,
+} from '../constants/constants';
 import Button from '../utility/Button';
 import Table from '../utility/Table';
 import Nav from '../utility/Nav';
@@ -16,52 +21,6 @@ import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-const columns = [
-	{
-		id: 1,
-		col_name: 'AIRCRAFT NO',
-		col_key: 'aircraft_no',
-	},
-	{
-		id: 2,
-		col_name: 'AIRLINE',
-		col_key: 'airline',
-	},
-];
-
-const sampleAircraft = {
-	aircraft_no: '',
-	airline: '',
-};
-
-const listItems = [
-	{
-		id: 1,
-		path: '/dashboard',
-		pathName: 'Dashboard',
-	},
-	{
-		id: 2,
-		path: '/airports',
-		pathName: 'Airports',
-	},
-	{
-		id: 3,
-		path: '/aircrafts',
-		pathName: 'Aircrafts',
-	},
-	{
-		id: 4,
-		path: '/transactions',
-		pathName: 'Transactions',
-	},
-	{
-		id: 6,
-		path: '/fuel-consumption',
-		pathName: 'Fuel Consumption Report',
-	},
-];
 
 const Aircrafts = () => {
 	const dispatch = useDispatch();
@@ -273,7 +232,7 @@ const Aircrafts = () => {
 						</div>
 					</div>
 					<Table
-						columns={columns}
+						columns={aircraftColumns}
 						className='aircrafts-table'
 						data={aircraftsData}
 						sorting={sorting}

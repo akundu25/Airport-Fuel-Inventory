@@ -4,37 +4,10 @@ import { useReactToPrint } from 'react-to-print';
 import { getFuelConsumption } from '../actions/fuelConsumption';
 import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
 import * as images from '../images';
+import { listItems } from '../constants/constants';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
-
-const listItems = [
-	{
-		id: 1,
-		path: '/dashboard',
-		pathName: 'Dashboard',
-	},
-	{
-		id: 2,
-		path: '/airports',
-		pathName: 'Airports',
-	},
-	{
-		id: 3,
-		path: '/aircrafts',
-		pathName: 'Aircrafts',
-	},
-	{
-		id: 4,
-		path: '/transactions',
-		pathName: 'Transactions',
-	},
-	{
-		id: 6,
-		path: '/fuel-consumption',
-		pathName: 'Fuel Consumption Report',
-	},
-];
 
 const FuelConsumptionReport = () => {
 	const dispatch = useDispatch();

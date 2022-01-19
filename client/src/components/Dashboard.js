@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useReactToPrint } from 'react-to-print';
+import { listItems, airportColumns } from '../constants/constants';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
 import LargeCard from '../utility/LargeCard';
@@ -13,47 +14,6 @@ import PdfFuelConsumptionReport from '../PDF/PdfFuelConsumptionReport';
 import { getAllAirports, getTopFiveAirports } from '../actions/airport';
 import { getFuelConsumption } from '../actions/fuelConsumption';
 import { getTopFiveAirline } from '../actions/aircraft';
-
-const listItems = [
-	{
-		id: 1,
-		path: '/dashboard',
-		pathName: 'Dashboard',
-	},
-	{
-		id: 2,
-		path: '/airports',
-		pathName: 'Airports',
-	},
-	{
-		id: 3,
-		path: '/aircrafts',
-		pathName: 'Aircrafts',
-	},
-	{
-		id: 4,
-		path: '/transactions',
-		pathName: 'Transactions',
-	},
-	{
-		id: 6,
-		path: '/fuel-consumption',
-		pathName: 'Fuel Consumption Report',
-	},
-];
-
-const columns = [
-	{
-		id: 1,
-		col_name: 'AIRPORT NAME',
-		col_key: 'airport_name',
-	},
-	{
-		id: 2,
-		col_name: 'FUEL AVAILABLE',
-		col_key: 'fuel_available',
-	},
-];
 
 const Dashboard = () => {
 	const dispatch = useDispatch();
@@ -180,7 +140,7 @@ const Dashboard = () => {
 			<Nav />
 			<div style={{ display: 'none' }}>
 				<PdfAirportSummaryReport
-					columns={columns}
+					columns={airportColumns}
 					className='airport-summary-table'
 					data={allAirportsData}
 					date={date}

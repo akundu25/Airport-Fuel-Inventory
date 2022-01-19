@@ -5,22 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import Input from '../utility/Input';
 import Button from '../utility/Button';
 import * as images from '../images';
-import * as types from '../types';
+import * as types from '../constants/types';
+import { initialLoginForm, initialSignupForm } from '../constants/constants';
 import { loginUser, signupUser } from '../actions/user';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-const initialSignupForm = {
-	name: '',
-	email: '',
-	password: '',
-	confirmPassword: '',
-};
-
-const initialLoginForm = {
-	email: '',
-	password: '',
-};
 
 const Authentication = () => {
 	const navigate = useNavigate();

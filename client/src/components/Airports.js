@@ -9,7 +9,12 @@ import {
 import { toast, ToastContainer } from 'react-toastify';
 import { useReactToPrint } from 'react-to-print';
 import * as images from '../images';
-import * as types from '../types';
+import * as types from '../constants/types';
+import {
+	airportColumns,
+	sampleAirport,
+	listItems,
+} from '../constants/constants';
 import Table from '../utility/Table';
 import Button from '../utility/Button';
 import Nav from '../utility/Nav';
@@ -19,58 +24,6 @@ import AddModal from '../modals/AddModal';
 import PdfTemplate from '../PDF/PdfAirportSummaryReport';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-const columns = [
-	{
-		id: 1,
-		col_name: 'AIRPORT NAME',
-		col_key: 'airport_name',
-	},
-	{
-		id: 2,
-		col_name: 'FUEL AVAILABLE',
-		col_key: 'fuel_available',
-	},
-	{
-		id: 3,
-		col_name: 'FUEL CAPACITY',
-		col_key: 'fuel_capacity',
-	},
-];
-
-const sampleAirport = {
-	airport_name: '',
-	fuel_available: 0,
-	fuel_capacity: 0,
-};
-
-const listItems = [
-	{
-		id: 1,
-		path: '/dashboard',
-		pathName: 'Dashboard',
-	},
-	{
-		id: 2,
-		path: '/airports',
-		pathName: 'Airports',
-	},
-	{
-		id: 3,
-		path: '/aircrafts',
-		pathName: 'Aircrafts',
-	},
-	{
-		id: 4,
-		path: '/transactions',
-		pathName: 'Transactions',
-	},
-	{
-		id: 6,
-		path: '/fuel-consumption',
-		pathName: 'Fuel Consumption Report',
-	},
-];
 
 const Airports = () => {
 	const dispatch = useDispatch();
@@ -289,7 +242,7 @@ const Airports = () => {
 		>
 			<div style={{ display: 'none' }}>
 				<PdfTemplate
-					columns={columns}
+					columns={airportColumns}
 					className='airport-summary-table'
 					data={allAirportsData}
 					date={date}
@@ -331,7 +284,7 @@ const Airports = () => {
 						</div>
 					</div>
 					<Table
-						columns={columns}
+						columns={airportColumns}
 						className='airports-table'
 						data={airportsData}
 						sorting={sorting}

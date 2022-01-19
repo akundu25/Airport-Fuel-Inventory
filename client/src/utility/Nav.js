@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import * as types from '../types';
+import * as types from '../constants/types';
 import * as images from '../images';
 import Button from './Button';
 
