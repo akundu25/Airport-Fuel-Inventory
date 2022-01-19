@@ -658,6 +658,9 @@ body button {
 
 .fuel-consumption-report .each-report-item thead {
   height: 25%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
 }
 
 .fuel-consumption-report .each-report-item tbody {

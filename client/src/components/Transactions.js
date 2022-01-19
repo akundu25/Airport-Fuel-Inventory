@@ -120,28 +120,24 @@ const Transactions = () => {
 		!transactions && dispatch(getTransactions(limit, page));
 		setTransactionsData(transactions);
 
-		!airports && dispatch(getAllAirports());
-		setAllAirports(airports);
-
-		!aircrafts && dispatch(getAllAircrafts());
-		setAllAircrafts(aircrafts);
-
-		if (next) setNextDisabled(false);
-		else setNextDisabled(true);
-		if (prev) setPrevDisabled(false);
-		else setPrevDisabled(true);
+		if (next) {
+			setNextDisabled(false);
+			setLimit(next.limit);
+		} else setNextDisabled(true);
+		if (prev) {
+			setPrevDisabled(false);
+			setLimit(prev.limit);
+		} else setPrevDisabled(true);
 
 		transactionError && notify(transactionError.msg, 'error');
 		transactionSuccess !== '' && notify(transactionSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_TRANSACTION });
-		}, 5000);
+		}, 1000);
 	}, [
 		dispatch,
 		transactions,
-		airports,
-		aircrafts,
 		next,
 		prev,
 		limit,
@@ -149,6 +145,16 @@ const Transactions = () => {
 		transactionSuccess,
 		transactionError,
 	]);
+
+	useEffect(() => {
+		!airports && dispatch(getAllAirports());
+		setAllAirports(airports);
+	}, [dispatch, airports]);
+
+	useEffect(() => {
+		!aircrafts && dispatch(getAllAircrafts());
+		setAllAircrafts(aircrafts);
+	}, [dispatch, aircrafts]);
 
 	const notify = (message, type) => {
 		switch (type) {
@@ -370,20 +376,8 @@ const Transactions = () => {
 					<div className='page-down'>
 						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option
-									selected={transactionsData && transactionsData.length <= 4}
-								>
-									4
-								</option>
-								<option
-									selected={
-										transactionsData &&
-										transactionsData.length > 4 &&
-										transactionsData.length <= 8
-									}
-								>
-									8
-								</option>
+								<option selected={limit === 4}>4</option>
+								<option selected={limit === 8}>8</option>
 							</select>
 							<span>Page limit</span>
 							<Button

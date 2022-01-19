@@ -7,7 +7,6 @@ const Sidebar = ({ listItems }) => {
 				{listItems.map(({ id, path, pathName }) => (
 					<NavLink
 						key={id}
-						exact
 						to={path}
 						className={({ isActive }) =>
 							isActive ? 'active-sidebar-item' : undefined

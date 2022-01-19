@@ -36,7 +36,7 @@ const Authentication = () => {
 		signupSuccess !== '' && notify(signupSuccess, 'success');
 		setTimeout(() => {
 			dispatch({ type: types.USER_AUTH_ERROR_REMOVE });
-		}, 5000);
+		}, 1000);
 	}, [dispatch, authError, signupSuccess]);
 
 	const handleSubmit = (e) => {

@@ -151,7 +151,9 @@ const Dashboard = () => {
 	useEffect(() => {
 		!allAirports && dispatch(getAllAirports());
 		setAllAirportsData(allAirports);
+	}, [dispatch, allAirports]);
 
+	useEffect(() => {
 		!top5NoOfTransactions &&
 			!top5FuelAvailable &&
 			!top5FuelCapacity &&
@@ -159,25 +161,19 @@ const Dashboard = () => {
 		setTop5NoOfTransactionsData(top5NoOfTransactions);
 		setTop5FuelAvailableData(top5FuelAvailable);
 		setTop5FuelCapacityData(top5FuelCapacity);
+	}, [dispatch, top5NoOfTransactions, top5FuelAvailable, top5FuelCapacity]);
 
+	useEffect(() => {
 		!airports && !transactions && dispatch(getFuelConsumption());
 		airports &&
 			nonTransactionAirports &&
 			setEveryAirport([...airports, ...nonTransactionAirports]);
+	}, [dispatch, airports, transactions, nonTransactionAirports]);
 
+	useEffect(() => {
 		!top5Airlines && dispatch(getTopFiveAirline());
 		setTopFiveAirlines(top5Airlines);
-	}, [
-		dispatch,
-		allAirports,
-		top5NoOfTransactions,
-		top5FuelAvailable,
-		top5FuelCapacity,
-		top5Airlines,
-		airports,
-		transactions,
-		nonTransactionAirports,
-	]);
+	}, [dispatch, top5Airlines]);
 
 	return (
 		<div className='dashboard-container'>

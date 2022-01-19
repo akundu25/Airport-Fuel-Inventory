@@ -111,17 +111,21 @@ const Airports = () => {
 		!allAirports && dispatch(getAllAirports());
 		setAllAirportsData(allAirports);
 
-		if (next) setNextDisabled(false);
-		else setNextDisabled(true);
-		if (prev) setPrevDisabled(false);
-		else setPrevDisabled(true);
+		if (next) {
+			setNextDisabled(false);
+			setLimit(next.limit);
+		} else setNextDisabled(true);
+		if (prev) {
+			setPrevDisabled(false);
+			setLimit(prev.limit);
+		} else setPrevDisabled(true);
 
 		airportError && notify(airportError.msg, 'error');
 		airportSuccess !== '' && notify(airportSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRPORT });
-		}, 5000);
+		}, 1000);
 	}, [
 		dispatch,
 		airports,
@@ -337,18 +341,8 @@ const Airports = () => {
 					<div className='page-down'>
 						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option selected={airportsData && airportsData.length <= 4}>
-									4
-								</option>
-								<option
-									selected={
-										airportsData &&
-										airportsData.length > 4 &&
-										airportsData.length <= 8
-									}
-								>
-									8
-								</option>
+								<option selected={limit === 4}>4</option>
+								<option selected={limit === 8}>8</option>
 							</select>
 							<span>Page limit</span>
 							<Button

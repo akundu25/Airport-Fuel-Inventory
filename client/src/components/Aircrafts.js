@@ -88,17 +88,21 @@ const Aircrafts = () => {
 		!aircrafts && dispatch(getAircrafts(limit, page));
 		setAircraftsData(aircrafts);
 
-		if (next) setNextDisabled(false);
-		else setNextDisabled(true);
-		if (prev) setPrevDisabled(false);
-		else setPrevDisabled(true);
+		if (next) {
+			setNextDisabled(false);
+			setLimit(next.limit);
+		} else setNextDisabled(true);
+		if (prev) {
+			setPrevDisabled(false);
+			setLimit(prev.limit);
+		} else setPrevDisabled(true);
 
 		aircraftError && notify(aircraftError.msg, 'error');
 		aircraftSuccess !== '' && notify(aircraftSuccess, 'success');
 
 		setTimeout(() => {
 			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRCRAFT });
-		}, 5000);
+		}, 1000);
 	}, [
 		dispatch,
 		aircrafts,
@@ -279,18 +283,8 @@ const Aircrafts = () => {
 					<div className='page-down'>
 						<div className='page-select'>
 							<select className='page-limit' onChange={handleChange}>
-								<option selected={aircraftsData && aircraftsData.length <= 4}>
-									4
-								</option>
-								<option
-									selected={
-										aircraftsData &&
-										aircraftsData.length > 4 &&
-										aircraftsData.length <= 8
-									}
-								>
-									8
-								</option>
+								<option selected={limit === 4}>4</option>
+								<option selected={limit === 8}>8</option>
 							</select>
 							<span>Page limit</span>
 							<Button
