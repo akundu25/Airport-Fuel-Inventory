@@ -21,7 +21,6 @@ const Dashboard = () => {
 	const fuelConsumptionRef = useRef();
 	const date = new Date().toDateString();
 	const allAirports = useSelector((state) => state.airport.allAirports);
-	const [allAirportsData, setAllAirportsData] = useState(allAirports);
 	const transactions = useSelector(
 		(state) => state.fuelConsumption.transactions
 	);
@@ -110,7 +109,6 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		!allAirports && dispatch(getAllAirports());
-		setAllAirportsData(allAirports);
 	}, [dispatch, allAirports]);
 
 	useEffect(() => {
@@ -142,7 +140,7 @@ const Dashboard = () => {
 				<PdfAirportSummaryReport
 					columns={airportColumns}
 					className='airport-summary-table'
-					data={allAirportsData}
+					data={allAirports}
 					date={date}
 					ref={airportSummaryRef}
 				/>

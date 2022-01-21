@@ -29,7 +29,7 @@ const AddTransactionModal = ({
 	const { transaction_type, airport_name, aircraft_name } = transaction;
 	const quantity = parseInt(transaction.quantity);
 
-	const addTransactionDisabled =
+	const addTransactionBtnDisabled =
 		transaction_type === '' ||
 		airport_name === '' ||
 		quantity <= 0 ||
@@ -46,11 +46,7 @@ const AddTransactionModal = ({
 			<h4>ENTER DETAILS OF TRANSACTION</h4>
 			<form className='transaction-add-form'>
 				<div className='warnings'>
-					{(transaction_type === '' ||
-						airport_name === '' ||
-						quantity <= 0 ||
-						(transaction_type === 'OUT' && aircraft_name === 'N/A') ||
-						isNaN(quantity)) && (
+					{addTransactionBtnDisabled && (
 						<span className='warning-message'>*All fields are mandatory</span>
 					)}
 				</div>
@@ -97,8 +93,8 @@ const AddTransactionModal = ({
 									aircraft
 										? {
 												...transaction,
-												aircraft_id: aircraft._id || '',
-												aircraft_name: aircraft.aircraft_no || '',
+												aircraft_id: aircraft._id,
+												aircraft_name: aircraft.aircraft_no,
 										  }
 										: {
 												...transaction,
@@ -138,8 +134,8 @@ const AddTransactionModal = ({
 					type='button'
 					btnText='Add Transaction'
 					onClick={handleAddTransaction}
-					className={addTransactionDisabled ? 'disabled' : 'btn'}
-					disabled={addTransactionDisabled}
+					className={addTransactionBtnDisabled ? 'disabled' : 'btn'}
+					disabled={addTransactionBtnDisabled}
 				/>
 			</div>
 		</Modal>

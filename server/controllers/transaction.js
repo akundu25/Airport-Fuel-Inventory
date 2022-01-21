@@ -210,9 +210,7 @@ export const updateTransaction = async (req, res) => {
 export const deleteTransaction = async (req, res) => {
 	try {
 		const { transactionId } = req.params;
-		const deletedTransaction = await transaction.findByIdAndDelete(
-			transactionId
-		);
+		await transaction.findByIdAndDelete(transactionId);
 		res.status(200).json({ message: 'The transaction has been deleted' });
 	} catch (error) {
 		console.log(error);

@@ -27,10 +27,10 @@ const Aircrafts = () => {
 	const aircraftSuccess = useSelector((state) => state.aircraft.success);
 	const aircraftError = useSelector((state) => state.aircraft.error);
 	const aircrafts = useSelector((state) => state.aircraft.aircrafts);
+	const [aircraftsData, setAircraftsData] = useState(aircrafts);
 	const next = useSelector((state) => state.aircraft.next);
 	const prev = useSelector((state) => state.aircraft.prev);
 	const pageCount = useSelector((state) => state.aircraft.pageCount);
-	const [aircraftsData, setAircraftsData] = useState(aircrafts);
 	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);

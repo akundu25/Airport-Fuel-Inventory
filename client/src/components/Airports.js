@@ -31,12 +31,11 @@ const Airports = () => {
 	const airportError = useSelector((state) => state.airport.error);
 	const airportSuccess = useSelector((state) => state.airport.success);
 	const allAirports = useSelector((state) => state.airport.allAirports);
-	const [allAirportsData, setAllAirportsData] = useState(allAirports);
 	const airports = useSelector((state) => state.airport.airports);
+	const [airportsData, setAirportsData] = useState(airports);
 	const next = useSelector((state) => state.airport.next);
 	const prev = useSelector((state) => state.airport.prev);
 	const pageCount = useSelector((state) => state.airport.pageCount);
-	const [airportsData, setAirportsData] = useState(airports);
 	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
@@ -62,7 +61,6 @@ const Airports = () => {
 		setAirportsData(airports);
 
 		!allAirports && dispatch(getAllAirports());
-		setAllAirportsData(allAirports);
 
 		if (next) {
 			setNextDisabled(false);
@@ -130,7 +128,6 @@ const Airports = () => {
 	const handleEditAirport = () => {
 		dispatch(updateAirport(selectedAirport, page, limit));
 		setIsEditModalOpen(false);
-		notify();
 	};
 
 	const handleAddAirport = () => {
@@ -244,7 +241,7 @@ const Airports = () => {
 				<PdfTemplate
 					columns={airportColumns}
 					className='airport-summary-table'
-					data={allAirportsData}
+					data={allAirports}
 					date={date}
 					ref={airportSummaryRef}
 				/>

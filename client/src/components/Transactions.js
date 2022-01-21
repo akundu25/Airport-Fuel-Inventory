@@ -29,14 +29,14 @@ const Transactions = () => {
 	const transactionSuccess = useSelector((state) => state.transaction.success);
 	const transactionError = useSelector((state) => state.transaction.error);
 	const transactions = useSelector((state) => state.transaction.transactions);
+	const [transactionsData, setTransactionsData] = useState(transactions);
 	const airports = useSelector((state) => state.airport.allAirports);
+	const [allAirportsData, setAllAirports] = useState(airports);
 	const aircrafts = useSelector((state) => state.aircraft.allAircrafts);
+	const [allAircraftsData, setAllAircrafts] = useState(aircrafts);
 	const next = useSelector((state) => state.transaction.next);
 	const prev = useSelector((state) => state.transaction.prev);
 	const pageCount = useSelector((state) => state.transaction.pageCount);
-	const [transactionsData, setTransactionsData] = useState(transactions);
-	const [allAirportsData, setAllAirports] = useState(airports);
-	const [allAircraftsData, setAllAircrafts] = useState(aircrafts);
 	const [limit, setLimit] = useState(4);
 	const [page, setPage] = useState(1);
 	const [prevDisabled, setPrevDisabled] = useState(true);
@@ -169,11 +169,11 @@ const Transactions = () => {
 	};
 
 	const sortTransactionByDate = () => {
-		if (transactionsData && isAscendingByDate) {
+		if (transactionsData && transactionsData.length && isAscendingByDate) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByDateASC)
 			);
-		} else if (transactionsData) {
+		} else if (transactionsData && transactionsData.length) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByDateDESC)
 			);
@@ -192,11 +192,11 @@ const Transactions = () => {
 	};
 
 	const sortTransactionByAirport = () => {
-		if (transactionsData && isAscendingByAirport) {
+		if (transactionsData && transactionsData.length && isAscendingByAirport) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByAirportASC)
 			);
-		} else if (transactionsData) {
+		} else if (transactionsData && transactionsData.length) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByAirportDESC)
 			);
@@ -215,11 +215,11 @@ const Transactions = () => {
 	};
 
 	const sortTransactionByAircraft = () => {
-		if (transactionsData && isAscendingByAircraft) {
+		if (transactionsData && transactionsData.length && isAscendingByAircraft) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByAircraftASC)
 			);
-		} else if (transactionsData) {
+		} else if (transactionsData && transactionsData.length) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByAircraftDESC)
 			);
@@ -238,11 +238,11 @@ const Transactions = () => {
 	};
 
 	const sortTransactionByQuantity = () => {
-		if (transactionsData && isAscendingByQuantity) {
+		if (transactionsData && transactionsData.length && isAscendingByQuantity) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByQuantityASC)
 			);
-		} else if (transactionsData) {
+		} else if (transactionsData && transactionsData.length) {
 			setTransactionsData((prevTransactions) =>
 				prevTransactions.sort(compareByQuantityDESC)
 			);
@@ -260,6 +260,7 @@ const Transactions = () => {
 	const handleSearchTransactionChange = (e) => {
 		const searchedTransactions =
 			transactions &&
+			transactions.length &&
 			transactions.filter(({ airport_name }) =>
 				airport_name.toLowerCase().startsWith(e.target.value.toLowerCase())
 			);

@@ -20,13 +20,13 @@ const AirportAddModal = ({
 	const fuel_capacity = parseInt(newEntity.fuel_capacity);
 	const { airport_name, aircraft_no, airline } = newEntity;
 
-	const addAirportDisabled =
+	const addAirportBtnDisabled =
 		fuel_capacity <= 0 ||
 		fuel_available > fuel_capacity ||
 		isNaN(fuel_capacity) ||
 		airport_name === '';
 
-	const addAircraftDisabled = aircraft_no === '' || airline === '';
+	const addAircraftBtnDisabled = aircraft_no === '' || airline === '';
 
 	return (
 		<Modal
@@ -49,10 +49,9 @@ const AirportAddModal = ({
 							*Airport name field can not be empty
 						</span>
 					)}
-					{inputNames[0] === 'aircraft_no' &&
-						(aircraft_no === '' || airline === '') && (
-							<span className='warning-message'>*All fields are mandatory</span>
-						)}
+					{inputNames[0] === 'aircraft_no' && addAircraftBtnDisabled && (
+						<span className='warning-message'>*All fields are mandatory</span>
+					)}
 				</div>
 				<div className='input-fields'>
 					{inputNames.map((name, index) => (
@@ -82,17 +81,17 @@ const AirportAddModal = ({
 					<Button
 						type='button'
 						btnText='Add'
-						className={addAirportDisabled ? 'disabled' : 'btn'}
+						className={addAirportBtnDisabled ? 'disabled' : 'btn'}
 						onClick={handleAddEntity}
-						disabled={addAirportDisabled}
+						disabled={addAirportBtnDisabled}
 					/>
 				) : (
 					<Button
 						type='button'
 						btnText='Add'
-						className={addAircraftDisabled ? 'disabled' : 'btn'}
+						className={addAircraftBtnDisabled ? 'disabled' : 'btn'}
 						onClick={handleAddEntity}
-						disabled={addAircraftDisabled}
+						disabled={addAircraftBtnDisabled}
 					/>
 				)}
 			</div>

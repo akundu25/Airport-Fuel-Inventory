@@ -27,13 +27,16 @@ const FuelConsumptionReport = () => {
 	});
 
 	useEffect(() => {
-		!airports && !transactions && dispatch(getFuelConsumption());
+		!airports &&
+			!transactions &&
+			!nonTransactionAirports &&
+			dispatch(getFuelConsumption());
 		airports &&
 			nonTransactionAirports &&
 			setAllAirports([...airports, ...nonTransactionAirports]);
 	}, [dispatch, transactions, airports, nonTransactionAirports]);
 
-	const oneAirportTransactions =
+	const transactionsPerAirport =
 		airports &&
 		airports.length &&
 		transactions &&
@@ -69,7 +72,7 @@ const FuelConsumptionReport = () => {
 								btnText={
 									<img
 										src={
-											airports && airportNumber === 1
+											airports && airports.length && airportNumber === 1
 												? images.leftArrowDisabled
 												: images.leftArrow
 										}
@@ -77,7 +80,7 @@ const FuelConsumptionReport = () => {
 										className='left-arrow'
 									/>
 								}
-								disabled={airports && airportNumber === 1}
+								disabled={airports && airports.length && airportNumber === 1}
 								onClick={() =>
 									setAirportNumber((prevAirportNumber) => prevAirportNumber - 1)
 								}
@@ -94,7 +97,9 @@ const FuelConsumptionReport = () => {
 								btnText={
 									<img
 										src={
-											airports && airportNumber === airports?.length
+											airports &&
+											airports.length &&
+											airportNumber === airports?.length
 												? images.rightArrowDisabled
 												: images.rightArrow
 										}
@@ -102,7 +107,11 @@ const FuelConsumptionReport = () => {
 										className='right-arrow'
 									/>
 								}
-								disabled={airports && airportNumber === airports?.length}
+								disabled={
+									airports &&
+									airports.length &&
+									airportNumber === airports?.length
+								}
 								onClick={() =>
 									setAirportNumber((prevAirportNumber) => prevAirportNumber + 1)
 								}
@@ -114,7 +123,9 @@ const FuelConsumptionReport = () => {
 							<div className='each-report-item'>
 								<p>
 									<b>Airport:</b>{' '}
-									{airports && airports[airportNumber - 1].airport_name}
+									{airports &&
+										airports.length &&
+										airports[airportNumber - 1].airport_name}
 								</p>
 								<div className='fuel-consumption-report-table'>
 									<table>
@@ -127,8 +138,9 @@ const FuelConsumptionReport = () => {
 											</tr>
 										</thead>
 										<tbody>
-											{oneAirportTransactions &&
-												oneAirportTransactions.map((transaction) => (
+											{transactionsPerAirport &&
+												transactionsPerAirport.length &&
+												transactionsPerAirport.map((transaction) => (
 													<tr key={transaction._id}>
 														<td>{transaction.transaction_date_time}</td>
 														<td>{transaction.transaction_type}</td>
@@ -141,7 +153,9 @@ const FuelConsumptionReport = () => {
 								</div>
 								<p>
 									<b>Fuel Available:</b>{' '}
-									{airports && airports[airportNumber - 1].fuel_available}
+									{airports &&
+										airports.length &&
+										airports[airportNumber - 1].fuel_available}
 								</p>
 							</div>
 						) : (

@@ -20,13 +20,13 @@ const AirportEditModal = ({
 	const fuel_capacity = parseInt(selectedEntity.fuel_capacity);
 	const { airport_name, aircraft_no, airline } = selectedEntity;
 
-	const editAirportDisabled =
+	const editAirportBtnDisabled =
 		fuel_capacity <= 0 ||
 		fuel_available > fuel_capacity ||
 		isNaN(fuel_capacity) ||
 		airport_name === '';
 
-	const editAircraftDisabled = aircraft_no === '' || airline === '';
+	const editAircraftBtnDisabled = aircraft_no === '' || airline === '';
 
 	return (
 		<Modal
@@ -39,7 +39,7 @@ const AirportEditModal = ({
 			<form className='airport-edit-form'>
 				<div className='warnings'>
 					{inputNames[0] === 'airport_name' &&
-						fuel_available > fuel_capacity && (
+						(fuel_available > fuel_capacity || isNaN(fuel_capacity)) && (
 							<span className='warning-message'>
 								*Fuel available should be less than or equal to fuel capacity
 							</span>
@@ -49,15 +49,8 @@ const AirportEditModal = ({
 							*Airport name field can not be empty
 						</span>
 					)}
-					{inputNames[0] === 'aircraft_no' && aircraft_no === '' && (
-						<span className='warning-message'>
-							*Aircraft no field can not be empty
-						</span>
-					)}
-					{inputNames[0] === 'aircraft_no' && airline === '' && (
-						<span className='warning-message'>
-							*Airline field can not be empty
-						</span>
+					{inputNames[0] === 'aircraft_no' && editAircraftBtnDisabled && (
+						<span className='warning-message'>*All fields are mandatory</span>
 					)}
 				</div>
 				<div className='input-fields'>
@@ -85,16 +78,16 @@ const AirportEditModal = ({
 						type='button'
 						btnText='Update'
 						onClick={handleEditEntity}
-						className={editAirportDisabled ? 'disabled' : 'btn'}
-						disabled={editAirportDisabled}
+						className={editAirportBtnDisabled ? 'disabled' : 'btn'}
+						disabled={editAirportBtnDisabled}
 					/>
 				) : (
 					<Button
 						type='button'
 						btnText='Update'
 						onClick={handleEditEntity}
-						className={editAircraftDisabled ? 'disabled' : 'btn'}
-						disabled={editAircraftDisabled}
+						className={editAircraftBtnDisabled ? 'disabled' : 'btn'}
+						disabled={editAircraftBtnDisabled}
 					/>
 				)}
 			</div>
