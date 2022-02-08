@@ -1,17 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import decode from 'jwt-decode';
 import { useDispatch } from 'react-redux';
+import * as types from '../redux/actionTypes';
 import { useNavigate } from 'react-router-dom';
-import * as types from '../constants/types';
-import * as images from '../images';
-import Button from './Button';
+import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import Overlay from 'react-bootstrap/Overlay';
+import Popover from 'react-bootstrap/Popover';
+import Avatar from '@mui/material/Avatar';
+import ListGroup from 'react-bootstrap/ListGroup';
+import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 
-const Nav = () => {
-	const dispatch = useDispatch();
-	const navigate = useNavigate();
+const NavigationBar = ({ handleShow }) => {
 	const [user, setUser] = useState(
 		JSON.parse(localStorage.getItem('userProfile'))
 	);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [show, setShow] = useState(false);
+	const [target, setTarget] = useState(null);
+	const ref = useRef(null);
+
+	const handleClick = (event) => {
+		setShow(!show);
+		setTarget(event.target);
+	};
 
 	const logout = () => {
 		dispatch({ type: types.LOGOUT });
@@ -29,21 +42,42 @@ const Nav = () => {
 	});
 
 	return (
-		<div className='nav-bar'>
-			<h2 className='nav-heading'>
-				<img
-					src={images.airportLogo}
-					alt='airport-logo'
-					className='airport-logo'
-				/>
-				Airport Management System
-			</h2>
-			<h6 className='user-name'>{user?.clientUser?.name}</h6>
-			<div className='logout-btn'>
-				<Button type='button' btnText='Logout' onClick={logout} />
+		<Container
+			fluid
+			style={{ zIndex: 1 }}
+			className='navbar nav-border position-sticky top-0 px-0 d-flex justify-content-right'
+		>
+			<div className='my-auto ms-4 sidebar-collapse' onClick={handleShow}>
+				<DensityMediumIcon />
 			</div>
-		</div>
+			<Nav className='ms-auto'>
+				<span ref={ref} className='p-3 me-3 d-flex'>
+					{user?.clientUser?.name}
+					<Avatar onClick={handleClick} className='ms-3 pointer'>
+						{user?.clientUser?.name[0]}
+					</Avatar>
+					<Overlay
+						show={show}
+						target={target}
+						placement='bottom'
+						container={ref}
+						containerPadding={20}
+					>
+						<Popover id='popover-contained'>
+							<Popover.Body className='p-0'>
+								<ListGroup variant='flush'>
+									<ListGroup.Item action>Profile</ListGroup.Item>
+									<ListGroup.Item active action onClick={logout}>
+										Logout
+									</ListGroup.Item>
+								</ListGroup>
+							</Popover.Body>
+						</Popover>
+					</Overlay>
+				</span>
+			</Nav>
+		</Container>
 	);
 };
 
-export default Nav;
+export default NavigationBar;

@@ -4,30 +4,39 @@ import {
 	getTransactions,
 	addNewTransaction,
 	undoTransaction,
-} from '../actions/transaction';
-import { getAllAircrafts } from '../actions/aircraft';
-import { getAllAirports } from '../actions/airport';
-import { toast, ToastContainer } from 'react-toastify';
-import * as images from '../images';
-import * as types from '../constants/types';
+} from '../redux/actions/transaction';
+import { getAllAircrafts } from '../redux/actions/aircraft';
+import { getAllAirports } from '../redux/actions/airport';
+import ToastContainer from '../utility/ToastContainer';
 import {
-	listItems,
 	sampleTransaction,
 	transactionColumns,
+	sortItems,
+	sortItemsByDate,
 } from '../constants/constants';
 import Table from '../utility/Table';
-import Button from '../utility/Button';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
+import SidebarCollapse from '../utility/SidebarCollapse';
+import PaginationComponent from '../utility/Pagination';
+import Search from '../utility/Search';
 import AddTransactionModal from '../modals/AddTransactionModal';
 import ReverseTransactionModal from '../modals/ReverseTransactionModal';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Pagination from 'react-bootstrap/Pagination';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 const Transactions = () => {
 	const dispatch = useDispatch();
-	const transactionSuccess = useSelector((state) => state.transaction.success);
-	const transactionError = useSelector((state) => state.transaction.error);
+	const [show, setShow] = useState(false);
+	const [showToast, setShowToast] = useState(false);
+	const [toastMessage, setToastMessage] = useState('');
+	const [bg, setBg] = useState('');
 	const transactions = useSelector((state) => state.transaction.transactions);
 	const [transactionsData, setTransactionsData] = useState(transactions);
 	const airports = useSelector((state) => state.airport.allAirports);
@@ -52,60 +61,53 @@ const Transactions = () => {
 	const [isAscendingByAirport, setIsAscendingByAirport] = useState(false);
 	const [isAscendingByAircraft, setIsAscendingByAircraft] = useState(false);
 	const [isAscendingByQuantity, setIsAscendingByQuantity] = useState(false);
-	const [searchTransaction, setSearchTransaction] = useState('');
+
+	//useEffect for fetching transactions per page
 
 	useEffect(() => {
-		!transactions && dispatch(getTransactions(limit, page));
+		!transactions &&
+			dispatch(
+				getTransactions(limit, page, setBg, setToastMessage, handleShowToast)
+			);
 		setTransactionsData(transactions);
 
 		if (next) {
 			setNextDisabled(false);
 			setLimit(next.limit);
+			setPage(next.page - 1);
 		} else setNextDisabled(true);
 		if (prev) {
 			setPrevDisabled(false);
 			setLimit(prev.limit);
+			setPage(prev.page + 1);
 		} else setPrevDisabled(true);
+	}, [dispatch, transactions, next, prev, limit, page]);
 
-		transactionError && notify(transactionError.msg, 'error');
-		transactionSuccess !== '' && notify(transactionSuccess, 'success');
-
-		setTimeout(() => {
-			dispatch({ type: types.SUCCESS_ERROR_REMOVE_TRANSACTION });
-		}, 1000);
-	}, [
-		dispatch,
-		transactions,
-		next,
-		prev,
-		limit,
-		page,
-		transactionSuccess,
-		transactionError,
-	]);
+	//useEffect for fetching all airports at once
 
 	useEffect(() => {
 		!airports && dispatch(getAllAirports());
 		setAllAirports(airports);
 	}, [dispatch, airports]);
 
+	//useEffect for fetching all aircrafts at once
+
 	useEffect(() => {
 		!aircrafts && dispatch(getAllAircrafts());
 		setAllAircrafts(aircrafts);
 	}, [dispatch, aircrafts]);
 
-	const notify = (message, type) => {
-		switch (type) {
-			case 'error':
-				toast.error(message);
-				break;
-			case 'success':
-				toast.success(message);
-				break;
-			default:
-				toast(message);
-		}
-	};
+	//handler functions for viewing sidebar
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	//handler functions for viewing toasts
+
+	const handleCloseToast = () => setShowToast(false);
+	const handleShowToast = () => setShowToast(true);
+
+	//handler function for opening/closing add transaction modal
 
 	const handleCloseAddTransactionModal = () => {
 		setTransaction(sampleTransaction);
@@ -116,6 +118,8 @@ const Transactions = () => {
 		setIsAddTransactionModalOpen(true);
 	};
 
+	//handler function for opening/closing reverse transaction modal
+
 	const handleCloseReverseTransactionModal = () =>
 		setIsReverseTransactionModalOpen(false);
 	const handleOpenReverseTransactionModal = (transaction) => {
@@ -123,239 +127,193 @@ const Transactions = () => {
 		setIsReverseTransactionModalOpen(true);
 	};
 
+	//onChange handler for adding new transaction
+
 	const handleChange = (e) => {
 		dispatch(getTransactions(e.target.value, 1));
 		setLimit(e.target.value);
 		setPage(1);
 	};
 
+	//handler function for going to the previous page
+
 	const handlePrevPage = () => {
 		dispatch(getTransactions(limit, page - 1));
 		setPage((prevPage) => prevPage - 1);
 	};
+
+	//handler function for going to a specific page
+
+	const handlePage = (currentPage) => {
+		dispatch(getTransactions(limit, currentPage));
+		setPage(currentPage);
+	};
+
+	//handler function for going to the next page
 
 	const handleNextPage = () => {
 		dispatch(getTransactions(limit, page + 1));
 		setPage((prevPage) => prevPage + 1);
 	};
 
+	//onChange handler for new transaction
+
 	const handleInputChange = (e) =>
 		setTransaction({
 			...transaction,
-			[e.target.name]: e.target.value,
+			[e.target.id]: e.target.value,
 		});
 
+	//handler function for dispatching the add transaction action
+
 	const handleAddTransaction = () => {
-		dispatch(addNewTransaction(page, limit, transaction));
+		dispatch(
+			addNewTransaction(
+				page,
+				limit,
+				transaction,
+				setBg,
+				setToastMessage,
+				handleShowToast
+			)
+		);
 		setIsAddTransactionModalOpen(false);
 		setTransaction(sampleTransaction);
 	};
 
+	//handler function for dispatching the reverse transaction action
+
 	const handleReverseTransaction = () => {
-		dispatch(undoTransaction(limit, page, reverseTransaction));
+		dispatch(
+			undoTransaction(
+				limit,
+				page,
+				reverseTransaction,
+				setBg,
+				setToastMessage,
+				handleShowToast
+			)
+		);
 		setIsReverseTransactionModalOpen(false);
 	};
 
-	const compareByDateASC = (a, b) => {
-		const d1 = new Date(a.transaction_date_time).valueOf();
-		const d2 = new Date(b.transaction_date_time).valueOf();
-		return d1 - d2;
-	};
-
-	const compareByDateDESC = (a, b) => {
-		const d1 = new Date(a.transaction_date_time).valueOf();
-		const d2 = new Date(b.transaction_date_time).valueOf();
-		return d2 - d1;
-	};
-
-	const sortTransactionByDate = () => {
-		if (transactionsData && transactionsData.length && isAscendingByDate) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByDateASC)
-			);
-		} else if (transactionsData && transactionsData.length) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByDateDESC)
-			);
-		}
-		setIsAscendingByDate(!isAscendingByDate);
-	};
-
-	const compareByAirportASC = (a, b) => {
-		if (a.airport_name < b.airport_name) return -1;
-		return 1;
-	};
-
-	const compareByAirportDESC = (a, b) => {
-		if (b.airport_name < a.airport_name) return -1;
-		return 1;
-	};
-
-	const sortTransactionByAirport = () => {
-		if (transactionsData && transactionsData.length && isAscendingByAirport) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByAirportASC)
-			);
-		} else if (transactionsData && transactionsData.length) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByAirportDESC)
-			);
-		}
-		setIsAscendingByAirport(!isAscendingByAirport);
-	};
-
-	const compareByAircraftASC = (a, b) => {
-		if (a.aircraft_name < b.aircraft_name) return -1;
-		return 1;
-	};
-
-	const compareByAircraftDESC = (a, b) => {
-		if (b.aircraft_name < a.aircraft_name) return -1;
-		return 1;
-	};
-
-	const sortTransactionByAircraft = () => {
-		if (transactionsData && transactionsData.length && isAscendingByAircraft) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByAircraftASC)
-			);
-		} else if (transactionsData && transactionsData.length) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByAircraftDESC)
-			);
-		}
-		setIsAscendingByAircraft(!isAscendingByAircraft);
-	};
-
-	const compareByQuantityASC = (a, b) => {
-		if (a.quantity < b.quantity) return -1;
-		return 1;
-	};
-
-	const compareByQuantityDESC = (a, b) => {
-		if (b.quantity < a.quantity) return -1;
-		return 1;
-	};
-
-	const sortTransactionByQuantity = () => {
-		if (transactionsData && transactionsData.length && isAscendingByQuantity) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByQuantityASC)
-			);
-		} else if (transactionsData && transactionsData.length) {
-			setTransactionsData((prevTransactions) =>
-				prevTransactions.sort(compareByQuantityDESC)
-			);
-		}
-		setIsAscendingByQuantity(!isAscendingByQuantity);
-	};
+	//array containing all the sorting functions
 
 	const sorting = {
-		'DATE & TIME': sortTransactionByDate,
-		AIRPORT: sortTransactionByAirport,
-		AIRCRAFT: sortTransactionByAircraft,
-		QUANTITY: sortTransactionByQuantity,
+		'DATE & TIME': () =>
+			sortItemsByDate(
+				transactionsData,
+				setTransactionsData,
+				isAscendingByDate,
+				setIsAscendingByDate,
+				'transaction_date_time'
+			),
+		AIRPORT: () =>
+			sortItems(
+				transactionsData,
+				setTransactionsData,
+				isAscendingByAirport,
+				setIsAscendingByAirport,
+				'aircraft_name'
+			),
+		AIRCRAFT: () =>
+			sortItems(
+				transactionsData,
+				setTransactionsData,
+				isAscendingByAircraft,
+				setIsAscendingByAircraft,
+				'aircraft_name'
+			),
+		QUANTITY: () =>
+			sortItems(
+				transactionsData,
+				setTransactionsData,
+				isAscendingByQuantity,
+				setIsAscendingByQuantity,
+				'quantity'
+			),
 	};
 
-	const handleSearchTransactionChange = (e) => {
-		const searchedTransactions =
-			transactions &&
-			transactions.length &&
-			transactions.filter(({ airport_name }) =>
-				airport_name.toLowerCase().startsWith(e.target.value.toLowerCase())
-			);
-		setTransactionsData(searchedTransactions);
-		setSearchTransaction(e.target.value);
-	};
+	//an array containing pagination item for all the available pages
+
+	const pageItem = [];
+	for (let index = 0; index < pageCount; index++) {
+		pageItem.push(
+			<Pagination.Item
+				key={index}
+				active={page === index + 1}
+				onClick={() => handlePage(index + 1)}
+			>
+				{index + 1}
+			</Pagination.Item>
+		);
+	}
 
 	return (
-		<div
-			className={`page-container ${
-				(isAddTransactionModalOpen || isReverseTransactionModalOpen) &&
-				'modal-open'
-			}`}
-		>
-			<Nav />
-			<ToastContainer />
-			<div className='inner-page-container'>
-				<Sidebar listItems={listItems} />
-				<div className='page-list'>
-					<div className='page-top'>
-						<div className='page-btn'>
-							<Button
-								type='button'
-								btnText='Add New Transaction'
-								onClick={handleOpenAddTransactionModal}
+		<Container fluid className='px-0 height-100'>
+			<ToastContainer
+				handleClose={handleCloseToast}
+				show={showToast}
+				bg={bg}
+				message={toastMessage}
+			/>
+			<Row className='h-100'>
+				<Col xxl={2} className='pe-0 border-end display'>
+					<Sidebar />
+					<SidebarCollapse show={show} handleClose={handleClose} />
+				</Col>
+				<Col xxl={10} className='ps-0'>
+					<Nav handleShow={handleShow} />
+					<Container fluid className='px-0'>
+						<div className='d-lg-flex justify-content-lg-between m-3 p-2'>
+							<div>
+								<Button
+									className='me-2 mt-2'
+									variant='outline-primary'
+									type='button'
+									onClick={handleOpenAddTransactionModal}
+								>
+									Add New Transaction
+								</Button>
+							</div>
+							<Search
+								data={transactions}
+								setData={setTransactionsData}
+								searchProperty='airport_name'
 							/>
 						</div>
-						<div className='search-functionality'>
-							<label>
-								<input
-									type='text'
-									placeholder='Search airport name'
-									value={searchTransaction}
-									onChange={handleSearchTransactionChange}
+						<div className='m-4'>
+							<Table
+								columns={transactionColumns}
+								className=''
+								data={transactionsData}
+								sorting={sorting}
+								reverse={true}
+								handleOpenModal={handleOpenReverseTransactionModal}
+							/>
+							<div className='d-xl-flex w-50 py-3'>
+								<PaginationComponent
+									handlePrevPage={handlePrevPage}
+									prevDisabled={prevDisabled}
+									handlePage={handlePage}
+									handleNextPage={handleNextPage}
+									nextDisabled={nextDisabled}
+									page={page}
+									pageCount={pageCount}
+									pageItem={pageItem}
 								/>
-								<img
-									src={images.searchIcon}
-									alt='search airport'
-									className='search'
-								/>
-							</label>
+								<Form className='d-flex ms-xl-3 mt-2 mt-xl-0'>
+									<Form.Label className='my-auto me-2'>Limit: </Form.Label>
+									<Form.Select onChange={handleChange} className='py-xl-0'>
+										<option selected={limit === 4}>{4}</option>
+										<option selected={limit === 8}>{8}</option>
+									</Form.Select>
+								</Form>
+							</div>
 						</div>
-					</div>
-					<Table
-						columns={transactionColumns}
-						className='transactions-table'
-						data={transactionsData}
-						sorting={sorting}
-						reverse={true}
-						handleOpenModal={handleOpenReverseTransactionModal}
-					/>
-					<div className='page-down'>
-						<div className='page-select'>
-							<select className='page-limit' onChange={handleChange}>
-								<option selected={limit === 4}>4</option>
-								<option selected={limit === 8}>8</option>
-							</select>
-							<span>Page limit</span>
-							<Button
-								type='button'
-								btnText={
-									<img
-										src={
-											prevDisabled ? images.leftArrowDisabled : images.leftArrow
-										}
-										alt='left-arrow'
-										className='left-arrow'
-									/>
-								}
-								onClick={handlePrevPage}
-								disabled={prevDisabled}
-							/>
-							<span className='page-number'>
-								{pageCount > 0 ? `Page ${page} of ${pageCount}` : 'No records'}
-							</span>
-							<Button
-								type='button'
-								btnText={
-									<img
-										src={
-											nextDisabled
-												? images.rightArrowDisabled
-												: images.rightArrow
-										}
-										alt='right-arrow'
-										className='right-arrow'
-									/>
-								}
-								onClick={handleNextPage}
-								disabled={nextDisabled}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+					</Container>
+				</Col>
+			</Row>
 			<AddTransactionModal
 				isModalOpen={isAddTransactionModalOpen}
 				handleCloseModal={handleCloseAddTransactionModal}
@@ -371,7 +329,7 @@ const Transactions = () => {
 				handleCloseModal={handleCloseReverseTransactionModal}
 				handleReverseTransaction={handleReverseTransaction}
 			/>
-		</div>
+		</Container>
 	);
 };
 

@@ -1,14 +1,16 @@
-import Modal from 'react-modal';
-import Button from '../utility/Button';
-import Input from '../utility/Input';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import React from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import './modal_style.css';
 
-Modal.setAppElement('#root');
-
 const AirportEditModal = ({
-	isModalOpen,
-	handleCloseEditModal,
+	showModal,
+	onHide,
 	handleEditEntity,
 	selectedEntity,
 	handleEditSelectedEntity,
@@ -29,15 +31,10 @@ const AirportEditModal = ({
 	const editAircraftBtnDisabled = aircraft_no === '' || airline === '';
 
 	return (
-		<Modal
-			isOpen={isModalOpen}
-			onRequestClose={handleCloseEditModal}
-			className='EditModal'
-			overlayClassName='Overlay'
-		>
-			<h4>{heading}</h4>
-			<form className='airport-edit-form'>
-				<div className='warnings'>
+		<Dialog open={showModal} onClose={onHide}>
+			<DialogTitle sx={{ mt: 3 }}>{heading}</DialogTitle>
+			<DialogContent>
+				<div className='warnings mb-4'>
 					{inputNames[0] === 'airport_name' &&
 						(fuel_available > fuel_capacity || isNaN(fuel_capacity)) && (
 							<span className='warning-message'>
@@ -53,45 +50,50 @@ const AirportEditModal = ({
 						<span className='warning-message'>*All fields are mandatory</span>
 					)}
 				</div>
-				<div className='input-fields'>
-					{inputNames.map((name, index) => (
-						<Input
-							key={index}
-							name={name}
-							label={inputLabels[index]}
-							type='text'
-							value={selectedEntity[name]}
-							onChange={handleEditSelectedEntity}
-						/>
-					))}
-				</div>
-			</form>
-			<div className='edit-modal-btn'>
-				<Button
-					type='button'
-					btnText='Cancel'
-					className='cancel-btn'
-					onClick={handleCloseEditModal}
-				/>
-				{inputNames[0] === 'airport_name' ? (
-					<Button
-						type='button'
-						btnText='Update'
-						onClick={handleEditEntity}
-						className={editAirportBtnDisabled ? 'disabled' : 'btn'}
-						disabled={editAirportBtnDisabled}
-					/>
-				) : (
-					<Button
-						type='button'
-						btnText='Update'
-						onClick={handleEditEntity}
-						className={editAircraftBtnDisabled ? 'disabled' : 'btn'}
-						disabled={editAircraftBtnDisabled}
-					/>
-				)}
-			</div>
-		</Modal>
+				<Form>
+					{inputNames.map((name, index) => {
+						return (
+							<React.Fragment key={index}>
+								<Form.Label>{inputLabels[index]}</Form.Label>
+								<Form.Control
+									type={
+										name === 'fuel_available' || name === 'fuel_capacity'
+											? 'number'
+											: 'text'
+									}
+									id={name}
+									value={selectedEntity[name]}
+									onChange={handleEditSelectedEntity}
+									className='mb-3'
+								/>
+							</React.Fragment>
+						);
+					})}
+				</Form>
+				<DialogActions sx={{ mt: 4 }}>
+					<Button type='button' variant='danger' onClick={onHide}>
+						Cancel
+					</Button>
+					{inputNames[0] === 'airport_name' ? (
+						<Button
+							type='button'
+							onClick={handleEditEntity}
+							disabled={editAirportBtnDisabled}
+						>
+							Update
+						</Button>
+					) : (
+						<Button
+							type='button'
+							onClick={handleEditEntity}
+							disabled={editAircraftBtnDisabled}
+						>
+							Update
+						</Button>
+					)}
+				</DialogActions>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

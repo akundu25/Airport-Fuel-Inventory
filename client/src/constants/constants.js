@@ -1,3 +1,5 @@
+export const baseURL = 'http://localhost:5000';
+
 export const listItems = [
 	{
 		id: 1,
@@ -117,4 +119,56 @@ export const initialSignupForm = {
 export const initialLoginForm = {
 	email: '',
 	password: '',
+};
+
+export const sortItems = (data, setData, isASC, setIsASC, property) => {
+	if (data && data.length && isASC) {
+		setData((prevData) =>
+			prevData.sort((a, b) => (a[property] < b[property] ? -1 : 1))
+		);
+	} else if (data && data.length) {
+		setData((prevData) =>
+			prevData.sort((a, b) => (b[property] < a[property] ? -1 : 1))
+		);
+	}
+	setIsASC(!isASC);
+};
+
+export const sortItemsByDate = (data, setData, isASC, setIsASC, property) => {
+	if (data && data.length && isASC) {
+		setData((prevData) =>
+			prevData.sort((a, b) => {
+				const d1 = new Date(a[property]).valueOf();
+				const d2 = new Date(b[property]).valueOf();
+				return d1 - d2;
+			})
+		);
+	} else if (data && data.length) {
+		setData((prevData) =>
+			prevData.sort((a, b) => {
+				const d1 = new Date(a[property]).valueOf();
+				const d2 = new Date(b[property]).valueOf();
+				return d2 - d1;
+			})
+		);
+	}
+	setIsASC(!isASC);
+};
+
+export const handleSearch = (e, data, setData, searchProperty) => {
+	const searchedData =
+		data &&
+		data.length &&
+		data.filter((dataItem) =>
+			dataItem[searchProperty]
+				.toLowerCase()
+				.startsWith(e.target.value.toLowerCase())
+		);
+	setData(searchedData);
+};
+
+export const notify = (message, bg, setBg, setMsg, handleShow) => {
+	setMsg(message);
+	setBg(bg);
+	handleShow();
 };

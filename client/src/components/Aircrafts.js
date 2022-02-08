@@ -4,28 +4,36 @@ import {
 	getAircrafts,
 	updateAircraft,
 	addNewAircraft,
-} from '../actions/aircraft';
-import { toast, ToastContainer } from 'react-toastify';
-import * as images from '../images';
-import * as types from '../constants/types';
+} from '../redux/actions/aircraft';
+import ToastContainer from '../utility/ToastContainer';
 import {
 	sampleAircraft,
 	aircraftColumns,
-	listItems,
+	sortItems,
 } from '../constants/constants';
-import Button from '../utility/Button';
 import Table from '../utility/Table';
 import Nav from '../utility/Nav';
 import Sidebar from '../utility/Sidebar';
+import SidebarCollapse from '../utility/SidebarCollapse';
+import PaginationComponent from '../utility/Pagination';
+import Search from '../utility/Search';
 import EditModal from '../modals/EditModal';
 import AddModal from '../modals/AddModal';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Pagination from 'react-bootstrap/Pagination';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 const Aircrafts = () => {
 	const dispatch = useDispatch();
-	const aircraftSuccess = useSelector((state) => state.aircraft.success);
-	const aircraftError = useSelector((state) => state.aircraft.error);
+	const [show, setShow] = useState(false);
+	const [showToast, setShowToast] = useState(false);
+	const [toastMessage, setToastMessage] = useState('');
+	const [bg, setBg] = useState('');
 	const aircrafts = useSelector((state) => state.aircraft.aircrafts);
 	const [aircraftsData, setAircraftsData] = useState(aircrafts);
 	const next = useSelector((state) => state.aircraft.next);
@@ -41,84 +49,104 @@ const Aircrafts = () => {
 	const [selectedAircraft, setSelectedAircraft] = useState(sampleAircraft);
 	const [isAscendingByName, setIsAscendingByName] = useState(false);
 	const [isAscendingByAirline, setIsAscendingByAirline] = useState(false);
-	const [searchAircraft, setSearchAircraft] = useState('');
+
+	//useEffect for fetching aircrafts for a specific page
 
 	useEffect(() => {
-		!aircrafts && dispatch(getAircrafts(limit, page));
+		!aircrafts &&
+			dispatch(
+				getAircrafts(limit, page, setBg, setToastMessage, handleShowToast)
+			);
 		setAircraftsData(aircrafts);
 
 		if (next) {
 			setNextDisabled(false);
 			setLimit(next.limit);
+			setPage(next.page - 1);
 		} else setNextDisabled(true);
 		if (prev) {
 			setPrevDisabled(false);
 			setLimit(prev.limit);
+			setPage(prev.page + 1);
 		} else setPrevDisabled(true);
+	}, [dispatch, aircrafts, next, prev, limit, page]);
 
-		aircraftError && notify(aircraftError.msg, 'error');
-		aircraftSuccess !== '' && notify(aircraftSuccess, 'success');
+	//handler functions for viewing sidebar
 
-		setTimeout(() => {
-			dispatch({ type: types.SUCCESS_ERROR_REMOVE_AIRCRAFT });
-		}, 1000);
-	}, [
-		dispatch,
-		aircrafts,
-		next,
-		prev,
-		limit,
-		page,
-		aircraftError,
-		aircraftSuccess,
-	]);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
-	const notify = (message, type) => {
-		switch (type) {
-			case 'error':
-				toast.error(message);
-				break;
-			case 'success':
-				toast.success(message);
-				break;
-			default:
-				toast(message);
-		}
-	};
+	//handler functions for viewing toasts
+
+	const handleCloseToast = () => setShowToast(false);
+	const handleShowToast = () => setShowToast(true);
+
+	//handler function for opening/closing of add aircraft modal
 
 	const handleOpenAddModal = () => setIsAddModalOpen(true);
 	const handleCloseAddModal = () => {
 		setNewAircraft(sampleAircraft);
 		setIsAddModalOpen(false);
 	};
+
+	//handler function for opening/closing of edit aircraft modal
+
 	const handleOpenEditModal = (aircraft) => {
 		setSelectedAircraft(JSON.parse(aircraft));
 		setIsEditModalOpen(true);
 	};
 	const handleCloseEditModal = () => setIsEditModalOpen(false);
 
+	//onChange handler for adding new aircraft
+
 	const handleNewAircraft = (e) =>
 		setNewAircraft({
 			...newAircraft,
-			[e.target.name]: e.target.value,
+			[e.target.id]: e.target.value,
 		});
+
+	//onChange handler for editing an aircraft
 
 	const handleEditSelectedAircraft = (e) =>
 		setSelectedAircraft({
 			...selectedAircraft,
-			[e.target.name]: e.target.value,
+			[e.target.id]: e.target.value,
 		});
 
+	//function to dispatch the edit aircraft action
+
 	const handleEditAircraft = () => {
-		dispatch(updateAircraft(selectedAircraft, page, limit));
+		dispatch(
+			updateAircraft(
+				selectedAircraft,
+				page,
+				limit,
+				setBg,
+				setToastMessage,
+				handleShowToast
+			)
+		);
 		setIsEditModalOpen(false);
 	};
 
+	//function to dispatch the add aircraft action
+
 	const handleAddAircraft = () => {
-		dispatch(addNewAircraft(newAircraft, page, limit));
+		dispatch(
+			addNewAircraft(
+				newAircraft,
+				page,
+				limit,
+				setBg,
+				setToastMessage,
+				handleShowToast
+			)
+		);
 		setIsAddModalOpen(false);
 		setNewAircraft(sampleAircraft);
 	};
+
+	//onChange handler for changing the limit of aircrafts per page
 
 	const handleChange = (e) => {
 		dispatch(getAircrafts(e.target.value, 1));
@@ -126,176 +154,141 @@ const Aircrafts = () => {
 		setPage(1);
 	};
 
+	//handler function for going to the previous page
+
 	const handlePrevPage = () => {
 		dispatch(getAircrafts(limit, page - 1));
 		setPage((prevPage) => prevPage - 1);
 	};
+
+	//handler function for going to a specific page
+
+	const handlePage = (currentPage) => {
+		dispatch(getAircrafts(limit, currentPage));
+		setPage(currentPage);
+	};
+
+	//handler function for going to the next page
 
 	const handleNextPage = () => {
 		dispatch(getAircrafts(limit, page + 1));
 		setPage((prevPage) => prevPage + 1);
 	};
 
-	const compareByNameASC = (a, b) => {
-		if (a.aircraft_no < b.aircraft_no) return -1;
-		return 1;
-	};
-
-	const compareByNameDESC = (a, b) => {
-		if (b.aircraft_no < a.aircraft_no) return -1;
-		return 1;
-	};
-
-	const sortAircraftByName = () => {
-		if (aircraftsData && isAscendingByName) {
-			setAircraftsData((prevAircrafts) => prevAircrafts.sort(compareByNameASC));
-		} else if (aircraftsData) {
-			setAircraftsData((prevAircrafts) =>
-				prevAircrafts.sort(compareByNameDESC)
-			);
-		}
-		setIsAscendingByName(!isAscendingByName);
-	};
-
-	const compareByAirlineASC = (a, b) => {
-		if (a.airline < b.airline) return -1;
-		return 1;
-	};
-
-	const compareByAirlineDESC = (a, b) => {
-		if (b.airline < a.airline) return -1;
-		return 1;
-	};
-
-	const sortAircraftByAirline = () => {
-		if (aircraftsData && isAscendingByAirline) {
-			setAircraftsData((prevAircrafts) =>
-				prevAircrafts.sort(compareByAirlineASC)
-			);
-		} else if (aircraftsData) {
-			setAircraftsData((prevAircrafts) =>
-				prevAircrafts.sort(compareByAirlineDESC)
-			);
-		}
-		setIsAscendingByAirline(!isAscendingByAirline);
-	};
+	//array containing all the sorting functions
 
 	const sorting = {
-		'AIRCRAFT NO': sortAircraftByName,
-		AIRLINE: sortAircraftByAirline,
+		'AIRCRAFT NO': () =>
+			sortItems(
+				aircraftsData,
+				setAircraftsData,
+				isAscendingByName,
+				setIsAscendingByName,
+				'aircraft_no'
+			),
+		AIRLINE: () =>
+			sortItems(
+				aircraftsData,
+				setAircraftsData,
+				isAscendingByAirline,
+				setIsAscendingByAirline,
+				'airline'
+			),
 	};
 
-	const handleSearchAircraftChange = (e) => {
-		const searchedAircrafts =
-			aircrafts &&
-			aircrafts.filter(({ aircraft_no }) =>
-				aircraft_no.toLowerCase().startsWith(e.target.value.toLowerCase())
-			);
-		setAircraftsData(searchedAircrafts);
-		setSearchAircraft(e.target.value);
-	};
+	//an array containing pagination item for all the available pages
+
+	const pageItem = [];
+	for (let index = 0; index < pageCount; index++) {
+		pageItem.push(
+			<Pagination.Item
+				key={index}
+				active={page === index + 1}
+				onClick={() => handlePage(index + 1)}
+			>
+				{index + 1}
+			</Pagination.Item>
+		);
+	}
 
 	return (
-		<div
-			className={`page-container ${
-				(isEditModalOpen || isAddModalOpen) && 'modal-open'
-			}`}
-		>
-			<Nav />
-			<ToastContainer />
-			<div className='inner-page-container'>
-				<Sidebar listItems={listItems} />
-				<div className='page-list'>
-					<div className='page-top'>
-						<div className='page-btn'>
-							<Button
-								type='button'
-								btnText='Add Aircraft'
-								onClick={handleOpenAddModal}
+		<Container fluid className='px-0 height-100'>
+			<ToastContainer
+				handleClose={handleCloseToast}
+				show={showToast}
+				bg={bg}
+				message={toastMessage}
+			/>
+			<Row className='h-100'>
+				<Col xxl={2} className='pe-0 border-end display'>
+					<Sidebar />
+					<SidebarCollapse show={show} handleClose={handleClose} />
+				</Col>
+				<Col xxl={10} className='ps-0'>
+					<Nav handleShow={handleShow} />
+					<Container fluid className='px-0'>
+						<div className='d-lg-flex justify-content-lg-between m-3 p-2'>
+							<div>
+								<Button
+									className='me-2 mt-2'
+									variant='outline-primary'
+									type='button'
+									onClick={handleOpenAddModal}
+								>
+									Add Aircraft
+								</Button>
+							</div>
+							<Search
+								data={aircrafts}
+								setData={setAircraftsData}
+								searchProperty='aircraft_no'
 							/>
 						</div>
-
-						<div className='search-functionality'>
-							<label>
-								<input
-									type='text'
-									placeholder='Search aircraft'
-									value={searchAircraft}
-									onChange={handleSearchAircraftChange}
+						<div className='m-4'>
+							<Table
+								columns={aircraftColumns}
+								className=''
+								data={aircraftsData}
+								sorting={sorting}
+								edit={true}
+								handleOpenModal={handleOpenEditModal}
+							/>
+							<div className='d-xl-flex w-50 py-3'>
+								<PaginationComponent
+									handlePrevPage={handlePrevPage}
+									prevDisabled={prevDisabled}
+									handlePage={handlePage}
+									handleNextPage={handleNextPage}
+									nextDisabled={nextDisabled}
+									page={page}
+									pageCount={pageCount}
+									pageItem={pageItem}
 								/>
-								<img
-									src={images.searchIcon}
-									alt='search airport'
-									className='search'
-								/>
-							</label>
+								<Form className='d-flex ms-xl-3 mt-2 mt-xl-0'>
+									<Form.Label className='my-auto me-2'>Limit: </Form.Label>
+									<Form.Select onChange={handleChange} className='py-xl-0'>
+										<option selected={limit === 4}>{4}</option>
+										<option selected={limit === 8}>{8}</option>
+									</Form.Select>
+								</Form>
+							</div>
 						</div>
-					</div>
-					<Table
-						columns={aircraftColumns}
-						className='aircrafts-table'
-						data={aircraftsData}
-						sorting={sorting}
-						edit={true}
-						handleOpenModal={handleOpenEditModal}
-					/>
-					<div className='page-down'>
-						<div className='page-select'>
-							<select className='page-limit' onChange={handleChange}>
-								<option selected={limit === 4}>4</option>
-								<option selected={limit === 8}>8</option>
-							</select>
-							<span>Page limit</span>
-							<Button
-								type='button'
-								btnText={
-									<img
-										src={
-											prevDisabled ? images.leftArrowDisabled : images.leftArrow
-										}
-										alt='left-arrow'
-										className='left-arrow'
-									/>
-								}
-								onClick={handlePrevPage}
-								disabled={prevDisabled}
-							/>
-							<span className='page-number'>
-								{pageCount > 0 ? `Page ${page} of ${pageCount}` : 'No records'}
-							</span>
-							<Button
-								type='button'
-								btnText={
-									<img
-										src={
-											nextDisabled
-												? images.rightArrowDisabled
-												: images.rightArrow
-										}
-										alt='right-arrow'
-										className='right-arrow'
-									/>
-								}
-								onClick={handleNextPage}
-								disabled={nextDisabled}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+					</Container>
+				</Col>
+			</Row>
 			<EditModal
-				isModalOpen={isEditModalOpen}
-				handleCloseEditModal={handleCloseEditModal}
+				showModal={isEditModalOpen}
+				onHide={handleCloseEditModal}
 				handleEditEntity={handleEditAircraft}
 				selectedEntity={selectedAircraft}
 				handleEditSelectedEntity={handleEditSelectedAircraft}
-				heading='SELECT AN AIRCRAFT TO EDIT'
+				heading='UPDATE DETAILS OF THE AIRCRAFT'
 				inputLabels={['Aircraft No: ', 'Airline: ']}
 				inputNames={['aircraft_no', 'airline']}
 			/>
 			<AddModal
-				isModalOpen={isAddModalOpen}
-				handleCloseAddModal={handleCloseAddModal}
+				showModal={isAddModalOpen}
+				onHide={handleCloseAddModal}
 				newEntity={newAircraft}
 				handleNewEntity={handleNewAircraft}
 				handleAddEntity={handleAddAircraft}
@@ -303,7 +296,7 @@ const Aircrafts = () => {
 				inputLabels={['Aircraft No: ', 'Airline: ']}
 				inputNames={['aircraft_no', 'airline']}
 			/>
-		</div>
+		</Container>
 	);
 };
 

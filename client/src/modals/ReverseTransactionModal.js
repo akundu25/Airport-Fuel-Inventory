@@ -1,9 +1,9 @@
-import Modal from 'react-modal';
-import Button from '../utility/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from 'react-bootstrap/Button';
 
 import './modal_style.css';
-
-Modal.setAppElement('#root');
 
 const ReverseTransactionModal = ({
 	isModalOpen,
@@ -11,28 +11,19 @@ const ReverseTransactionModal = ({
 	handleReverseTransaction,
 }) => {
 	return (
-		<Modal
-			isOpen={isModalOpen}
-			onRequestClose={handleCloseModal}
-			className='ReverseTransactionModal'
-			overlayClassName='Overlay'
-		>
-			<h5>Are you sure you want to reverse the transaction</h5>
-			<div className='transaction-modal-btn'>
-				<Button
-					type='button'
-					btnText='Cancel'
-					className='cancel-btn'
-					onClick={handleCloseModal}
-				/>
-				<Button
-					type='button'
-					btnText='Reverse Transaction'
-					onClick={handleReverseTransaction}
-					className='btn'
-				/>
-			</div>
-		</Modal>
+		<Dialog open={isModalOpen} onClose={handleCloseModal}>
+			<DialogTitle sx={{ mt: 3 }}>
+				Are you sure you want to reverse the transaction?
+			</DialogTitle>
+			<DialogActions sx={{ mt: 4, mb: 3 }}>
+				<Button type='button' variant='danger' onClick={handleCloseModal}>
+					Cancel
+				</Button>
+				<Button type='button' onClick={handleReverseTransaction}>
+					Reverse Transaction
+				</Button>
+			</DialogActions>
+		</Dialog>
 	);
 };
 

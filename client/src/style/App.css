@@ -1,721 +1,112 @@
-body {
-  margin: 0px;
-  padding: 0px;
-}
-
-body button {
-  border: none;
-  border-radius: 4px;
-}
-
-.auth-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 980px;
-}
-
-.auth-form {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 30%;
-  height: 100%;
-  padding: 20px;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-}
-
-.auth-form .heading {
-  text-align: center;
-  font-family: monospace;
-  font-weight: 600;
-}
-
-.auth-form .airport-logo {
-  margin: 0px auto;
-  width: 80px;
-  height: 80px;
-}
-
-.auth-form .auth-error {
-  font-size: 12px;
-  color: #f13753;
-  text-align: center;
-}
-
-.auth-form .switch-login,
-.auth-form .switch-signup {
-  text-align: center;
-  cursor: pointer;
-  color: #f13753;
-}
-
-.auth-form input {
-  display: block;
-  width: 100%;
-  border: 1px solid #bdb5b6;
-  border-radius: 5px;
-}
-
-.auth-form input:focus {
-  outline: none;
-  -webkit-box-shadow: 0px 0px 5px #3845f3;
-          box-shadow: 0px 0px 5px #3845f3;
-}
-
-.auth-form button {
-  margin: 0px auto;
-  background-color: #0715d0;
-  color: #ffff;
-  width: 50%;
-  padding: 20px 30px;
-  letter-spacing: 2px;
-  font-family: "Prompt", sans-serif;
-}
-
-.auth-form button:hover {
-  color: #ffff;
-  background-color: #3845f3;
-}
-
-.airport-image {
-  width: 70%;
-}
-
-.airport-image img {
-  width: 100%;
-  height: 100%;
-}
-
-.nav-bar {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 20px 10px;
-  -webkit-box-shadow: 0 10px 20px #d2d2da;
-          box-shadow: 0 10px 20px #d2d2da;
-  position: -webkit-sticky;
-  position: sticky;
-}
-
-.nav-bar .logout-btn {
-  width: 15%;
-}
-
-.nav-bar .logout-btn button {
-  width: 60%;
-  margin-left: 40px;
-  background-color: #0715d0;
-  color: #ffff;
-  padding: 10px 20px;
-  font-family: "Prompt", sans-serif;
-}
-
-.nav-bar .logout-btn button:hover {
-  background-color: #3845f3;
-  color: #ffff;
-}
-
-.nav-bar .nav-heading {
-  width: 60%;
-  margin-left: 40px;
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: 2px;
-}
-
-.nav-bar .nav-heading .airport-logo {
-  width: 50px;
-  height: 50px;
-  margin-right: 20px;
-}
-
-.nav-bar .user-name {
-  width: 25%;
-  margin-right: 30px;
-  text-align: right;
-}
-
-.dashboard-container {
-  height: 1800px;
-}
-
-.dashboard-container .main-dashboard {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-}
-
-.dashboard-container .main-dashboard .dashboard-items {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 80%;
-  height: 100%;
-  padding: 100px;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .cards {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-  height: 30%;
-  padding: 50px 0px;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-1,
-.dashboard-container .main-dashboard .dashboard-items .charts-2 {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: 1200px;
-  height: 35%;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-1 {
-  margin-left: 30px;
-  margin-bottom: 100px;
-  margin-top: 100px;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-1 .pie,
-.dashboard-container .main-dashboard .dashboard-items .charts-1 .doughnut {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  font-size: 20px;
-  text-align: center;
-  width: 40%;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-1 h6 {
-  color: #d1391e;
-  margin-bottom: 25px;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-2 .bar,
-.dashboard-container .main-dashboard .dashboard-items .charts-2 .line {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 50%;
-  text-align: center;
-  font-size: 15px;
-}
-
-.dashboard-container .main-dashboard .dashboard-items .charts-2 h6 {
-  color: #0715d0;
-  margin-bottom: 25px;
-}
-
-.sidebar-container {
-  width: 20%;
-  height: 100%;
-  padding: 50px 0;
-  -webkit-box-shadow: 10px 0px 20px #d2d2da;
-          box-shadow: 10px 0px 20px #d2d2da;
-}
-
-.sidebar-container .sidebar-items {
-  list-style-type: none;
-  padding-left: 0px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 50px;
-}
-
-.sidebar-container .sidebar-items a {
-  padding: 20px 20px 20px 40px;
-  font-family: 'Roboto Condensed', sans-serif;
-  letter-spacing: 2px;
-  display: block;
-  -webkit-box-shadow: 0px 5px 20px #bdb5b6;
-          box-shadow: 0px 5px 20px #bdb5b6;
-  text-decoration: none;
-  color: black;
-}
-
-.sidebar-container .sidebar-items a:hover {
-  background-color: #d2d2da;
-}
-
-.sidebar-container .sidebar-items .active-sidebar-item {
-  background-color: #0715d0 !important;
-  color: #ffff !important;
-}
-
-.large-card {
-  text-align: center;
-  width: 500px;
-  padding: 80px 0px;
-  border-radius: 20px;
-  -webkit-box-shadow: 0px 0px 10px #bdb5b6;
-          box-shadow: 0px 0px 10px #bdb5b6;
-  background-color: #f0f3f8;
-}
-
-.large-card .card-heading {
-  font-size: 35px;
-  font-family: 'Open Sans Condensed', sans-serif;
-  letter-spacing: 2px;
-}
-
-.large-card .card-links {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  padding: 20px 55px 0px 55px;
-  font-size: 20px;
-}
-
-.large-card .card-links a {
-  text-decoration: none;
-  color: #3845f3;
-}
-
-.large-card .card-links button {
-  font-size: 20px;
-  padding: 0px;
-  color: #f13753;
-}
-
-.modal-open {
-  opacity: 0.1;
-}
-
-.page-container {
-  height: 920px;
-}
-
-.inner-page-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-}
-
-.page-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  width: 80%;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-}
-
-.page-top {
-  height: 10%;
-  margin: 20px;
-  text-align: right;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.page-top .page-btn {
-  width: 50%;
-  text-align: left;
-  padding: 10px 55px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.page-top .page-btn button {
-  background-color: #0715d0;
-  color: #ffff;
-  padding: 15px 20px;
-  margin-right: 20px;
-}
-
-.page-top .page-btn button:hover {
-  color: #ffff;
-  background-color: #3845f3;
-}
-
-.page-top .search-functionality {
-  width: 50%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.page-top .search-functionality label {
-  margin: auto 55px auto auto;
-}
-
-.page-top .search-functionality label .search {
-  width: 45px;
-  height: 45px;
-  cursor: pointer;
-}
-
-.airports-table,
-.aircrafts-table,
-.transactions-table {
-  height: 80%;
-  width: 90%;
-  margin: 0px auto 20px auto;
-  border: 1px solid black;
-  overflow-y: auto;
-}
-
-.airports-table table,
-.aircrafts-table table,
-.transactions-table table {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 100%;
-  width: 100%;
-  margin: 0px;
-}
-
-.airports-table table th img,
-.aircrafts-table table th img,
-.transactions-table table th img {
-  cursor: pointer;
-}
-
-.airports-table thead,
-.aircrafts-table thead,
-.transactions-table thead {
-  height: 20%;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-}
-
-.airports-table tbody,
-.aircrafts-table tbody,
-.transactions-table tbody {
-  height: 80%;
-  font-size: 20px;
-}
-
-.airports-table th,
-.aircrafts-table th,
-.transactions-table th {
-  padding: 20px;
-  background-color: #313137;
-  color: #ffff;
-  letter-spacing: 4px;
-  font-family: 'Open Sans Condensed', sans-serif;
-  font-weight: 600;
-  height: 135px;
-}
-
-.airports-table .text-middle,
-.aircrafts-table .text-middle,
-.transactions-table .text-middle {
-  text-align: center;
-}
-
-.airports-table .edit-icon,
-.aircrafts-table .edit-icon,
-.transactions-table .edit-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-
-.airports-table .reverse-transaction-icon,
-.aircrafts-table .reverse-transaction-icon,
-.transactions-table .reverse-transaction-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-
-.airports-table tr:nth-child(odd),
-.aircrafts-table tr:nth-child(odd),
-.transactions-table tr:nth-child(odd) {
-  background-color: #efeff3;
-}
-
-.airports-table .loading,
-.aircrafts-table .loading,
-.transactions-table .loading {
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: 2px;
-}
-
-.airports-table td,
-.aircrafts-table td {
-  padding: 20px;
-  height: 150px;
-}
-
-.airports-table td {
-  width: 330px;
-}
-
-.airports-table th {
-  width: 330px;
-}
-
-.aircrafts-table td {
-  width: 440px;
-}
-
-.aircrafts-table th {
-  width: 440px;
-}
-
-.transactions-table td {
-  padding: 20px;
-  height: 200px;
-  width: 290px;
-}
-
-.transactions-table th {
-  width: 290px;
-}
-
-.page-down {
-  height: 10%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: right;
-      -ms-flex-pack: right;
-          justify-content: right;
-}
-
-.page-down .left-arrow,
-.page-down .right-arrow {
-  width: 40px;
-  height: 40px;
-}
-
-.page-down .page-select {
-  height: 100%;
-  margin-right: 70px;
-}
-
-.page-down .page-select button {
-  padding: 0px;
-  background-color: #ffff;
-}
-
-.page-down .page-limit {
-  margin-right: 20px;
-}
-
-.airport-summary-table {
-  margin: 0px 50px 40px 50px;
-}
-
-.airport-summary-table table {
-  height: 100%;
-  width: 100%;
-  margin: 0px;
-}
-
-.airport-summary-table table th {
-  padding: 20px;
-  background-color: #313137;
-  color: #ffff;
-  letter-spacing: 4px;
-  font-family: 'Open Sans Condensed', sans-serif;
-  font-weight: 600;
-}
-
-.airport-summary-table table td {
-  padding: 20px;
-}
-
-.fuel-consumption-container {
-  height: 920px;
-}
-
-.fuel-consumption-container .fuel-consumption-report,
-.fuel-consumption-container .fuel-consumption-report-pdf {
-  margin: 50px;
-  height: 75%;
-}
-
-.inner-fuel-consumption-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list {
-  width: 80%;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn {
-  margin: 50px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn img {
-  width: 40px;
-  height: 40px;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn .prev-report,
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn .next-report {
-  background-color: #ffff;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn .download-report {
-  padding: 15px 20px;
-  background-color: #0715d0;
-  color: #ffff;
-}
-
-.inner-fuel-consumption-container .fuel-consumption-list .download-btn .download-report:hover {
-  background-color: #3845f3;
-  color: #ffff;
-}
-
-.fuel-consumption-report .each-report-item {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 100%;
-}
-
-.fuel-consumption-report .each-report-item p {
-  height: 10%;
-  margin-top: 30px;
-  font-size: 30px;
-}
-
-.fuel-consumption-report .each-report-item .fuel-consumption-report-table {
-  height: 80%;
-  overflow-y: auto;
-  border: 1px solid black;
-}
-
-.fuel-consumption-report .each-report-item table {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  height: 100%;
-  width: 100%;
-  margin: 0px;
-}
-
-.fuel-consumption-report .each-report-item thead {
-  height: 25%;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-}
-
-.fuel-consumption-report .each-report-item tbody {
-  height: 75%;
-}
-
-.fuel-consumption-report .each-report-item th {
-  padding: 20px;
-  background-color: #313137;
-  color: #ffff;
-  letter-spacing: 4px;
-  font-family: 'Open Sans Condensed', sans-serif;
-  font-weight: 600;
-  height: 115px;
-  width: 342px;
-}
-
-.fuel-consumption-report .each-report-item td {
-  padding: 20px;
-  width: 340px;
-  height: 120px;
-  font-size: 20px;
-}
-
-.fuel-consumption-report .each-report-item tr:nth-child(odd) {
-  background-color: #efeff3;
-}
-
 .fuel-consumption-report-pdf .each-report-item-pdf {
-  border-bottom: 2px dotted black;
+	border-bottom: 2px dotted black;
 }
 
 .fuel-consumption-report-pdf .each-report-item-pdf p {
-  margin: 20px 0px;
+	margin: 20px 0px;
 }
 
 .fuel-consumption-report-pdf .each-report-item-pdf table {
-  border: 1px solid black;
+	border: 1px solid black;
 }
 
 .fuel-consumption-report-pdf .each-report-item-pdf th {
-  padding: 20px;
-  background-color: #313137;
-  color: #ffff;
-  letter-spacing: 4px;
-  font-family: 'Open Sans Condensed', sans-serif;
-  font-weight: 600;
+	padding: 20px;
+	background-color: #313137;
+	color: #ffff;
+	letter-spacing: 4px;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-weight: 600;
 }
 
 .fuel-consumption-report-pdf .each-report-item-pdf td {
-  padding: 20px;
+	padding: 20px;
 }
 
 .Toastify__toast-container {
-  width: 400px !important;
-  font-size: 15px;
+	width: 400px !important;
+	font-size: 15px;
 }
 /*# sourceMappingURL=App.css.map */
+
+.toast-container {
+	z-index: 2;
+	position: fixed;
+	top: 0;
+	color: #ffff;
+}
+
+.nav-border {
+	border-bottom: 1px solid #dddde2;
+}
+
+.height-100 {
+	height: 100vh;
+}
+
+.navbar {
+	background-color: #ffff;
+}
+
+.sidebar-collapse {
+	cursor: pointer;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-middle {
+	text-align: center;
+	cursor: pointer;
+}
+
+.table-header {
+	background-color: #313137;
+	color: #ffff;
+}
+
+.nav-link {
+	text-decoration: none;
+	color: #0000;
+}
+
+.chart-fs {
+	font-size: 25px;
+}
+
+@media only screen and (max-width: 900px) {
+	.res-w {
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: 901px) {
+	.res-w {
+		width: 50%;
+	}
+}
+
+@media only screen and (max-width: 1400px) {
+	.display {
+		display: none;
+	}
+
+	.sidebar-collapse {
+		display: block;
+	}
+}
+
+@media only screen and (min-width: 1401px) {
+	.display {
+		display: block;
+	}
+
+	.sidebar-collapse {
+		display: none;
+	}
+}

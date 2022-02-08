@@ -30,6 +30,7 @@ const LineChart = ({
 		radius: 5,
 		hitRadius: 40,
 		hoverRadius: 10,
+		maintainAspectRatio: false,
 		scales: {
 			y: {
 				suggestedMin: 0,

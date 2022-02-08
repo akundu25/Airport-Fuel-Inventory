@@ -1,4 +1,3 @@
-import './style/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './routing/PrivateRoute';
 import NonPrivateRoute from './routing/NonPrivateRoute';
@@ -8,6 +7,9 @@ import Airports from './components/Airports';
 import Aircrafts from './components/Aircrafts';
 import Transactions from './components/Transactions';
 import FuelConsumptionReport from './components/FuelConsumptionReport';
+
+import './style/App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
 	return (
