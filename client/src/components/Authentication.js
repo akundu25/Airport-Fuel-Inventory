@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import ToastContainer from '../utility/ToastContainer';
 import * as images from '../images';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,16 +11,22 @@ import Button from 'react-bootstrap/Button';
 import { initialLoginForm, initialSignupForm } from '../constants/constants';
 import { loginUser, signupUser } from '../redux/actions/user';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const Authentication = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [signupForm, setSignupForm] = useState(initialSignupForm);
 	const [loginForm, setLoginForm] = useState(initialLoginForm);
 	const [isLogin, setIsLogin] = useState(true);
+	const [showToast, setShowToast] = useState(false);
+	const [toastMessage, setToastMessage] = useState('');
+	const [bg, setBg] = useState('');
 	const [loginValidated, setLoginValidated] = useState(false);
 	const [signupValidated, setSignupValidated] = useState(false);
+
+	//handler functions for viewing toasts
+
+	const handleCloseToast = () => setShowToast(false);
+	const handleShowToast = () => setShowToast(true);
 
 	//function to dispatch the login action
 
@@ -29,7 +35,9 @@ const Authentication = () => {
 		if (e.target.checkValidity() === false) {
 			e.stopPropagation();
 		} else {
-			dispatch(loginUser(loginForm, navigate));
+			dispatch(
+				loginUser(loginForm, navigate, setBg, setToastMessage, handleShowToast)
+			);
 		}
 		setLoginValidated(true);
 	};
@@ -41,7 +49,7 @@ const Authentication = () => {
 		if (e.target.checkValidity() === false) {
 			e.stopPropagation();
 		} else {
-			dispatch(signupUser(signupForm));
+			dispatch(signupUser(signupForm, setBg, setToastMessage, handleShowToast));
 			setIsLogin(true);
 		}
 		setSignupValidated(true);
@@ -65,7 +73,12 @@ const Authentication = () => {
 
 	return (
 		<Container fluid className='px-0 vh-100'>
-			<ToastContainer />
+			<ToastContainer
+				handleClose={handleCloseToast}
+				show={showToast}
+				bg={bg}
+				message={toastMessage}
+			/>
 			<Row className='h-100'>
 				<Col xs={12} lg={4} className='p-5'>
 					<div className='d-flex flex-column align-items-center'>

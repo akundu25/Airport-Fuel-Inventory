@@ -26,8 +26,6 @@ import Pagination from 'react-bootstrap/Pagination';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import 'react-toastify/dist/ReactToastify.css';
-
 const Aircrafts = () => {
 	const dispatch = useDispatch();
 	const [show, setShow] = useState(false);

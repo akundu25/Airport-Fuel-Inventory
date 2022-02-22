@@ -2,6 +2,8 @@ import * as types from '../actionTypes';
 import * as api from '../api/transaction';
 import { notify } from '../../constants/constants';
 
+//adding new transactions
+
 export const addNewTransaction =
 	(page, limit, transaction, setBg, setToastMessage, handleShowToast) =>
 	async (dispatch) => {
@@ -28,6 +30,8 @@ export const addNewTransaction =
 			console.log(error.response);
 		}
 	};
+
+//reversing existing transactions
 
 export const undoTransaction =
 	(limit, page, transaction, setBg, setToastMessage, handleShowToast) =>
@@ -56,6 +60,8 @@ export const undoTransaction =
 		}
 	};
 
+//fetching transactions per page
+
 export const getTransactions =
 	(limit, page, setBg, setToastMessage, handleShowToast) =>
 	async (dispatch) => {
@@ -76,6 +82,8 @@ export const getTransactions =
 			console.log(error.response);
 		}
 	};
+
+//fetching all transactions at once
 
 export const getAllTransactions = () => async (dispatch) => {
 	try {

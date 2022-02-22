@@ -121,6 +121,8 @@ export const initialLoginForm = {
 	password: '',
 };
 
+//sort function to sort tables
+
 export const sortItems = (data, setData, isASC, setIsASC, property) => {
 	if (data && data.length && isASC) {
 		setData((prevData) =>
@@ -133,6 +135,8 @@ export const sortItems = (data, setData, isASC, setIsASC, property) => {
 	}
 	setIsASC(!isASC);
 };
+
+//sort function to sort by date
 
 export const sortItemsByDate = (data, setData, isASC, setIsASC, property) => {
 	if (data && data.length && isASC) {
@@ -155,6 +159,8 @@ export const sortItemsByDate = (data, setData, isASC, setIsASC, property) => {
 	setIsASC(!isASC);
 };
 
+//handler function to implement search functionality
+
 export const handleSearch = (e, data, setData, searchProperty) => {
 	const searchedData =
 		data &&
@@ -166,6 +172,8 @@ export const handleSearch = (e, data, setData, searchProperty) => {
 		);
 	setData(searchedData);
 };
+
+//function to display toast notification
 
 export const notify = (message, bg, setBg, setMsg, handleShow) => {
 	setMsg(message);

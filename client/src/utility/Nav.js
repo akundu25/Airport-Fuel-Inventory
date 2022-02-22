@@ -21,16 +21,22 @@ const NavigationBar = ({ handleShow }) => {
 	const [target, setTarget] = useState(null);
 	const ref = useRef(null);
 
+	//handler function to view the popover
+
 	const handleClick = (event) => {
 		setShow(!show);
 		setTarget(event.target);
 	};
+
+	//function to logout of the website
 
 	const logout = () => {
 		dispatch({ type: types.LOGOUT });
 		setUser(null);
 		navigate('/');
 	};
+
+	//useEffect to logout automatically when jwt expires
 
 	useEffect(() => {
 		const token = user?.token;

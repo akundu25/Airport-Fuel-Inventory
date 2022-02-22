@@ -1,39 +1,47 @@
 import * as api from '../api/user';
 import * as types from '../actionTypes';
-import { toast } from 'react-toastify';
+import { notify } from '../../constants/constants';
 
-const notify = (message, type) => {
-	switch (type) {
-		case 'success':
-			toast.success(message);
-			break;
-		case 'error':
-			toast.error(message);
-			break;
-		default:
-			break;
-	}
-};
+//function to login user
 
-export const loginUser = (userInfo, navigate) => async (dispatch) => {
-	try {
-		const { data } = await api.userLogin(userInfo);
-		dispatch({ type: types.USER_AUTH_LOGIN, payload: data });
-		navigate('/dashboard');
-	} catch (error) {
-		const { data } = error?.response;
-		data?.errors.length && notify(data.errors[0].msg, 'error');
-		console.log(error.response);
-	}
-};
+export const loginUser =
+	(userInfo, navigate, setBg, setToastMessage, handleShowToast) =>
+	async (dispatch) => {
+		try {
+			const { data } = await api.userLogin(userInfo);
+			dispatch({ type: types.USER_AUTH_LOGIN, payload: data });
+			navigate('/dashboard');
+		} catch (error) {
+			const { data } = error?.response;
+			data?.errors.length &&
+				notify(
+					data?.errors[0].msg,
+					'danger',
+					setBg,
+					setToastMessage,
+					handleShowToast
+				);
+			console.log(error.response);
+		}
+	};
 
-export const signupUser = (userInfo) => async (dispatch) => {
-	try {
-		const { data } = await api.signupUser(userInfo);
-		notify(data?.message, 'success');
-	} catch (error) {
-		const { data } = error?.response;
-		data?.errors.length && notify(data.errors[0].msg, 'error');
-		console.log(error.response);
-	}
-};
+//function to signup new users
+
+export const signupUser =
+	(userInfo, setBg, setToastMessage, handleShowToast) => async (dispatch) => {
+		try {
+			const { data } = await api.signupUser(userInfo);
+			notify(data?.message, 'success', setBg, setToastMessage, handleShowToast);
+		} catch (error) {
+			const { data } = error?.response;
+			data?.errors.length &&
+				notify(
+					data?.errors[0].msg,
+					'danger',
+					setBg,
+					setToastMessage,
+					handleShowToast
+				);
+			console.log(error.response);
+		}
+	};

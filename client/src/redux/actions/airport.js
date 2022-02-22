@@ -2,6 +2,8 @@ import * as api from '../api/airport';
 import * as types from '../actionTypes';
 import { notify } from '../../constants/constants';
 
+//fetching airports per page
+
 export const getAirports =
 	(limit, page, setBg, setToastMessage, handleShowToast) =>
 	async (dispatch) => {
@@ -22,6 +24,8 @@ export const getAirports =
 		}
 	};
 
+//updating existing airports
+
 export const updateAirport =
 	(newAirport, page, limit, setBg, setToastMessage, handleShowToast) =>
 	async (dispatch) => {
@@ -41,6 +45,8 @@ export const updateAirport =
 			console.log(error.response);
 		}
 	};
+
+//adding new airports
 
 export const addNewAirport =
 	(newAirport, page, limit, setBg, setToastMessage, handleShowToast) =>
@@ -69,6 +75,8 @@ export const addNewAirport =
 		}
 	};
 
+//fetching all aiports at once
+
 export const getAllAirports = () => async (dispatch) => {
 	try {
 		const { data } = await api.fetchAllAirports();
@@ -77,6 +85,8 @@ export const getAllAirports = () => async (dispatch) => {
 		console.log(error);
 	}
 };
+
+//fetching top 5 airports
 
 export const getTopFiveAirports = () => async (dispatch) => {
 	try {
